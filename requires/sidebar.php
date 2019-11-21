@@ -1,8 +1,8 @@
 <!-- Sidebar -->
-<ul class="sidebar navbar-nav">
+<ul class="sidebar navbar-nav" style="position:;">
     
       <li class="nav-item active">
-        <a class="nav-link" href="index.html">
+        <a class="nav-link" href="index.php">
           <i class="fas fa-fw fa-tachometer-alt"></i>
           <span>Dashboard</span>
         </a>
@@ -11,13 +11,13 @@
       <!--grp 1 -->
       <div>
         <li class="nav-item">
-        <a class="nav-link" href="charts.html">
+        <a class="nav-link" href="add_pay.php">
           <i class="fas fa-fw fa-plus-square"></i>
           <span>Add Payments</span></a>
       </li> 
 
       <li class="nav-item">
-        <a class="nav-link" href="tables.html">
+        <a class="nav-link" href="office.php">
           <i class="fas fa-fw fa-users"></i>
           <span>Office</span></a>
       </li>
@@ -30,7 +30,7 @@
 
       <li class="nav-item">
         <a class="nav-link" href="tables.html">
-          <i class="fas fa-fw fa-file-text-o"></i>
+          <i class="fas fa-fw fa-folder-open"></i>
           <span>Services</span></a>
       </li>
 
@@ -39,7 +39,25 @@
           <i class="fas fa-fw fa-chart-area"></i>
           <span>Period</span></a>
       </li>
+
       
+      </div>
+
+      <!--Admin -->
+      <div>
+        <hr>
+
+      <li class="nav-item">
+        <a class="nav-link" href="tables.html">
+          <i class="fas fa-fw fa-info"></i>
+          <span>Departments</span></a>
+      </li>
+<li class="nav-item">
+        <a class="nav-link" href="tables.html">
+          <i class="fas fa-fw fa-briefcase"></i>
+          <span>Offices</span></a>
+      </li>
+
       </div>
 
        <!-- <li class="nav-item">
@@ -59,10 +77,14 @@
         <hr>
       <li class="nav-item">
         <a class="nav-link" href="tables.html">
-          <i class="fas fa-fw fa-table"></i>
+          <i class="fas fa-fw fa-database"></i>
           <span>Records</span></a>
       </li>
-
+<li class="nav-item">
+        <a class="nav-link" href="tables.html">
+          <i class="fas fa-fw fa-arrow-left"></i>
+          <span>Sign Out</span></a>
+      </li>
       </div>
      
     </ul>
