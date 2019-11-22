@@ -1,6 +1,11 @@
 <?php
 require_once 'requires/head.php';
+include_once 'includes/newDepartment.html';
 ?>
+
+<!-- Modal -->
+
+
 
     <div id="content-wrapper">
 
@@ -11,40 +16,29 @@ require_once 'requires/head.php';
           <li class="breadcrumb-item">
             <a href="#">Dashboard</a>
           </li>
-          <li class="breadcrumb-item active">Records</li>
+          <li class="breadcrumb-item active">Office</li>
         </ol>
+        <button class="btn btn-lg btn-block btn-outline-dark"  data-toggle="modal" data-target="#departmentModal" >Add A New Department</button>
 
         <!-- DataTables Example -->
         <div class="card mb-3">
           <div class="card-header">
             <i class="fas fa-table"></i>
-            Payments</div>
+            Departments</div>
           <div class="card-body">
             <div class="table-responsive">
-            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+            <table class="table" id="dataTable" width="100%" cellspacing="0">
                 <thead>
                 <tr>
                   <th>#</th>
-                    <th>Company</th>
-                    <th>Service Provided</th>
-                    <th>Date</th>
-                    <th>Period</th>
-                    <th>Amount Payable</th>
-                    <th>Due Date</th>
-                    <th>Status</th>
+                    <th>Name</th>
                     <th>Action</th>
                   </tr>
                 </thead>
                 <tfoot>
                   <tr>
                   <th>#</th>
-                    <th>Company</th>
-                    <th>Service Provided</th>
-                    <th>Date</th>
-                    <th>Period</th>
-                    <th>Amount Payable</th>
-                    <th>Due Date</th>
-                    <th>Status</th>
+                    <th>Name</th>
                     <th>Action</th>
                   </tr>
                 </tfoot>
@@ -53,36 +47,21 @@ require_once 'requires/head.php';
                     <td>1</td>
                     <td>System Architect</td>
                     <td>Edinburgh</td>
-                    <td>61</td>
-                    <td>2011/04/25</td>
-                    <td>$320,800</td>
-                    <td>Edinburgh</td>
-                    <td>61</td>
-                    <td>2011/04/25</td>
+                    
                     
                   </tr>
                   <tr>
                     <td>2</td>
                     <td>Accountant</td>
-                    <td>Tokyo</td>
-                    <td>63</td>
-                    <td>2011/07/25</td>
-                    <td>$170,750</td>
                     <td>Edinburgh</td>
-                    <td>61</td>
-                    <td>2011/04/25</td>
+                    
                    
                   </tr>
                   <tr>
                     <td>3</td>
                     <td>Junior Technical Author</td>
-                    <td>San Francisco</td>
-                    <td>66</td>
-                    <td>2009/01/12</td>
-                    <td>$86,000</td>
                     <td>Edinburgh</td>
-                    <td>61</td>
-                    <td>2011/04/25</td>
+                    
                     
                   </tr>
                   
@@ -93,9 +72,6 @@ require_once 'requires/head.php';
           <div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div>
         </div>
 
-        <p class="small text-center text-muted my-5">
-          <em>More table examples coming soon...</em>
-        </p>
 
       </div>
       <!-- /.container-fluid -->

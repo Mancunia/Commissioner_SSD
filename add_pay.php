@@ -1,5 +1,8 @@
 <?php
 require_once 'requires/head.php';
+include_once 'includes/newCompany.html';
+include_once 'includes/newService.html';
+include_once 'includes/newPeriod.html';
 ?>
 
 <!-- Modal -->
@@ -34,7 +37,7 @@ require_once 'requires/head.php';
                         
                       </select>
                         <div><br>
-                        <button type="button" class="btn btn-primary " data-toggle="modal" data-target="#exampleModal" data-whatever="@mdo">
+                        <button type="button" class="btn btn-primary " data-toggle="modal" data-target="#companyModal" data-whatever="@mdo">
                         <b><h4>+</h4></b> company
                         </button>
                         </div>
@@ -53,7 +56,7 @@ require_once 'requires/head.php';
                         
                       </select>
                         <div><br>
-                        <button type="button" class="btn btn-primary " data-toggle="modal" data-target="#servicemodal" data-whatever="@mdo">
+                        <button type="button" class="btn btn-primary " data-toggle="modal" data-target="#serviceModal" data-whatever="@mdo">
                         <b><h4>+</h4></b> Service
                         </button>
                         </div>
@@ -125,7 +128,7 @@ require_once 'requires/head.php';
             </select>
           </div>
 
-            <div class="col-2"><button class="btn btn-primary" data-toggle="modal" data-target="#periodmodal"><b><h4>+</h4></b></button></div>
+            <div class="col-2"><button class="btn btn-primary" data-toggle="modal" data-target="#periodModal"><b><h4>+</h4></b></button></div>
             </div>
 
             <div class="invalid-feedback">

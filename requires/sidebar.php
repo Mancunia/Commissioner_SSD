@@ -25,17 +25,17 @@
       <li class="nav-item">
         <a class="nav-link" href="tables.html">
           <i class="fas fa-fw fa-american-sign-language-interpreting"></i>
-          <span>Company</span></a>
+          <span>Companies</span></a>
       </li>
 
       <li class="nav-item">
-        <a class="nav-link" href="tables.html">
+        <a class="nav-link" href="services.php">
           <i class="fas fa-fw fa-folder-open"></i>
           <span>Services</span></a>
       </li>
 
 <li class="nav-item">
-        <a class="nav-link" href="tables.html">
+        <a class="nav-link" href="period.php">
           <i class="fas fa-fw fa-chart-area"></i>
           <span>Period</span></a>
       </li>
@@ -48,12 +48,12 @@
         <hr>
 
       <li class="nav-item">
-        <a class="nav-link" href="tables.html">
+        <a class="nav-link" href="department.php">
           <i class="fas fa-fw fa-info"></i>
           <span>Departments</span></a>
       </li>
 <li class="nav-item">
-        <a class="nav-link" href="tables.html">
+        <a class="nav-link" href="offices.php">
           <i class="fas fa-fw fa-briefcase"></i>
           <span>Offices</span></a>
       </li>
@@ -76,12 +76,12 @@
      <div>
         <hr>
       <li class="nav-item">
-        <a class="nav-link" href="tables.html">
+        <a class="nav-link" href="records.php">
           <i class="fas fa-fw fa-database"></i>
           <span>Records</span></a>
       </li>
 <li class="nav-item">
-        <a class="nav-link" href="tables.html">
+        <a class="nav-link" href="settings/logout.php?logout">
           <i class="fas fa-fw fa-arrow-left"></i>
           <span>Sign Out</span></a>
       </li>
