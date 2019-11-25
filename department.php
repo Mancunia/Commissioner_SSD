@@ -1,5 +1,12 @@
 <?php
 require_once 'requires/head.php';
+include 'requires/app_user.php';
+$app=new app_user();
+
+if(isset($_POST['newDepart'])){
+  $app->newDepartment($_POST['department']);
+}
+
 include_once 'includes/newDepartment.html';
 ?>
 
@@ -16,9 +23,9 @@ include_once 'includes/newDepartment.html';
           <li class="breadcrumb-item">
             <a href="#">Dashboard</a>
           </li>
-          <li class="breadcrumb-item active">Office</li>
+          <li class="breadcrumb-item active">Department</li>
         </ol>
-        <button class="btn btn-lg btn-block btn-outline-dark"  data-toggle="modal" data-target="#departmentModal" >Add A New Department</button>
+        <button class="btn btn-lg btn-info"  data-toggle="modal" data-target="#departmentModal" >Add A New Department</button>
 
         <!-- DataTables Example -->
         <div class="card mb-3">

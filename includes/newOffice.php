@@ -17,20 +17,27 @@
 
                           <select class="form-control" name="department">
                           <option selected>Select</option>
-                          
+                         <?php  
+                         while($d=mysqli_fetch_array($result)){
+                         
+                          echo '<option value="'.$d['department_id'].'">'.$d['department_name'].'</option>';
+                         
+                        }
+                           ?>
                           </select>
                           <small id="emailHelp" class="form-text text-muted">New Office name.</small>
                         </div>
                         <div class="form-group">
                           <label for="exampleInputEmail1">Office Name</label>
-                          <input type="text" class="form-control" id="exampleInputEmail1" name="officeName" aria-describedby="emailHelp" required placeholder="Enter Here">
+                          <input type="text" class="form-control" id="exampleInputEmail1" name="office" aria-describedby="emailHelp" required placeholder="Enter Here">
                           <small id="emailHelp" class="form-text text-muted">New Office name.</small>
                         </div>
                       
-                        <!-- <div class="form-group">
+                        <div class="form-group">
                           <label for="exampleInputPassword1">Acronym</label>
                           <input type="text" class="form-control" name="officeAcro" id="exampleInputPassword1" required placeholder="Acronym">
-                        </div> -->
+                        <small id="emailHelp" class="form-text text-muted">Office Acronym</small>
+                      </div>
                         
                         <input class="btn btn-outline-dark btn-lg btn-block" name="newOffice" type="submit">
                       </form>

@@ -1,5 +1,5 @@
 <!-- Sidebar -->
-<ul class="sidebar navbar-nav" style="position:;">
+<ul class="sidebar navbar-nav">
     
       <li class="nav-item active">
         <a class="nav-link" href="index.php">
@@ -23,7 +23,7 @@
       </li>
 
       <li class="nav-item">
-        <a class="nav-link" href="tables.html">
+        <a class="nav-link" href="company.php">
           <i class="fas fa-fw fa-american-sign-language-interpreting"></i>
           <span>Companies</span></a>
       </li>
@@ -58,6 +58,12 @@
           <span>Offices</span></a>
       </li>
 
+      <li class="nav-item">
+    <a class="nav-link" href="users.php">
+      <i class="fas fa-fw fa-users"></i>
+      <span>Users</span></a>
+  </li>
+
       </div>
 
        <!-- <li class="nav-item">
@@ -85,6 +91,7 @@
           <i class="fas fa-fw fa-arrow-left"></i>
           <span>Sign Out</span></a>
       </li>
+      
       </div>
      
     </ul>

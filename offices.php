@@ -1,6 +1,14 @@
 <?php
 require_once 'requires/head.php';
-include_once 'includes/newOffice.html';
+include 'requires/app_user.php';
+$app=new app_user();
+$result=$app->getDepartment();
+
+if(isset($_POST['newOffice'])){
+  $app->newOffice($_POST['office'],$_POST['officeAcro'],$_POST['department']);
+}
+
+include_once 'includes/newOffice.php';
 ?>
 
 <!-- Modal -->
@@ -18,7 +26,7 @@ include_once 'includes/newOffice.html';
           </li>
           <li class="breadcrumb-item active">Office</li>
         </ol>
-        <button class="btn btn-lg btn-block btn-outline-dark"  data-toggle="modal" data-target="#officeModal" >Add A New Office</button>
+        <button class="btn btn-lg btn-info"  data-toggle="modal" data-target="#officeModal" >Add A New Office</button>
 
         <!-- DataTables Example -->
         <div class="card mb-3">

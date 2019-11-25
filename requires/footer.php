@@ -2,7 +2,7 @@
 <footer class="sticky-footer">
         <div class="container my-auto">
           <div class="copyright text-center my-auto">
-            <span>Copyright © Your Website 2019</span>
+            <span>Copyright © 2019</span>
           </div>
         </div>
       </footer>
@@ -14,7 +14,7 @@
   <!-- /#wrapper -->
 
   <!-- Scroll to Top Button-->
-  <a class="scroll-to-top rounded" href="#page-top">
+  <a class="scroll-to-top rounded" href="#top">
     <i class="fas fa-angle-up"></i>
   </a>
 

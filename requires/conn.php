@@ -26,6 +26,9 @@ class Database {
 			trigger_error("Failed to conencto to MySQL: " . mysql_connect_error(),
 				 E_USER_ERROR);
 		}
+		// else{
+		// 	echo "Connected to DB successfully";
+		// }
 	}
 	// Magic method clone is empty to prevent duplication of connection
 	private function __clone() { }

@@ -16,9 +16,9 @@ include_once 'includes/newService.html';
           <li class="breadcrumb-item">
             <a href="#">Dashboard</a>
           </li>
-          <li class="breadcrumb-item active">Periods</li>
+          <li class="breadcrumb-item active">Service</li>
         </ol>
-        <button class="btn btn-lg btn-block btn-outline-dark"  data-toggle="modal" data-target="#serviceModal" >Add A New Service</button>
+        <button class="btn btn-lg btn-info"  data-toggle="modal" data-target="#serviceModal" >Add A New Service</button>
 
         <!-- DataTables Example -->
         <div class="card mb-3">

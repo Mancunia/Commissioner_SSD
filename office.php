@@ -18,13 +18,13 @@ include_once 'includes/newUser.html';
           </li>
           <li class="breadcrumb-item active">Office</li>
         </ol>
-        <button class="btn btn-lg btn-block btn-outline-dark"  data-toggle="modal" data-target="#userModal" >Add A New User</button>
+        <button class="btn btn-lg btn-info"  data-toggle="modal" data-target="#userModal" >Add A New User</button>
 
         <!-- DataTables Example -->
         <div class="card mb-3">
           <div class="card-header">
             <i class="fas fa-table"></i>
-            Data Table Example</div>
+            Office</div>
           <div class="card-body">
             <div class="table-responsive">
             <table class="table" id="dataTable" width="100%" cellspacing="0">

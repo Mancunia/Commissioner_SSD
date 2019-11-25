@@ -1,6 +1,6 @@
 <?php
 require_once 'requires/head.php';
-include_once 'includes/newPeriod.html';
+include_once 'includes/newCompany.html';
 ?>
 
 <!-- Modal -->
@@ -16,15 +16,14 @@ include_once 'includes/newPeriod.html';
           <li class="breadcrumb-item">
             <a href="#">Dashboard</a>
           </li>
-          <li class="breadcrumb-item active">Periods</li>
+          <li class="breadcrumb-item active">companies</li>
         </ol>
-        <button class="btn btn-lg btn-info"  data-toggle="modal" data-target="#periodModal" >Add A New Period</button>
-
+        <button class="btn btn-lg btn-info"  data-toggle="modal" data-target="#companyModal" >Add A New Company</button>
         <!-- DataTables Example -->
         <div class="card mb-3">
           <div class="card-header">
             <i class="fas fa-table"></i>
-            Periods</div>
+            Companies</div>
           <div class="card-body">
             <div class="table-responsive">
             <table class="table" id="dataTable" width="100%" cellspacing="0">
@@ -32,6 +31,7 @@ include_once 'includes/newPeriod.html';
                 <tr>
                   <th>#</th>
                     <th>Name</th>
+                    <th>Department</th>
                     <th>Action</th>
                   </tr>
                 </thead>
@@ -39,6 +39,7 @@ include_once 'includes/newPeriod.html';
                   <tr>
                   <th>#</th>
                     <th>Name</th>
+                    <th>Department</th>
                     <th>Action</th>
                   </tr>
                 </tfoot>
@@ -48,11 +49,15 @@ include_once 'includes/newPeriod.html';
                     <td>System Architect</td>
                     <td>Edinburgh</td>
                     
+                    <td>Edinburgh</td>
+                    
                     
                   </tr>
                   <tr>
                     <td>2</td>
                     <td>Accountant</td>
+                    <td>Tokyo</td>
+                    
                     <td>Edinburgh</td>
                     
                    
@@ -60,6 +65,8 @@ include_once 'includes/newPeriod.html';
                   <tr>
                     <td>3</td>
                     <td>Junior Technical Author</td>
+                    <td>San Francisco</td>
+                    
                     <td>Edinburgh</td>
                     
                     

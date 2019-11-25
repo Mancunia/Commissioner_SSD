@@ -1,6 +1,16 @@
 <?php
 require_once 'requires/head.php';
-include_once 'includes/newPeriod.html';
+include 'requires/app_user.php';
+
+//instance of the class app_user
+$app = new app_user();
+
+$role=$app->getRole();
+$rank=$app->getRank();
+$group=$app->getGroup();
+
+//form
+include_once 'includes/adminUsers.php';
 ?>
 
 <!-- Modal -->
@@ -16,15 +26,15 @@ include_once 'includes/newPeriod.html';
           <li class="breadcrumb-item">
             <a href="#">Dashboard</a>
           </li>
-          <li class="breadcrumb-item active">Periods</li>
+          <li class="breadcrumb-item active">Users</li>
         </ol>
-        <button class="btn btn-lg btn-info"  data-toggle="modal" data-target="#periodModal" >Add A New Period</button>
+        <button class="btn btn-lg btn-info"  data-toggle="modal" data-target="#userModal" >Add A New Account</button>
 
         <!-- DataTables Example -->
         <div class="card mb-3">
           <div class="card-header">
             <i class="fas fa-table"></i>
-            Periods</div>
+          User</div>
           <div class="card-body">
             <div class="table-responsive">
             <table class="table" id="dataTable" width="100%" cellspacing="0">
@@ -32,6 +42,10 @@ include_once 'includes/newPeriod.html';
                 <tr>
                   <th>#</th>
                     <th>Name</th>
+                    <th>Phone</th>
+                    <th>Staff ID</th>
+                    <th>Rank</th>
+                    <th>Date Added</th>
                     <th>Action</th>
                   </tr>
                 </thead>
@@ -39,6 +53,10 @@ include_once 'includes/newPeriod.html';
                   <tr>
                   <th>#</th>
                     <th>Name</th>
+                    <th>Phone</th>
+                    <th>Staff ID</th>
+                    <th>Rank</th>
+                    <th>Date Added</th>
                     <th>Action</th>
                   </tr>
                 </tfoot>
@@ -47,12 +65,20 @@ include_once 'includes/newPeriod.html';
                     <td>1</td>
                     <td>System Architect</td>
                     <td>Edinburgh</td>
+                    <td>61</td>
+                    <td>2011/04/25</td>
+                    <td>$320,800</td>
+                    <td>Edinburgh</td>
                     
                     
                   </tr>
                   <tr>
                     <td>2</td>
                     <td>Accountant</td>
+                    <td>Tokyo</td>
+                    <td>63</td>
+                    <td>2011/07/25</td>
+                    <td>$170,750</td>
                     <td>Edinburgh</td>
                     
                    
@@ -60,6 +86,10 @@ include_once 'includes/newPeriod.html';
                   <tr>
                     <td>3</td>
                     <td>Junior Technical Author</td>
+                    <td>San Francisco</td>
+                    <td>66</td>
+                    <td>2009/01/12</td>
+                    <td>$86,000</td>
                     <td>Edinburgh</td>
                     
                     

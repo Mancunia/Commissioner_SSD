@@ -1,11 +1,24 @@
 <?php
-include 'conn.php';
+require 'requires/conn.php';
+
 class com_ssd{
 //Get payments details
+
+function testDB(){
+    $db = Database::getInstance();
+    $mysqli = $db->getConnection(); 
+    echo mysqli_get_server_info($mysqli);
+    // $d= mysqli_fetch_array($result);
+    // return $d[0];
+}
+
+
 function getPaymentDetails($payID){
     try{
-        $conn = new Database();
-$db=$conn->getdbconnect();
+        $conn = Database::getInstance();
+        $db = $conn->getConnection(); 
+//         $conn = new Database();
+// $db=$conn->getdbconnect();
 $result=mysqli_query($db,"SELECT p.*, c.*,s.* , v.* FROM payment p join company c  on p.company_id=c.company_id join service s on p.service_provided=s.service_id join period v on p.period=v.period_id  
 where p.payment_id='$payID' and p.alive=1");
     return $result;
