@@ -1,3 +1,14 @@
+<?php
+session_start();
+if(!isset($_SESSION['user_id'])){
+
+  header ("Location:./settings/login.php");
+}
+
+if($_SESSION['cred_1']==$_SESSION['cred_2']){
+  header ("Location:./settings/setpassword.php");
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 

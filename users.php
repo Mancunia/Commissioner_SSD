@@ -8,6 +8,21 @@ $app = new app_user();
 $role=$app->getRole();
 $rank=$app->getRank();
 $group=$app->getGroup();
+$office=$app->getOffices();
+
+$feed="";
+
+if(isset($_POST['newUser'])){
+  extract($_POST);
+  $pid=$app->newPerson($userName,$fname,$lname,$dob,$staff_id,$phone,$phone1,$add_ress,$ranke,$email);
+
+  echo $userName;
+
+ $feed=$app->newUser($pid,$userName,$role,$office,$acnt,$_SESSION['user_id']);
+ echo $_SESSION['user_id'];
+ echo $office;
+}
+
 
 //form
 include_once 'includes/adminUsers.php';
@@ -28,6 +43,7 @@ include_once 'includes/adminUsers.php';
           </li>
           <li class="breadcrumb-item active">Users</li>
         </ol>
+        <?php echo $feed; ?>
         <button class="btn btn-lg btn-info"  data-toggle="modal" data-target="#userModal" >Add A New Account</button>
 
         <!-- DataTables Example -->

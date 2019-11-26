@@ -14,19 +14,24 @@
     <div class="form-row">
       <div class="form-group col-md-6">
         <label for="inputEmail4">Firstname:</label>
-        <input type="text" class="form-control" id="inputEmail4" name="fname" placeholder="Firstname">
+        <input type="text" class="form-control" id="inputEmail4" required name="fname" placeholder="Firstname">
       </div>
   
       <div class="form-group col-md-6">
         <label for="inputPassword4">Surname:</label>
-        <input type="text" class="form-control" id="inputPassword4" name="lname" placeholder="Surname">
+        <input type="text" class="form-control" id="inputPassword4" required name="lname" placeholder="Surname">
       </div>
     </div>
   
     <div class="form-row">
-      <div class="form-group col-md-12">
+      <div class="form-group col-md-6">
         <label for="inputEmail4">Username</label>
-        <input type="text" class="form-control" id="inputEmail4" name="userName" placeholder="Username">
+        <input type="text" class="form-control" id="inputEmail4" required name="userName" placeholder="Username">
+      </div>
+
+      <div class="form-group col-md-6">
+        <label for="inputEmail4">Date of Birth</label>
+        <input type="date" class="form-control" id="inputEmail4" name="dob" required placeholder="Date of birth">
       </div>
     </div>
   
@@ -46,7 +51,7 @@
   
       <div class="form-group col-md-6">
         <label for="inputPassword4">Role:</label>
-        <select type="text" class="form-control" id="inputPassword4" name="role">
+        <select type="text" class="form-control" id="inputPassword4" required name="role">
   <option>Select</option>
   <?php
   while($rol=mysqli_fetch_array($role)){
@@ -62,7 +67,7 @@
     <div class="form-row">
       <div class="form-group col-md-6">
         <label for="inputEmail4">Phone:</label>
-        <input type="Number" class="form-control" id="inputEmail4" name="phone" placeholder="0240000000">
+        <input type="Number" class="form-control" id="inputEmail4" name="phone" required placeholder="0240000000">
       </div>
   
       <div class="form-group col-md-6">
@@ -74,7 +79,7 @@
     
       <div class="form-group">
         <label for="inputEmail4">Address:</label>
-        <textarea type="text" class="form-control" id="inputEmail4" row="100" col="20" name="address" placeholder="Address">
+        <textarea type="text" class="form-control" id="inputEmail4" row="100" col="20" name="add_ress" placeholder="Address">
   </textarea>
       </div>
   
@@ -83,12 +88,21 @@
         <hr>
             <div class="form-group col-md-4">
               <label for="inputEmail4">Office</label>
-              <input type="Number" class="form-control" id="inputEmail4" name="phone" placeholder="0240000000">
+              <select type="Number" class="form-control" id="inputEmail4" required name="office" placeholder="0240000000">
+ <option>Select</option>
+  <?php
+  while($rak=mysqli_fetch_array($office)){
+    
+    echo'<option value"'.$rak['office_id'].'">'.$rak['office_name'].'</option>';
+  }
+  ?>
+              </select>
             </div>
+
         
             <div class="form-group col-md-4">
               <label for="">Rank:</label>
-              <select type="text" class="form-control" name="rank">
+              <select type="text" class="form-control" required name="ranke">
               <option>Select</option>
   <?php
   while($rak=mysqli_fetch_array($rank)){
@@ -102,12 +116,14 @@
             
             <div class="form-group col-md-4">
               <label for="">Account Type</label>
-              <select name="group" type="text" class="form-control">
+              <select name="acnt" type="text" required class="form-control">
               <option>Select</option>
   <?php
+  
   while($grp=mysqli_fetch_array($group)){
     echo'<option value"'.$grp['group_id'].'">'.$grp['group_name'].'</option>';
   }
+
   ?>
 
               </select>

@@ -68,13 +68,13 @@ function newRole($role)
 
 
 //Like-Admin functions
-    function offices(){
+    function getOffices(){
 try {
     //code...
     $conn = Database::getInstance();
         $db = $conn->getConnection();
 
-        $result=mysqli_query($db,"SELECT * FROM office");
+        $result=mysqli_query($db,"SELECT * FROM `office` where status = 1 ");
         
         return $result;  
 }  
@@ -114,26 +114,83 @@ catch (PDOException $ex){
     }
 
 //Add new account
-    function newUser($username,$password,$fname,$lname,$contact,$role,$office,$by){
+    function newPerson($username,$fname,$lname,$dob,$emp_num,$phone1,$phone2,$address,$rank,$email)
+    {
         try{
 
-            if($by=="AC"||$by=="DC"||$by=="Commissioner"){
-                $role="staff";
-            }
+            // if($by=="AC"||$by=="DC"||$by=="Commissioner"){
+            //     $role="staff";
+            // }
 
             $conn = Database::getInstance();
         $db = $conn->getConnection();
-mysqli_query($db,"
-INSERT INTO `com_ssd`.`users` (`username`, `fname`, `lname`, `password`, `contact`, `role`, `office`, `by`,`date`) 
-VALUES ('$username', '$fname', '$lname', '$username', '$contact', '$role', '$office','$by',NOW())
 
-");
+        $chk=mysqli_query($db,"SELECT * FROM user where `username`='$username'");
+        $row=mysqli_num_rows($chk);
+        if($row>0){
+           echo"
+<script>
+alert('Username Taken')
+</script>
+"; 
+        }
+
+        else {
+
+mysqli_query($db,"INSERT INTO person (first_name, last_name,rank_id,dob,employee_number,phone,phone2,address,email,created_date) 
+VALUES ('$fname', '$lname', '$rank', '$dob', '$emp_num', '$phone1','$phone2','$address', '$email', NOW())");
+
+// VALUES ('$fname', '$lname', '$rank', '$dob', '$emp_num', '$phone1','$phone2', '$address', '$email',NOW()) ");
+
+$last_id=mysqli_query($db,"SELECT person_id FROM person ORDER BY person_id DESC LIMIT 1");
+$last_id=mysqli_fetch_array($last_id);
+$pid=$last_id['person_id'];
+return $pid;
+            }
 
         }
         catch (PDOException $ex){
             echo $ex->getMessage();
             }
     }
+
+
+    function newUser($pers_id,$username,$role,$office,$acnt,$by){
+//New user acount
+ $conn = Database::getInstance();
+        $db = $conn->getConnection();
+
+        
+
+        $feed=mysqli_query($db," INSERT INTO `com_ssd`.`user` (`username`, `password`, `person_id`, `role`, `grp_id`, `office_id`, `date_created`, `created_by`) 
+        VALUES ('$username', '$username', '$pers_id', '$role', '$acnt', '$office', NOW(), '$by');
+
+        ");
+
+        if($feed){
+
+return"
+<div class='alert alert-success alert-dismissible fade show' role='alert'>
+<strong>Great!</strong> User: ".$username."'s account has been created successfully,<b>NOTE!</b> password is username
+<button type='button' class='close' data-dismiss='alert' aria-label='Close'>
+<span aria-hidden='true'>&times;</span>
+</button>
+</div>
+";
+}
+else{
+    return"
+<div class='alert alert-danger alert-dismissible fade show' role='alert'>
+<strong>OOPs!</strong> There is something wrong <b>NOTE!</b> Check all details
+<button type='button' class='close' data-dismiss='alert' aria-label='Close'>
+<span aria-hidden='true'>&times;</span>
+</button>
+</div>
+";
+
+}
+
+}
 
 
     /*
@@ -236,7 +293,7 @@ catch (PDOException $ex){
     function getRank(){
         $conn = Database::getInstance();
         $db = $conn->getConnection();
-        $result=mysqli_query($db,"SELECT * from rank where status=1");
+        $result=mysqli_query($db,"SELECT * from rank");
         return $result;
     }
 
@@ -244,7 +301,7 @@ catch (PDOException $ex){
     function getGroup(){
         $conn = Database::getInstance();
         $db = $conn->getConnection();
-        $result=mysqli_query($db,"SELECT * from group");
+        $result=mysqli_query($db,"SELECT * from `group`");
         return $result;
     }
 
