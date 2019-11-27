@@ -16,11 +16,11 @@ if(isset($_POST['newUser'])){
   extract($_POST);
   $pid=$app->newPerson($userName,$fname,$lname,$dob,$staff_id,$phone,$phone1,$add_ress,$ranke,$email);
 
-  echo $userName;
+  // echo $userName;
 
  $feed=$app->newUser($pid,$userName,$role,$office,$acnt,$_SESSION['user_id']);
- echo $_SESSION['user_id'];
- echo $office;
+//  echo $_SESSION['user_id'];
+//  echo $office;
 }
 
 

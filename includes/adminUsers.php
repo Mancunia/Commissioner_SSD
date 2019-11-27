@@ -51,11 +51,11 @@
   
       <div class="form-group col-md-6">
         <label for="inputPassword4">Role:</label>
-        <select type="text" class="form-control" id="inputPassword4" required name="role">
+        <select class="form-control" id="inputPassword4" required name="role">
   <option>Select</option>
   <?php
   while($rol=mysqli_fetch_array($role)){
-    echo'<option value"'.$rol['role_id'].'">'.$rol['role_name'].'</option>';
+    echo'<option value="'.$rol['role_id'].'">'.$rol['role_name'].'</option>';
   }
   ?>
   </select>
@@ -93,7 +93,7 @@
   <?php
   while($rak=mysqli_fetch_array($office)){
     
-    echo'<option value"'.$rak['office_id'].'">'.$rak['office_name'].'</option>';
+    echo'<option value="'.$rak['office_id'].'">'.$rak['office_name'].'</option>';
   }
   ?>
               </select>
@@ -107,7 +107,7 @@
   <?php
   while($rak=mysqli_fetch_array($rank)){
     
-    echo'<option value"'.$rak['rank_id'].'">'.$rak['rank_title'].'</option>';
+    echo'<option value="'.$rak['rank_id'].'">'.$rak['rank_title'].'</option>';
   }
   ?>
 
@@ -121,7 +121,7 @@
   <?php
   
   while($grp=mysqli_fetch_array($group)){
-    echo'<option value"'.$grp['group_id'].'">'.$grp['group_name'].'</option>';
+    echo'<option value="'.$grp['group_id'].'">'.$grp['group_name'].'</option>';
   }
 
   ?>

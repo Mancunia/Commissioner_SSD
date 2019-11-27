@@ -22,7 +22,7 @@ include './includes/grps/ordinary.html';
 
     if($_SESSION['grp']=='3'){
        //like-admin
-       include './includes/grps/like.html';
+       include './includes/grps/like-admin.html';
     }
 
     if($_SESSION['grp']=='4'){

@@ -117,16 +117,14 @@ catch (PDOException $ex){
     function newPerson($username,$fname,$lname,$dob,$emp_num,$phone1,$phone2,$address,$rank,$email)
     {
         try{
-
-            // if($by=="AC"||$by=="DC"||$by=="Commissioner"){
-            //     $role="staff";
-            // }
+// echo $username;
 
             $conn = Database::getInstance();
         $db = $conn->getConnection();
-
+// echo $fname;
         $chk=mysqli_query($db,"SELECT * FROM user where `username`='$username'");
         $row=mysqli_num_rows($chk);
+        
         if($row>0){
            echo"
 <script>
@@ -136,18 +134,30 @@ alert('Username Taken')
         }
 
         else {
+// echo $lname;
+$feed=mysqli_query($db,"INSERT INTO `com_ssd`.`person` (`first_name`, `last_name`, `rank_id`, `dob`, `employee_number`, `phone`, `phone_2`, `address`, `email`, `created_date`) 
+VALUES ('$fname', '$lname', '$rank', '$dob', '$emp_num', '$phone1', '$phone2', '$address', '$email',NOW())
 
-mysqli_query($db,"INSERT INTO person (first_name, last_name,rank_id,dob,employee_number,phone,phone2,address,email,created_date) 
-VALUES ('$fname', '$lname', '$rank', '$dob', '$emp_num', '$phone1','$phone2','$address', '$email', NOW())");
-
-// VALUES ('$fname', '$lname', '$rank', '$dob', '$emp_num', '$phone1','$phone2', '$address', '$email',NOW()) ");
-
-$last_id=mysqli_query($db,"SELECT person_id FROM person ORDER BY person_id DESC LIMIT 1");
+");
+// echo $rank;
+// VALUES ('$fname', '$lname', '$rank','$dob', '$emp_num', '$phone1','$phone2', '$address', '$email',NOW()) ");
+if (!$feed){
+echo"
+<div class='alert alert-danger alert-dismissible fade show' role='alert'>
+<strong>OOPs!</strong> There is something wrong <b>NOTE!</b> Check all details
+<button type='button' class='close' data-dismiss='alert' aria-label='Close'>
+<span aria-hidden='true'>&times;</span>
+</button>
+</div>
+";
+}else{
+$last_id=mysqli_query($db," SELECT `person_id` FROM `com_ssd`.person ORDER BY person_id DESC LIMIT 1");
 $last_id=mysqli_fetch_array($last_id);
 $pid=$last_id['person_id'];
+// echo $pid;
 return $pid;
             }
-
+}
         }
         catch (PDOException $ex){
             echo $ex->getMessage();
@@ -160,12 +170,11 @@ return $pid;
  $conn = Database::getInstance();
         $db = $conn->getConnection();
 
-        
+        // echo $pers_id;
 
         $feed=mysqli_query($db," INSERT INTO `com_ssd`.`user` (`username`, `password`, `person_id`, `role`, `grp_id`, `office_id`, `date_created`, `created_by`) 
-        VALUES ('$username', '$username', '$pers_id', '$role', '$acnt', '$office', NOW(), '$by');
-
-        ");
+        VALUES ('$username', '$username', '$pers_id', '$role', '$acnt', '$office', NOW(), '$by')");
+        
 
         if($feed){
 
@@ -181,7 +190,7 @@ return"
 else{
     return"
 <div class='alert alert-danger alert-dismissible fade show' role='alert'>
-<strong>OOPs!</strong> There is something wrong <b>NOTE!</b> Check all details
+<strong>OOPs!</strong> There is something wrong <b>NOTE!</b>, Check all details
 <button type='button' class='close' data-dismiss='alert' aria-label='Close'>
 <span aria-hidden='true'>&times;</span>
 </button>
@@ -189,6 +198,8 @@ else{
 ";
 
 }
+
+
 
 }
 
