@@ -23,6 +23,20 @@ if(isset($_POST['newUser'])){
 //  echo $office;
 }
 
+if(isset($_GET['on'])){
+  $feed=$app->acntOn($_GET['on']);
+
+  // header ("Location:index.php");
+}
+
+if(isset($_GET['off'])){
+  $feed=$app->acntOff($_GET['off']);
+
+  // header ("Location:index.php");
+
+}
+
+$users=$app->getUserAdmin($_SESSION['office']);
 
 //form
 include_once 'includes/adminUsers.php';
@@ -62,54 +76,57 @@ include_once 'includes/adminUsers.php';
                     <th>Staff ID</th>
                     <th>Rank</th>
                     <th>Date Added</th>
-                    <th>Action</th>
+                    <th>Last_Login</th>
+                    <th>Status</th>
                   </tr>
                 </thead>
                 <tfoot>
-                  <tr>
+                <tr>
                   <th>#</th>
                     <th>Name</th>
                     <th>Phone</th>
                     <th>Staff ID</th>
                     <th>Rank</th>
                     <th>Date Added</th>
-                    <th>Action</th>
+                    <th>Last_Login</th>
+                    <th>Status</th>
                   </tr>
                 </tfoot>
                 <tbody>
-                  <tr>
-                    <td>1</td>
-                    <td>System Architect</td>
-                    <td>Edinburgh</td>
-                    <td>61</td>
-                    <td>2011/04/25</td>
-                    <td>$320,800</td>
-                    <td>Edinburgh</td>
+                <?php
+                  $i=1;
+                  while($u=mysqli_fetch_array($users)){
+                    echo "
+                    <tr>
+                    <td>".$i."</td>
+                    <td>".$u['first_name']." ".$u['last_name']."</td>
+                    <td>".$u['phone']."</td>
+                    <td>".$u['employee_number']."</td>
+                    <td>".$u['rank_title']."</td>
+                    <td>".$u['date_created']."</td>
+                    <td>".$u['last_login']."</td>
+
+                    <td>";
+
+                    if($u['status']==1){
+                      echo '<a href="office.php?off='.$u['user_id'].'" class="btn btn-danger btn-group-toggle">Deactivate</a>';
+                    }
+                    else{
+                      echo '<a href="office.php?on='.$u['user_id'].'" class="btn btn-success btn-group-toggle">Activate</a>';
+                    }
+                    
+                    echo"<a href='users.php?times=".$u['user_id']."'>&times;</a></td>
                     
                     
                   </tr>
-                  <tr>
-                    <td>2</td>
-                    <td>Accountant</td>
-                    <td>Tokyo</td>
-                    <td>63</td>
-                    <td>2011/07/25</td>
-                    <td>$170,750</td>
-                    <td>Edinburgh</td>
                     
-                   
-                  </tr>
-                  <tr>
-                    <td>3</td>
-                    <td>Junior Technical Author</td>
-                    <td>San Francisco</td>
-                    <td>66</td>
-                    <td>2009/01/12</td>
-                    <td>$86,000</td>
-                    <td>Edinburgh</td>
-                    
-                    
-                  </tr>
+                    ";
+                    $i++;
+
+                  }
+                  
+                  
+                  ?>
                   
                   </tbody>
               </table>

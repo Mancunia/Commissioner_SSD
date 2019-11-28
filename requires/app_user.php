@@ -203,6 +203,44 @@ else{
 
 }
 
+function getUserByOffice($office){
+    $conn = Database::getInstance();
+    $db = $conn->getConnection();
+
+    $result=mysqli_query($db,"SELECT u.*,p.*,r.rank_title FROM user u join person p on u.person_id=p.person_id join rank r on p.rank_id=r.rank_id where u.office_id='$office' and u.grp_id=1");
+$count=mysqli_num_rows($result);
+if ($count>=1){
+return $result;
+}
+else{
+echo "<script>
+alert('Nothing to show')
+</script>";
+}
+
+header ("Location:./index.php");
+
+}
+
+function getUserAdmin($office){
+    $conn = Database::getInstance();
+    $db = $conn->getConnection();
+
+    $result=mysqli_query($db,"SELECT u.*,p.*,r.rank_title FROM user u join person p on u.person_id=p.person_id join rank r on p.rank_id=r.rank_id where u.grp_id<>4");
+$count=mysqli_num_rows($result);
+if ($count>=1){
+return $result;
+}
+else{
+echo "<script>
+alert('Nothing to show')
+</script>";
+}
+
+header ("Location:./index.php");
+
+}
+
 
     /*
     |
@@ -328,7 +366,7 @@ catch (PDOException $ex){
         mysqli_query($db,"UPDATE `com_ssd`.`user` SET `status`='0' WHERE `user_id`='$userid'
         ");
    
-echo "
+return "
 <div class='alert alert-warning alert-dismissible fade show' role='alert'>
     <strong>Great!</strong> User has been Deactivated
     <button type='button' class='close' data-dismiss='alert' aria-label='Close'>
@@ -355,7 +393,7 @@ echo "
         mysqli_query($db,"UPDATE `com_ssd`.`user` SET `status`='1' WHERE `user_id`='$userid'
         ");
    
-echo "
+return "
 <div class='alert alert-success alert-dismissible fade show' role='alert'>
     <strong>Great!</strong> User has been Activated
     <button type='button' class='close' data-dismiss='alert' aria-label='Close'>

@@ -8,6 +8,7 @@ if(isset($_POST['newOffice'])){
   $app->newOffice($_POST['office'],$_POST['officeAcro'],$_POST['department']);
 }
 
+
 include_once 'includes/newOffice.php';
 ?>
 

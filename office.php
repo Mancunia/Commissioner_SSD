@@ -1,6 +1,41 @@
 <?php
 require_once 'requires/head.php';
-include_once 'includes/newUser.html';
+include 'requires/app_user.php';
+
+//instance of the class app_user
+$app = new app_user();
+
+$rank=$app->getRank();
+
+$feed="";
+
+if(isset($_POST['newUser'])){
+  extract($_POST);
+  $pid=$app->newPerson($userName,$fname,$lname,$dob,$staff_id,$phone,$phone1,$address,$rank,$email);
+
+  // echo $userName;
+
+ $feed=$app->newUser($pid,$userName,1,$_SESSION['office'],1,$_SESSION['user_id']);
+//  echo $_SESSION['user_id'];
+//  echo $office;
+}
+
+if(isset($_GET['on'])){
+  $feed=$app->acntOn($_GET['on']);
+
+  // header ("Location:index.php");
+}
+
+if(isset($_GET['off'])){
+  $feed=$app->acntOff($_GET['off']);
+
+  // header ("Location:index.php");
+
+}
+
+$users=$app->getUserByOffice($_SESSION['office']);
+
+include_once 'includes/newUser.php';
 ?>
 
 <!-- Modal -->
@@ -18,6 +53,8 @@ include_once 'includes/newUser.html';
           </li>
           <li class="breadcrumb-item active">Office</li>
         </ol>
+
+        <?php echo $feed;?>
         <button class="btn btn-lg btn-info"  data-toggle="modal" data-target="#userModal" >Add A New User</button>
 
         <!-- DataTables Example -->
@@ -36,7 +73,8 @@ include_once 'includes/newUser.html';
                     <th>Staff ID</th>
                     <th>Rank</th>
                     <th>Date Added</th>
-                    <th>Action</th>
+                    <th>Last_Login</th>
+                    <th>Status</th>
                   </tr>
                 </thead>
                 <tfoot>
@@ -47,43 +85,45 @@ include_once 'includes/newUser.html';
                     <th>Staff ID</th>
                     <th>Rank</th>
                     <th>Date Added</th>
-                    <th>Action</th>
+                    <th>Last_Login</th>
+                    <th>Status</th>
                   </tr>
                 </tfoot>
                 <tbody>
-                  <tr>
-                    <td>1</td>
-                    <td>System Architect</td>
-                    <td>Edinburgh</td>
-                    <td>61</td>
-                    <td>2011/04/25</td>
-                    <td>$320,800</td>
-                    <td>Edinburgh</td>
+                  <?php
+                  $i=1;
+                  while($u=mysqli_fetch_array($users)){
+                    echo "
+                    <tr>
+                    <td>".$i."</td>
+                    <td>".$u['first_name']." ".$u['last_name']."</td>
+                    <td>".$u['phone']."</td>
+                    <td>".$u['employee_number']."</td>
+                    <td>".$u['rank_title']."</td>
+                    <td>".$u['date_created']."</td>
+                    <td>".$u['last_login']."</td>
+
+                    <td>";
+
+                    if($u['status']==1){
+                      echo '<a href="office.php?off='.$u['user_id'].'" class="btn btn-danger btn-group-toggle">Deactivate</a>';
+                    }
+                    else{
+                      echo '<a href="office.php?on='.$u['user_id'].'" class="btn btn-success btn-group-toggle">Activate</a>';
+                    }
+                    
+                    echo"</td>
                     
                     
                   </tr>
-                  <tr>
-                    <td>2</td>
-                    <td>Accountant</td>
-                    <td>Tokyo</td>
-                    <td>63</td>
-                    <td>2011/07/25</td>
-                    <td>$170,750</td>
-                    <td>Edinburgh</td>
                     
-                   
-                  </tr>
-                  <tr>
-                    <td>3</td>
-                    <td>Junior Technical Author</td>
-                    <td>San Francisco</td>
-                    <td>66</td>
-                    <td>2009/01/12</td>
-                    <td>$86,000</td>
-                    <td>Edinburgh</td>
-                    
-                    
-                  </tr>
+                    ";
+                    $i++;
+
+                  }
+                  
+                  
+                  ?>
                   
                   </tbody>
               </table>

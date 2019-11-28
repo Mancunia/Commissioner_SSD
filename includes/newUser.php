@@ -24,9 +24,13 @@
     </div>
   
     <div class="form-row">
-      <div class="form-group col-md-12">
+      <div class="form-group col-md-6">
         <label for="inputEmail4">Username</label>
         <input type="text" class="form-control" id="inputEmail4" name="userName" placeholder="Username">
+      </div>
+      <div class="form-group col-md-6">
+        <label for="inputEmail4">Date of Birth</label>
+        <input type="date" class="form-control" id="inputEmail4" name="dob" required placeholder="Date of birth">
       </div>
     </div>
   
@@ -43,14 +47,21 @@
         <label for="inputEmail4">Staff ID:</label>
         <input type="text" class="form-control" id="inputEmail4" name="staff_id" placeholder="Staff ID">
       </div>
-  
+
       <div class="form-group col-md-6">
-        <label for="inputPassword4">Role:</label>
-        <select type="text" class="form-control" id="inputPassword4" name="role">
+              <label for="">Rank:</label>
+              <select type="text" class="form-control" required name="rank">
+                <option>Select</option>
+    <?php
+    while($rak=mysqli_fetch_array($rank)){
+      
+      echo'<option value="'.$rak['rank_id'].'">'.$rak['rank_title'].'</option>';
+    }
+    ?>
   
-  </select>
-  
-      </div>
+                </select>
+            </div> 
+      
     </div>
   
     <!--phones -->
@@ -74,16 +85,13 @@
       </div>
   
     <!--admin-->
-    <div class="form-row">
+    <!-- <div class="form-row">
         <hr>
         
-            <div class="form-group col-md-12">
-              <label for="">Rank:</label>
-              <input type="Number" class="form-control" id="inputPassword4" name="phone1" placeholder="0240000000">
-            </div> 
             
             
-          </div>
+            
+          </div> -->
 
     
    <!--Admin-->
