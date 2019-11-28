@@ -74,7 +74,7 @@ try {
     $conn = Database::getInstance();
         $db = $conn->getConnection();
 
-        $result=mysqli_query($db,"SELECT * FROM `office` where status = 1 ");
+        $result=mysqli_query($db,"SELECT f.*,d.* FROM office f join department d on f.department_id=d.department_id where f.status = 1 ");
         
         return $result;  
 }  
@@ -83,6 +83,22 @@ catch (PDOException $ex){
     }
               
     }
+
+    function getOffices_id($d){
+        try {
+            //code...
+            $conn = Database::getInstance();
+                $db = $conn->getConnection();
+        
+                $result=mysqli_query($db,"SELECT f.*,d.* FROM office f join department d on f.department_id=d.department_id where f.department_id='$d' ");
+                
+                return $result;  
+        }  
+        catch (PDOException $ex){
+            echo $ex->getMessage();
+            }
+                      
+            }
 
     function getDepartment(){
         $conn = Database::getInstance();
@@ -222,7 +238,7 @@ header ("Location:./index.php");
 
 }
 
-function getUserAdmin($office){
+function getUserAdmin(){
     $conn = Database::getInstance();
     $db = $conn->getConnection();
 
@@ -241,6 +257,25 @@ header ("Location:./index.php");
 
 }
 
+function getUserAdmin_id($office){
+    $conn = Database::getInstance();
+    $db = $conn->getConnection();
+
+    $result=mysqli_query($db,"SELECT u.*,p.*,r.rank_title FROM user u join person p on u.person_id=p.person_id join rank r on p.rank_id=r.rank_id where u.grp_id<>4 and u.office_id='$office'");
+$count=mysqli_num_rows($result);
+if ($count>=1){
+return $result;
+}
+else{
+echo "<script>
+alert('Nothing to show')
+</script>";
+}
+
+// header ("Location:./index.php");
+
+}
+
 
     /*
     |
@@ -254,49 +289,10 @@ try{
     $conn = Database::getInstance();
     $db = $conn->getConnection();
 
-$results=mysqli_query($db,"SELECT * FROM user WHERE username='$username' AND password='$password'");
+$results=mysqli_query($db,"SELECT u.*,d.department_id FROM user u join office f on f.office_id=u.office_id join department d on f.department_id=d.department_id  WHERE username='$username' AND password='$password'");
    //fetch into an array
     $result=mysqli_fetch_array($results);
     return $result;
-
-//     if($result['username']==$username&&$result['password']==$password){
-//        if($result['status']==0){
-//         $error_msg="<div class='alert alert-danger alert-dismissible fade show' role='alert'>
-//         <strong>OOPS!</strong> Your account isn't active
-//         <button type='button' class='close' data-dismiss='alert' aria-label='Close'>
-//           <span aria-hidden='true'>&times;</span>
-//         </button>
-//         </div>";
-//         return $error_msg; 
-//        }
-//        else{
-           
-//         session_start();
-//     $_SESSION['user_id']=$result['user_id'];
-//     $_SESSION['role']=$result['role'];
-//     $_SESSION['fname']=$result['fname'];
-//     $_SESSION['office']=$result['office_id'];
-//     $_SESSION['grp']=$result['grp_id'];
-//     $_SESSION['cred_1']=$result['username'];
-//     $_SESSION['cred_2']=$result['password'];
-// }
-
-//     }
-        
-//         else{
-//             $error_msg="<div class='alert alert-danger alert-dismissible fade show' role='alert'>
-//             <strong>OOPS!</strong> Your credentials are not correct or you are not supposed to be trying this.
-//             <button type='button' class='close' data-dismiss='alert' aria-label='Close'>
-//               <span aria-hidden='true'>&times;</span>
-//             </button>
-//             </div>";
-//             return $error_msg;
-            
-//         }
-
-
-
-
 }
 catch (PDOException $ex){
         echo $ex->getMessage();

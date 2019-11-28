@@ -2,7 +2,7 @@
 require_once 'requires/head.php';
 include 'requires/app_user.php';
 $app=new app_user();
-
+$result=$app->getDepartment();
 if(isset($_POST['newDepart'])){
   $app->newDepartment($_POST['department']);
 }
@@ -50,27 +50,26 @@ include_once 'includes/newDepartment.html';
                   </tr>
                 </tfoot>
                 <tbody>
-                  <tr>
-                    <td>1</td>
-                    <td>System Architect</td>
-                    <td>Edinburgh</td>
+
+                <?php  
+                $i=1;
+                         while($d=mysqli_fetch_array($result)){
+                         
+                          echo "
+                          <tr>
+                    <td>".$i."</td>
+                    <td>".$d['department_name']."</td>
+                    <td><a class='btn btn-info'>Something</a>
+                    <a class='btn btn-primary' href='offices.php?depart=".$d['department_id']."'>Offices</a>
+                    </td>
                     
                     
                   </tr>
-                  <tr>
-                    <td>2</td>
-                    <td>Accountant</td>
-                    <td>Edinburgh</td>
-                    
-                   
-                  </tr>
-                  <tr>
-                    <td>3</td>
-                    <td>Junior Technical Author</td>
-                    <td>Edinburgh</td>
-                    
-                    
-                  </tr>
+                          ";
+                         $i++;
+                        }
+                           ?>
+                
                   
                   </tbody>
               </table>

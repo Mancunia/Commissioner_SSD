@@ -36,7 +36,17 @@ if(isset($_GET['off'])){
 
 }
 
-$users=$app->getUserAdmin($_SESSION['office']);
+if(isset($_GET['office'])){
+
+  $users=$app->getUserAdmin_id($_GET['office']);
+}
+else{
+  $users=$app->getUserAdmin();
+
+}
+
+
+
 
 //form
 include_once 'includes/adminUsers.php';
@@ -109,10 +119,10 @@ include_once 'includes/adminUsers.php';
                     <td>";
 
                     if($u['status']==1){
-                      echo '<a href="office.php?off='.$u['user_id'].'" class="btn btn-danger btn-group-toggle">Deactivate</a>';
+                      echo '<a href="users.php?off='.$u['user_id'].'" class="btn btn-danger btn-group-toggle">Deactivate</a>';
                     }
                     else{
-                      echo '<a href="office.php?on='.$u['user_id'].'" class="btn btn-success btn-group-toggle">Activate</a>';
+                      echo '<a href="users.php?on='.$u['user_id'].'" class="btn btn-success btn-group-toggle">Activate</a>';
                     }
                     
                     echo"<a href='users.php?times=".$u['user_id']."'>&times;</a></td>

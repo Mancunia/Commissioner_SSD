@@ -29,17 +29,20 @@ where p.payment_id='$payID' and p.alive=1");
 }
 
 //add payment
-function addPayments($uid,$cid,$amnt,$period,$year,$amc_st,$amc_end,$due_D,$office,$service, $role){
+function addPayments($uid,$cid,$amnt,$period,$year,$amc_st,$amc_end,$due_D,$depart,$service,$role){
     try{
         $conn = new Database();
         $status="Submitted";
         $db=$conn->getdbconnect();
-        if($role=="staff"){
+        if($role=="1"){
             $status="Stand By";
         }
 
-        mysqli_query($db,"INSERT INTO `com_ssd`.`payment` (`company_id`, `amount`, `period`, `year`, `status`, `AMC_start`, `AMC_end`, `due_date`, `office`, `service_provided`, `date`,`by`) 
-        VALUES ('$cid', '$amnt', '$period', '$year', '$status', '$amc_st', '$amc_end', '$due_D', '$office', '$service',NOW(),'$uid' ) ");
+        // INSERT INTO `com_ssd`.`payment` (`company_id`, `service_id`, `period_id`, `department_id`, `added_id`, `year`, `amc_start`, `amc_end`, `due_date`, `status`, `created_date`, `alive`) 
+        // VALUES ('c', 's', 'p', 'd', 'u', 'y', 'as', 'ae', 'dd', 'st', 'cr', 'a')
+
+        mysqli_query($db,"INSERT INTO payment (`company_id`, `service_id`, `period_id`, `department_id`, `added_id`, `year`, `amc_start`, `amc_end`, `due_date`, `status`, `created_date`) 
+        VALUES ('$cid', '$service', '$period', '$depart', '$uid', '$year', '$amc_st','$amc_end', '$due_D', '$status',NOW() ) ");
 
 $last_id=mysqli_query($db,"SELECT payment_id FROM payment ORDER BY payment_id DESC LIMIT 1");
 $last_id=mysqli_fetch_array($last_id);
@@ -241,17 +244,24 @@ header ($link);
 
         //get Service
         function getService(){
-            $conn = new Database();
-            $db=$conn->getdbconnect();
+            $conn = Database::getInstance();
+            $db = $conn->getConnection();
 
             $result = mysqli_query($db,"SELECT * FROM service"); 
             return $result;
         }
 
-         //get Company
+         //Company
+         function addCompany($companyName,$TIN,$email,$web,$p1,$p2,$p3,$address,$desc){
+            $conn = Database::getInstance();
+            $db = $conn->getConnection();
+            mysqli_query($db,"INSERT INTO `com_ssd`.`company` (`company_name`, `TIN`, `phone`, `phone_2`, `phone_3`, `address`, `email`, `website`, `description`, `date_add`) 
+            VALUES ('$companyName', '$TIN', '$p1', '$p2', '$p3', '$address', '$email', '$web', '$desc', NOW()) ");
+         }
+
         function getCompany(){
-            $conn = new Database();
-            $db=$conn->getdbconnect();
+            $conn = Database::getInstance();
+            $db = $conn->getConnection();
 
             $result = mysqli_query($db,"SELECT * FROM company "); 
             return $result;
@@ -259,8 +269,8 @@ header ($link);
 
          //get Period
         function getPeriod(){
-            $conn = new Database();
-            $db=$conn->getdbconnect();
+            $conn = Database::getInstance();
+            $db = $conn->getConnection();
 
             $result = mysqli_query($db,"SELECT * FROM period");
             return $result;
@@ -269,8 +279,8 @@ header ($link);
          //Fly Payment 
         function deletePayment($payid){
             try{   
-                $conn = new Database();
-                $db=$conn->getdbconnect();
+                $conn = Database::getInstance();
+    $db = $conn->getConnection();
     
                 // FLY payment
             mysqli_query($db,"UPDATE `com_ssd`.`payment` SET `alive`='0' WHERE `payment_id`='$payid'");
@@ -293,8 +303,8 @@ header ($link);
 
         function restorePayment($payid){
             try{   
-                $conn = new Database();
-                $db=$conn->getdbconnect();
+                $conn = Database::getInstance();
+    $db = $conn->getConnection();
     
                 // FLY payment
             mysqli_query($db,"UPDATE `com_ssd`.`payment` SET `alive`='1' WHERE `payment_id`='$payid'");
@@ -319,8 +329,8 @@ header ($link);
 
         function everyThing($role){
             try{   
-                $conn = new Database();
-                $db=$conn->getdbconnect();
+                $conn = Database::getInstance();
+    $db = $conn->getConnection();
 
                 $spl="";
                 
@@ -411,8 +421,8 @@ if($table['status']=="Denied"){
         //edit payment
         function editPayment($payid,$amnt,$amc_in,$amc_out,$due_date,$period,$year,$role){
             try{   
-                $conn = new Database();
-                $db=$conn->getdbconnect();
+                $conn = Database::getInstance();
+    $db = $conn->getConnection();
                 $status="Submitted";
     
                 // File edit
@@ -443,26 +453,26 @@ if($table['status']=="Denied"){
                 }  
         }
 
-        function addCompany($companyName, $tin, $contact,$description){
-            try {
-                $conn = new Database();
-                $db=$conn->getdbconnect();
+//         function addCompany($companyName, $tin, $contact,$description){
+//             try {
+//                 $conn = Database::getInstance();
+//     $db = $conn->getConnection();
 
-                $sql = "INSERT INTO company (name, tin, contact, description)
-VALUES ('$companyName', '$tin', '$contact','$description')";
-mysqli_query($db,$sql);
-            } catch (Exception $ex){
-                echo $ex->getMessage();
-                } 
-        }
+//                 $sql = "INSERT INTO company (name, tin, contact, description)
+// VALUES ('$companyName', '$tin', '$contact','$description')";
+// mysqli_query($db,$sql);
+//             } catch (Exception $ex){
+//                 echo $ex->getMessage();
+//                 } 
+//         }
 
         function addService($serviceName){
             try {
                 
-                $conn = new Database();
-                $db=$conn->getdbconnect();
+                $conn = Database::getInstance();
+                $db = $conn->getConnection();
                 
-                $sql = "INSERT INTO service (title)
+                $sql = "INSERT INTO service (service_title)
                 VALUES ('$serviceName')";
                 mysqli_query($db,$sql);
 
@@ -474,8 +484,8 @@ mysqli_query($db,$sql);
 
         function addPeriod($periodName){
             try {
-                $conn = new Database();
-                $db=$conn->getdbconnect();
+                $conn = Database::getInstance();
+    $db = $conn->getConnection();
 
                 $sql = "INSERT INTO period (period_title)
 VALUES ('$periodName')";

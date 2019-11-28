@@ -4,6 +4,12 @@ include 'requires/app_user.php';
 $app=new app_user();
 $result=$app->getDepartment();
 
+if(isset($_GET['depart'])){
+  $office=$app->getOffices_id($_GET['depart']);
+}
+else{
+$office=$app->getOffices();
+}
 if(isset($_POST['newOffice'])){
   $app->newOffice($_POST['office'],$_POST['officeAcro'],$_POST['department']);
 }
@@ -54,33 +60,23 @@ include_once 'includes/newOffice.php';
                   </tr>
                 </tfoot>
                 <tbody>
-                  <tr>
-                    <td>1</td>
-                    <td>System Architect</td>
-                    <td>Edinburgh</td>
-                    
-                    <td>Edinburgh</td>
-                    
-                    
+                <?php  
+                $i=1;
+                         while($d=mysqli_fetch_array($office)){
+                         
+                          echo "
+                          <tr>
+                    <td>".$i."</td>
+                    <td>".$d['office_name']."</td>
+                    <td>".$d['department_name']."</td>
+                    <td><a class='btn btn-info'>Something</a>
+                    <a class='btn btn-primary' href='users.php?office=".$d['office_id']."'>Offices</a>
+                    </td>                    
                   </tr>
-                  <tr>
-                    <td>2</td>
-                    <td>Accountant</td>
-                    <td>Tokyo</td>
-                    
-                    <td>Edinburgh</td>
-                    
-                   
-                  </tr>
-                  <tr>
-                    <td>3</td>
-                    <td>Junior Technical Author</td>
-                    <td>San Francisco</td>
-                    
-                    <td>Edinburgh</td>
-                    
-                    
-                  </tr>
+                          ";
+                         $i++;
+                        }
+                           ?>
                   
                   </tbody>
               </table>

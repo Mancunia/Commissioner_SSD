@@ -37,6 +37,7 @@ $_SESSION['office']=$result['office_id'];
 $_SESSION['grp']=$result['grp_id'];
 $_SESSION['cred_1']=$result['username'];
 $_SESSION['cred_2']=$result['password'];
+$_SESSION['department']=$result['department_id'];
 $app->lastLogin($_SESSION['user_id']);
 
 if($result['username']==$result['password']){

@@ -3,6 +3,34 @@ require_once 'requires/head.php';
 include_once 'includes/newCompany.html';
 include_once 'includes/newService.html';
 include_once 'includes/newPeriod.html';
+include_once 'requires/com_ssd.php';
+
+$com_ssd=new com_ssd();
+
+if(isset($_POST['submitBtn'])){
+  extract($_POST);
+  $uid = $_SESSION['user_id'];
+    $_SESSION['department'];
+$pid=$com_ssd->addPayments($_SESSION['user_id'],$cid,$amnt,$period,$year,$amc_st,$amc_end,$due_D,$depart,$service, $role);
+$com_ssd->addRemark($pid,$uid,$note);
+
+}
+
+if(isset($_POST['newCompany'])){
+extract($_POST);
+  $com_ssd->addCompany($name,$tin,$email,$web,$phone,$phone1,$phone2,$address,$description);
+}
+
+if(isset($_POST['newService'])){
+
+  $com_ssd->addService($_POST['name']);
+}
+
+if(isset($_POST['newPeriod'])){
+
+ $com_ssd->addPeriod($_POST['period']);
+}
+
 ?>
 
 <!-- Modal -->
