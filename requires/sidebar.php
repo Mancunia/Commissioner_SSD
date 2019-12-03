@@ -12,22 +12,22 @@
      <?php
      if($_SESSION['grp']=='1'){
 //ordinary
-include './includes/grps/ordinary.html';
+include './includes/grps/ordinary.php';
      }
 
      if($_SESSION['grp']=='2'){
        //not-so-ordinary
-       include './includes/grps/not_so-ordinary.html';
+       include './includes/grps/not_so-ordinary.php';
     }
 
     if($_SESSION['grp']=='3'){
        //like-admin
-       include './includes/grps/like-admin.html';
+       include './includes/grps/like-admin.php';
     }
 
     if($_SESSION['grp']=='4'){
        //Admin
-       include './includes/grps/admin.html';
+       include './includes/grps/admin.php';
     }
      
      ?>

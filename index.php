@@ -1,5 +1,12 @@
 <?php
 require_once 'requires/head.php';
+include 'requires/com_ssd.php';
+$com_ssd=new com_ssd();
+$payment=$com_ssd->getPayments($_SESSION['role'],$_SESSION['department']);
+
+// echo $_SESSION['role']."  ".$_SESSION['department'];
+
+// echo $payment;
 ?>
 
 
@@ -25,7 +32,11 @@ require_once 'requires/head.php';
                 <div class="card-body-icon">
                   <i class="fas fa-fw fa-spinner"></i>
                 </div>
-                <div class="mr-5">26 Recommended</div>
+                <div class="mr-5">
+                  
+                <?php echo $com_ssd->getRecommended($_SESSION['department']);  ?> Recommended
+
+              </div>
               </div>
               <!-- <a class="card-footer text-white clearfix small z-1" href="#">
                 <span class="float-left">View Details</span>
@@ -41,7 +52,7 @@ require_once 'requires/head.php';
                 <div class="card-body-icon">
                   <i class="fas fa-fw fa-exclamation"></i>
                 </div>
-                <div class="mr-5">11 Declined</div>
+                <div class="mr-5"><?php echo $com_ssd->getDeclined($_SESSION['department']);  ?> Declined</div>
               </div>
               <!-- <a class="card-footer text-white clearfix small z-1" href="#">
                 <span class="float-left">View Details</span>
@@ -58,7 +69,7 @@ require_once 'requires/head.php';
                 <div class="card-body-icon">
                   <i class="fas fa-fw fa-check"></i>
                 </div>
-                <div class="mr-5">123 Approved</div>
+                <div class="mr-5"><?php echo $com_ssd->getApproved($_SESSION['department']);  ?> Approved</div>
               </div>
               <!-- <a class="card-footer text-white clearfix small z-1" href="#">
                 <span class="float-left">View Details</span>
@@ -74,7 +85,7 @@ require_once 'requires/head.php';
                 <div class="card-body-icon">
                   <i class="fas fa-fw fa-times"></i>
                 </div>
-                <div class="mr-5">13 Canceled</div>
+                <div class="mr-5"><?php echo $com_ssd->getCanceled($_SESSION['department']);  ?> Canceled</div>
               </div>
               <!-- <a class="card-footer text-white clearfix small z-1" href="#">
                 <span class="float-left">View Details</span>
@@ -93,7 +104,7 @@ require_once 'requires/head.php';
             Payments</div>
           <div class="card-body">
             <div class="table-responsive">
-              <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+              <table class="table table-hover" id="dataTable" width="100%" cellspacing="0">
                 <thead>
                 <tr>
                   <th>#</th>
@@ -121,49 +132,37 @@ require_once 'requires/head.php';
                   </tr>
                 </tfoot>
                 <tbody>
+                <?php 
+                $i=1;
+                while($pay=mysqli_fetch_array($payment)){
+                  echo"
+                  
                   <tr>
-                    <td>1</td>
-                    <td>System Architect</td>
-                    <td>Edinburgh</td>
-                    <td>61</td>
-                    <td>2011/04/25</td>
-                    <td>$320,800</td>
-                    <td>Edinburgh</td>
-                    <td>61</td>
-                    <td>2011/04/25</td>
+                    <td>".$i."</td>
+                    <td>".$pay['company_name']."</td>
+                    <td>".$pay['service_title']."</td>
+                    <td>".$pay['created_date']."</td>
+                    <td>".$pay['period_title']."</td>
+                    <td>".$pay['amount']."</td>
+                    <td>".$pay['due_date']."</td>
+                    <td>".$com_ssd->status($pay['payment_status'])."</td>
+                    <td><a href='review.php?payid=".$pay['payment_id']."' class='btn btn-dark'> Open</a>
                     
                   </tr>
-                  <tr>
-                    <td>2</td>
-                    <td>Accountant</td>
-                    <td>Tokyo</td>
-                    <td>63</td>
-                    <td>2011/07/25</td>
-                    <td>$170,750</td>
-                    <td>Edinburgh</td>
-                    <td>61</td>
-                    <td>2011/04/25</td>
-                   
-                  </tr>
-                  <tr>
-                    <td>3</td>
-                    <td>Junior Technical Author</td>
-                    <td>San Francisco</td>
-                    <td>66</td>
-                    <td>2009/01/12</td>
-                    <td>$86,000</td>
-                    <td>Edinburgh</td>
-                    <td>61</td>
-                    <td>2011/04/25</td>
-                    
-                  </tr>
+                  ";
+$i++;
+                }
+
+                ?>
+                  
+                  
                   
                   </tbody>
               </table>
             </div>
           </div>
           <div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div>
-        </div>
+         </div>
 
       </div>
       <!-- /.container-fluid -->

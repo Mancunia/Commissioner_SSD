@@ -12,6 +12,30 @@ function testDB(){
     // return $d[0];
 }
 
+function status($status){
+    if($status=="Submitted"){
+          return "<button class='btn btn-outline-primary'>".$status."...</button>";
+        }
+        else if($status=="Recommended"){
+          return "<button class='btn btn-primary'>".$status."</button>";
+        }
+        else if($status=="Approved"){
+          return "<button class='btn btn-success'>".$status."</button>";
+        }
+        else if($status=="Stand By"){
+          return "<button class='btn btn-info'>".$status."</button>";
+        }
+        else if($status=="Revise"){
+          return "<button class='btn btn-warning'>".$status."</button>";
+        }
+        else if($status=="Declined"){
+          return "<button class='btn btn-danger'>".$status."</button>";
+        }
+        else{
+          return "<button class='btn btn-outline-danger'>".$status."</button>";
+        }
+        
+}
 
 function getPaymentDetails($payID){
     try{
@@ -19,8 +43,9 @@ function getPaymentDetails($payID){
         $db = $conn->getConnection(); 
 //         $conn = new Database();
 // $db=$conn->getdbconnect();
-$result=mysqli_query($db,"SELECT p.*, c.*,s.* , v.* FROM payment p join company c  on p.company_id=c.company_id join service s on p.service_provided=s.service_id join period v on p.period=v.period_id  
+$result=mysqli_query($db,"SELECT p.*, c.*,s.service_title , v.period_title FROM payment p join company c  on p.company_id=c.company_id join service s on p.service_id=s.service_id join period v on p.period_id=v.period_id  
 where p.payment_id='$payID' and p.alive=1");
+
     return $result;
     }
     catch (Exception $ex){
@@ -31,18 +56,17 @@ where p.payment_id='$payID' and p.alive=1");
 //add payment
 function addPayments($uid,$cid,$amnt,$period,$year,$amc_st,$amc_end,$due_D,$depart,$service,$role){
     try{
-        $conn = new Database();
+        $conn = Database::getInstance();
+            $db = $conn->getConnection();
         $status="Submitted";
-        $db=$conn->getdbconnect();
         if($role=="1"){
             $status="Stand By";
         }
 
-        // INSERT INTO `com_ssd`.`payment` (`company_id`, `service_id`, `period_id`, `department_id`, `added_id`, `year`, `amc_start`, `amc_end`, `due_date`, `status`, `created_date`, `alive`) 
-        // VALUES ('c', 's', 'p', 'd', 'u', 'y', 'as', 'ae', 'dd', 'st', 'cr', 'a')
+        // INSERT INTO `com_ssd`.`payment`
 
-        mysqli_query($db,"INSERT INTO payment (`company_id`, `service_id`, `period_id`, `department_id`, `added_id`, `year`, `amc_start`, `amc_end`, `due_date`, `status`, `created_date`) 
-        VALUES ('$cid', '$service', '$period', '$depart', '$uid', '$year', '$amc_st','$amc_end', '$due_D', '$status',NOW() ) ");
+        mysqli_query($db,"INSERT INTO payment (`company_id`, `service_id`, `period_id`, `department_id`, `added_id`, `year`,`amount`, `amc_start`, `amc_end`, `due_date`, `status`, `created_date`) 
+        VALUES ('$cid', '$service', '$period', '$depart', '$uid', '$year','$amnt', '$amc_st','$amc_end', '$due_D', '$status',NOW() ) ");
 
 $last_id=mysqli_query($db,"SELECT payment_id FROM payment ORDER BY payment_id DESC LIMIT 1");
 $last_id=mysqli_fetch_array($last_id);
@@ -57,61 +81,46 @@ return $pid;
 }
 
     //Get payments for tables via role
-    function getPayments($role,$office){
+    function getPayments($role,$depart){
         try{
-            $conn = new Database();
+            $conn = Database::getInstance();
+            $db = $conn->getConnection();
             $status="";
-            $db=$conn->getdbconnect();
+            // $db=$conn->getdbconnect();
             
 $this_yr=date("Y")."%";
 //if it's AC
-if($role=="Commissioner")
+if($role=="6")
 {
-    $status="Recommended";
-    $result=mysqli_query($db,"SELECT p.*, c.*,s.*, v.*, d.* FROM payment p 
-    join company c  on p.company_id=c.company_id join service s on p.service_provided=s.service_id 
-    join period v on p.period=v.period_id
-    join department d on p.office=d.department_id
-    where p.date like '$this_yr' and d.department_id='$office' and p.status='$status' and p.alive=1 ORDER BY p.payment_id desc");
-
-    return $result;
+    $status="p.status=Recommended";
+   
 }
 
 //if it's any other
-elseif($role=="DC"){
-    $status="Submitted";
-    $result=mysqli_query($db,"SELECT p.*, c.*,s.*,v.* FROM payment p 
-    join company c  on p.company_id=c.company_id join service s on p.service_provided=s.service_id 
-    join period v on p.period=v.period_id
-    join department d on p.office=d.department_id
-    where p.date like '$this_yr' and d.department_id='$office' and p.status='$status' and p.alive=1 ORDER BY p.payment_id desc");
-    //return results
-    // $results= mysqli_fetch_array($result);
-    return $result;
+elseif($role=="5"){
+    $status="p.status= Submitted";
+    
 }
 
-elseif($role=="AC"){
-    $status="Stand By";
+elseif($role=="4"){
+    $status="p.status= Stand By";
 
-    $result=mysqli_query($db,"SELECT p.*, c.*,s.*,v.* FROM payment p 
-    join company c  on p.company_id=c.company_id join service s on p.service_provided=s.service_id 
-    join period v on p.period=v.period_id
-    join department d on p.office=d.department_id
-    where p.date like '$this_yr' and d.department_id='$office' and p.status='$status' and p.alive=1 ORDER BY p.payment_id desc");
 
-    return $result;
 }
 
 else{
-    
-    $result=mysqli_query($db,"SELECT p.*, c.*,s.*,v.* FROM payment p 
-    join company c  on p.company_id=c.company_id join service s on p.service_provided=s.service_id 
-    join period v on p.period=v.period_id
-    join department d on p.office=d.department_id
-    where p.date like '$this_yr' and d.department_id='$office' and p.alive=1 and p.status IS NOT NULL ORDER BY p.payment_id desc");
-    return $result;
+
+    $status=" p.status IS NOT NULL";
+
 }
 
+$result=mysqli_query($db,"SELECT p.payment_id,p.amount,p.created_date,p.due_date, p.status as payment_status, c.*,s.*, v.period_title, d.* FROM payment p 
+join company c  on p.company_id=c.company_id join service s on p.service_id=s.service_id 
+join period v on p.period_id=v.period_id
+join department d on p.department_id=d.department_id
+where p.created_date like '$this_yr' and d.department_id='$depart' and $status and p.alive=1 ORDER BY p.payment_id desc");
+
+return $result;
 
 
 
@@ -128,12 +137,12 @@ else{
         //function for adding Remarks
         function addRemark($payID,$userID,$note){
 try{
-    $conn = new Database();
-                $db=$conn->getdbconnect();
+    $conn = Database::getInstance();
+            $db = $conn->getConnection();
     $combinedDT = date("Y-m-d");
 
-mysqli_query($db,"INSERT INTO `com_ssd`.`remark` (`user_id`, `payment_id`, `note`, `date`) 
-VALUES ('$userID', '$payID', '$note', NOW()) ");
+mysqli_query($db,"INSERT INTO `com_ssd`.`remark` ( `payment_id`,`added_id`, `note`, `date_created`) 
+VALUES ( '$payID','$userID', '$note', NOW()) ");
 $link="Location:review.php?payid=".$payID;
 header ($link);
 
@@ -146,10 +155,10 @@ header ($link);
 //get remarks
         function getRemark($payID){
             try{
-                $conn = new Database();
-                $db=$conn->getdbconnect();
+                $conn = Database::getInstance();
+            $db = $conn->getConnection();
 
-                $result=mysqli_query($db,"SELECT u.fname,u.lname,u.role,r.* FROM remark r join users u on r.user_id=u.user_id where r.payment_id='$payID' ORDER BY r.payment_id desc");
+                $result=mysqli_query($db,"SELECT p.first_name,p.last_name,u.role,r.* FROM remark r join user u on r.added_id=u.user_id join person p on u.person_id=p.person_id where r.payment_id='$payID' ORDER BY r.payment_id desc");
 
                 return $result;
 
@@ -167,8 +176,8 @@ header ($link);
         function updateStatus($payID,$role,$userID,$note,$status)
         {
             try{
-                $conn = new Database();
-                $db=$conn->getdbconnect();
+                $conn = Database::getInstance();
+            $db = $conn->getConnection();
                 //for DC
                 if($role=="DC"){
                     
@@ -217,8 +226,8 @@ header ($link);
 
         function uploadFile($payID,$filename){
         try{   
-            $conn = new Database();
-            $db=$conn->getdbconnect();
+            $conn = Database::getInstance();
+            $db = $conn->getConnection();
 
             // File upload configuration
    
@@ -252,19 +261,18 @@ header ($link);
         }
 
          //Company
-         function addCompany($companyName,$TIN,$email,$web,$p1,$p2,$p3,$address,$desc){
+        function getCompany($id){
             $conn = Database::getInstance();
             $db = $conn->getConnection();
-            mysqli_query($db,"INSERT INTO `com_ssd`.`company` (`company_name`, `TIN`, `phone`, `phone_2`, `phone_3`, `address`, `email`, `website`, `description`, `date_add`) 
-            VALUES ('$companyName', '$TIN', '$p1', '$p2', '$p3', '$address', '$email', '$web', '$desc', NOW()) ");
-         }
-
-        function getCompany(){
-            $conn = Database::getInstance();
-            $db = $conn->getConnection();
-
-            $result = mysqli_query($db,"SELECT * FROM company "); 
-            return $result;
+if($id==4){
+    $result = mysqli_query($db,"SELECT * FROM company "); 
+        
+}
+          else{
+              $result = mysqli_query($db,"SELECT * FROM company where alive=1 "); 
+           
+          }
+             return $result;
         }
 
          //get Period
@@ -495,5 +503,62 @@ mysqli_query($db,$sql);
                 echo $ex->getMessage();
                 } 
         }
+
+        function addCompany($companyName,$TIN,$email,$web,$p1,$p2,$p3,$address,$desc){
+            $conn = Database::getInstance();
+            $db = $conn->getConnection();
+            mysqli_query($db,"INSERT INTO `com_ssd`.`company` (`company_name`, `TIN`, `phone`, `phone_2`, `phone_3`, `address`, `email`, `website`, `description`, `date_add`) 
+            VALUES ('$companyName', '$TIN', '$p1', '$p2', '$p3', '$address', '$email', '$web', '$desc', NOW()) ");
+         }
+
+
+         // the UI stuff 
+         function getRecommended($depart){
+             $this_yr=date("Y")."%";
+//recommmended
+            $conn = Database::getInstance();
+            $db = $conn->getConnection();
+            
+            $result=mysqli_query($db,"SELECT * From payment where department_id='$depart' and status='Recommended' and alive=1 and created_date like '$this_yr'");
+            return mysqli_num_rows($result);
+
+
+         }
+
+        function getDeclined($depart){
+//Declined
+            $this_yr=date("Y")."%";
+
+            $conn = Database::getInstance();
+            $db = $conn->getConnection();
+
+            $result=mysqli_query($db,"SELECT * From payment where department_id='$depart' and status='Declined' and alive=1 and created_date like '$this_yr'");
+            return mysqli_num_rows($result);
+
+         }
+
+        function getApproved($depart){
+//Approved
+            $this_yr=date("Y")."%";
+
+            $conn = Database::getInstance();
+            $db = $conn->getConnection();
+
+            $result=mysqli_query($db,"SELECT * From payment where department_id='$depart' and status='Approved' and alive=1 and created_date like '$this_yr'");
+            return mysqli_num_rows($result);
+
+         }
+
+         function getCanceled($depart){
+//Canceled
+            $this_yr=date("Y")."%";
+
+            $conn = Database::getInstance();
+            $db = $conn->getConnection();
+
+            $result=mysqli_query($db,"SELECT * From payment where department_id='$depart' and status='Canceled' and alive=1 and created_date like '$this_yr'");
+            return mysqli_num_rows($result);
+
+         }
 }
 ?>

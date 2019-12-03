@@ -1,11 +1,66 @@
 <?php
 require_once 'requires/head.php';
+include 'requires/com_ssd.php';
+$com_ssd=new com_ssd();
+$the_else="";
+
+if (isset($_GET['payid'])){
+  $remark=$com_ssd->getRemark($_GET['payid']);
+
+  // $note=mysqli_fetch_array($remark);
+
+  $paymentDetails=$com_ssd->getPaymentDetails($_GET['payid']);
+
+  $results=mysqli_fetch_array($paymentDetails);
+
+  //company details
+  $com_name=$results['company_name'];
+  $com_tin=$results['TIN'];
+  $com_p1=$results['phone'];
+$com_p2=$results['phone_2'];
+$com_p3=$results['phone_3'];
+$com_email=$results['email'];
+$com_web=$results['website'];
+$com_address=$results['address'];
+
+
+//payment details
+$pay_id=$results['payment_id'];
+  $pay_amt=$results['amount'];
+  $pay_period=$results['period_title'];
+  $pay_year=$results['year'];
+  $pay_stat=$results['status'];
+  $pay_amc_in=$results['amc_start'];
+  $pay_amc_out=$results['amc_end'];
+  $pay_due=$results['due_date'];
+
+//Service provided
+$service_prov=$results['service_title'];
+}
+else{
+
+ $the_else="
+ <div class='alert alert-warning alert-dismissible fade show' role='alert'>
+        <strong>Hmmm!</strong> Something went wrong <a href='index.php'>GO back</a>
+        <button type='button' class='close' data-dismiss='alert' aria-label='Close'>
+          <span aria-hidden='true'>&times;</span>
+        </button>
+        </div>
+ 
+ ";
+ 
+}
 ?>
 
 
 
     <div id="content-wrapper">
-
+<?php 
+if($the_else){
+echo $the_else; 
+exit();
+}
+?>
       <div class="container-fluid">
 
         <!-- Breadcrumbs-->
@@ -14,14 +69,17 @@ require_once 'requires/head.php';
             <a href="#">Dashboard</a>
           </li>
           <li class="breadcrumb-item active">Review</li>
+          <li class="breadcrumb-item active">Payment ID:<?php echo $results['payment_id']; ?></li>
         </ol>
         <div class="container">
           <div class="row">
             <div class="col-3">
-                <button class='btn btn-lg btn-outline-primary'>Submitted..</button>
+                <?php
+                echo $com_ssd->status($pay_stat);
+                ?>
           </div>
           <div class="col-6">
-          <h4 class="mb-3"><?php /*echo "<b>".$service_prov." </b>";*/ ?>the service</h4> 
+          <h4 class="mb-3"><?php echo "<b>".$service_prov." </b>"; ?></h4> 
           </div>
   
         <div class="col-3">
@@ -49,9 +107,15 @@ require_once 'requires/head.php';
       <ul class="list-group mb-3">
         <li class="list-group-item d-flex justify-content-between lh-condensed">
           <div>
-            <h6 class="my-0"><?php /*echo $com_name;*/ ?></h6>
-         <p>   <small class="text-muted">Contact:<?php /*echo " 0".$com_contact;*/ ?> </small></p>
-            <small class="text-muted">TIN:<?php /*echo " ".$com_tin;*/ ?> </small>
+            <h6 class="my-0"><?php echo $com_name;?></h6>
+         <p>   <small class="text-muted"><b>Tel:</b><?php echo " ".$com_p1; ?> </small>
+         <small class="text-muted"><?php echo "<br> ".$com_p2; ?> </small>
+         <small class="text-muted"><?php echo "".$com_p3; ?> </small>
+         </p>
+         <p><small class="text-muted"><b>email:</b><?php echo " ".$com_email; ?> </small></p>
+         <p><small class="text-muted"><b>website:</b><?php echo " ".$com_web; ?> </small></p>
+
+            <small class="text-muted"><b>TIN:</b><?php echo " ".$com_tin; ?> </small>
           </div>
           
         </li>
@@ -61,23 +125,23 @@ require_once 'requires/head.php';
 
       <h4 class="d-flex justify-content-between align-items-center mb-3">
         <span class="text-muted">Remarks</span>
-        <span class="badge badge-secondary badge-pill"><?php /*echo mysqli_num_rows($remark_result);*/ ?></span>
+        <span class="badge badge-secondary badge-pill"><?php echo mysqli_num_rows($remark); ?></span>
       </h4>
       <ul class="list-group mb-3">
 <?php
-// while($remark=mysqli_fetch_array($remark_result))
-// echo'
-//         <li class="list-group-item d-flex justify-content-between lh-condensed">
-//           <div>
-//             <h6 class="my-0">'.$remark['fname'].'(<b>'.$remark['role'].'</b>)</h6>
-//             <small class="text-muted">'.$remark['date'].'</small>
-//             <p>'.$remark['note'].'
+while($note=mysqli_fetch_array($remark)){
+echo'
+        <li class="list-group-item d-flex justify-content-between lh-condensed">
+          <div>
+            <h6 class="my-0">'.$note['first_name'].'(<b>'.$note['role'].'</b>)</h6>
+            <small class="text-muted">'.$note['date_created'].'</small>
+            <p>'.$note['note'].'
           
-//           </p>
-//           </div>
-//         </li>
-//         ';
-      
+          </p>
+          </div>
+        </li>
+        ';
+      }
       ?>
       </ul>
     </div>
@@ -86,85 +150,14 @@ require_once 'requires/head.php';
     <div class="col-md-8 order-md-1">
       <div class="row">
       <div class="col-8">
-       <h4 class="mb-3"><?php /*echo "<b>".$service_prov." </b>";*/ ?></h4>
+      <script>
+      
+      </script>
+       <h4 class="mb-3">Due in 5 days</h4>
       </div>
      <div class="col-4">
       <?php
-//       switch($_SESSION['rank']){
-//         case "AC":
-//         if($pay_stat=="Revise"||$pay_stat=="Stand By"){
-//           echo '<a href="edit.php?payid='.$_GET['payid'].'" class="btn btn-outline-info" >Edit</a>
-//           <a href="update.php?payid='.$_GET['payid'].'" class="btn btn-outline-danger" >X Delete</a>';
-//         }
-//         else{
-//           if($pay_stat=="Submitted"){
-//             echo"<button class='btn btn-outline-primary'>".$pay_stat."...</button>";
-//           }
-//           if($pay_stat=="Recommended"){
-//             echo"<button class='btn btn-primary'>".$pay_stat."</button>";
-//           }
-//           if($pay_stat=="Approved"){
-//             echo"<button class='btn btn-success'>".$pay_stat."</button>";
-//           }
-          
-//         }
-//         break;
-// case "staff":
-// if($pay_stat=="Denied"){
-//   echo '<a href="edit.php?payid='.$_GET['payid'].'" class="btn btn-outline-info" >Edit</a>';
-// }
-// else{
-//   if($pay_stat=="Submitted"){
-//     echo"<button class='btn btn-outline-primary'>".$pay_stat."...</button>";
-//   }
-//   if($pay_stat=="Recommended"){
-//     echo"<button class='btn btn-primary'>".$pay_stat."</button>";
-//   }
-//   if($pay_stat=="Approved"){
-//     echo"<button class='btn btn-success'>".$pay_stat."</button>";
-//   }
-//   if($pay_stat=="Stand By"){
-//     echo"<button class='btn btn-info'>".$pay_stat."</button>";
-//   }
-//   if($pay_stat=="Revise"){
-//     echo"<button class='btn btn-waring'>".$pay_stat."</button>";
-//   }
-//   if($pay_stat=="Declined"){
-//     echo"<button class='btn btn-danger'>".$pay_stat."</button>";
-//   }
-// }
-// break;
-// default:
-// if($pay_stat=="Submitted"){
-//   echo"<button class='btn btn-outline-primary'>".$pay_stat."...</button>";
-// }
-// if($pay_stat=="Recommended"){
-//   echo"<button class='btn btn-primary'>".$pay_stat."</button>";
-// }
-// if($pay_stat=="Approved"){
-//   echo"<button class='btn btn-success'>".$pay_stat."</button>";
-// }
-// if($pay_stat=="Stand By"){
-//   echo"<button class='btn btn-info'>".$pay_stat."</button>";
-// }
-// if($pay_stat=="Revise"){
-//   echo"<button class='btn btn-waring'>".$pay_stat."</button>";
-// }
-// if($pay_stat=="Declined"){
-//   echo"<button class='btn btn-danger'>".$pay_stat."</button>";
-// }
-// if($pay_stat=="Denied"){
-//   echo"<button class='btn btn-outline-danger'>".$pay_stat."</button>";
-// }
-// if($pay_stat=="Revise"){
-//   echo"<button class='btn btn-'>".$pay_stat."...</button>";
-// }
-
-
-      // }
-
-      // if($_SESSION['rank']=="AC"&&$pay_stat=="Revise"||$pay_stat=="Stand By"){
-      // echo '<a href="edit.php?payid='.$_GET['payid'].'" class="btn btn-outline-info" >Edit</a>';
+//      
     
       ?>
       </div>
@@ -174,7 +167,7 @@ require_once 'requires/head.php';
           <div class="col-md-6 mb-3">
             <label for="firstName">Company Name</label>
             <input name="id" hidden value="<?php /*echo $pay_id*/ ?>" >
-            <input type="text" class="form-control" id="firstName" name="company" value="<?php /*echo $com_name;*/ ?>" readonly style="background-image: url(&quot;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAfBJREFUWAntVk1OwkAUZkoDKza4Utm61iP0AqyIDXahN2BjwiHYGU+gizap4QDuegWN7lyCbMSlCQjU7yO0TOlAi6GwgJc0fT/fzPfmzet0crmD7HsFBAvQbrcrw+Gw5fu+AfOYvgylJ4TwCoVCs1ardYTruqfj8fgV5OUMSVVT93VdP9dAzpVvm5wJHZFbg2LQ2pEYOlZ/oiDvwNcsFoseY4PBwMCrhaeCJyKWZU37KOJcYdi27QdhcuuBIb073BvTNL8ln4NeeR6NRi/wxZKQcGurQs5oNhqLshzVTMBewW/LMU3TTNlO0ieTiStjYhUIyi6DAp0xbEdgTt+LE0aCKQw24U4llsCs4ZRJrYopB6RwqnpA1YQ5NGFZ1YQ41Z5S8IQQdP5laEBRJcD4Vj5DEsW2gE6s6g3d/YP/g+BDnT7GNi2qCjTwGd6riBzHaaCEd3Js01vwCPIbmWBRx1nwAN/1ov+/drgFWIlfKpVukyYihtgkXNp4mABK+1GtVr+SBhJDbBIubVw+Cd/TDgKO2DPiN3YUo6y/nDCNEIsqTKH1en2tcwA9FKEItyDi3aIh8Gl1sRrVnSDzNFDJT1bAy5xpOYGn5fP5JuL95ZjMIn1ya7j5dPGfv0A5eAnpZUY3n5jXcoec5J67D9q+VuAPM47D3XaSeL4AAAAASUVORK5CYII=&quot;); background-repeat: no-repeat; background-attachment: scroll; background-size: 16px 18px; background-position: 98% 50%;">
+            <input type="text" class="form-control" id="firstName" name="company" value="<?php echo $com_name; ?>" readonly style="background-image: url(&quot;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAfBJREFUWAntVk1OwkAUZkoDKza4Utm61iP0AqyIDXahN2BjwiHYGU+gizap4QDuegWN7lyCbMSlCQjU7yO0TOlAi6GwgJc0fT/fzPfmzet0crmD7HsFBAvQbrcrw+Gw5fu+AfOYvgylJ4TwCoVCs1ardYTruqfj8fgV5OUMSVVT93VdP9dAzpVvm5wJHZFbg2LQ2pEYOlZ/oiDvwNcsFoseY4PBwMCrhaeCJyKWZU37KOJcYdi27QdhcuuBIb073BvTNL8ln4NeeR6NRi/wxZKQcGurQs5oNhqLshzVTMBewW/LMU3TTNlO0ieTiStjYhUIyi6DAp0xbEdgTt+LE0aCKQw24U4llsCs4ZRJrYopB6RwqnpA1YQ5NGFZ1YQ41Z5S8IQQdP5laEBRJcD4Vj5DEsW2gE6s6g3d/YP/g+BDnT7GNi2qCjTwGd6riBzHaaCEd3Js01vwCPIbmWBRx1nwAN/1ov+/drgFWIlfKpVukyYihtgkXNp4mABK+1GtVr+SBhJDbBIubVw+Cd/TDgKO2DPiN3YUo6y/nDCNEIsqTKH1en2tcwA9FKEItyDi3aIh8Gl1sRrVnSDzNFDJT1bAy5xpOYGn5fP5JuL95ZjMIn1ya7j5dPGfv0A5eAnpZUY3n5jXcoec5J67D9q+VuAPM47D3XaSeL4AAAAASUVORK5CYII=&quot;); background-repeat: no-repeat; background-attachment: scroll; background-size: 16px 18px; background-position: 98% 50%;">
             <div class="invalid-feedback">
               Valid first name is required.
             </div>
@@ -188,7 +181,7 @@ require_once 'requires/head.php';
             <div class="input-group-prepend">
               <span class="input-group-text">ghs</span>
             </div>
-            <input type="number" class="form-control" id="username"value="<?php /*echo $pay_amt;*/ ?>" readonly>
+            <input type="number" class="form-control" id="username"value="<?php echo $pay_amt;?>" readonly>
             
           </div>
         </div>
@@ -199,12 +192,12 @@ require_once 'requires/head.php';
         <div class="row">
           <div class="col-md-5 mb-3">
             <label for="country">From</label>
-            <input type="date" class=" d-block w-100 form-control" name="amc_in" id="country" readonly value="<?php /*echo $pay_amc_in;*/ ?>">
+            <input type="date" class=" d-block w-100 form-control" name="amc_in" id="country" readonly value="<?php echo $pay_amc_in; ?>">
           
           </div>
           <div class="col-md-4 mb-3">
             <label for="state">To</label>
-            <input type="date" class="form-control" name="amc_out" readonly value="<?php /*echo $pay_amc_out;*/ ?>">
+            <input type="date" class="form-control" name="amc_out" readonly value="<?php echo $pay_amc_out;?>">
             
           </div>
           </div>
@@ -213,7 +206,7 @@ require_once 'requires/head.php';
           <div class="col-md-5 mb-3">
             <label for="country">Due date</label>
             
-            <input type="date" class="form-control" name="due_date" readonly value="<?php /*echo $pay_due;*/ ?>">
+            <input type="date" class="form-control" name="due_date" readonly value="<?php echo $pay_due; ?>">
           <script>
           var due_date =document.getElemenyById("due_date");
           var today = new Date();
@@ -232,12 +225,12 @@ var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
         <div class="row">
           <div class="col-md-5 mb-3">
             <label for="country">Period</label>
-            <input type="text" class=" d-block w-100 form-control" id="country" readonly value="<?php /*echo $pay_period;*/ ?>">
+            <input type="text" class=" d-block w-100 form-control" id="country" readonly value="<?php echo $pay_period; ?>">
           
           </div>
           <div class="col-md-4 mb-3">
             <label for="state">Year</label>
-            <input type="text" class="form-control" name="year" readonly value="<?php /*echo $pay_year;*/ ?>">
+            <input type="text" class="form-control" name="year" readonly value="<?php echo $pay_year; ?>">
             
           </div>
           </div>

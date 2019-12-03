@@ -7,13 +7,17 @@ include_once 'requires/com_ssd.php';
 
 $com_ssd=new com_ssd();
 
+$comp=$com_ssd->getCompany($_SESSION['grp']);
+$serve=$com_ssd->getService();
+$period=$com_ssd->getPeriod();
+
 if(isset($_POST['submitBtn'])){
   extract($_POST);
-  $uid = $_SESSION['user_id'];
-    $_SESSION['department'];
-$pid=$com_ssd->addPayments($_SESSION['user_id'],$cid,$amnt,$period,$year,$amc_st,$amc_end,$due_D,$depart,$service, $role);
-$com_ssd->addRemark($pid,$uid,$note);
-
+  // $uid = $_SESSION['user_id'];
+  //   $_SESSION['department'];
+$pid=$com_ssd->addPayments($_SESSION['user_id'],$company,$amount,$period,$year,$amc_startDate,$amc_endDate,$dueDate,$_SESSION['department'],$service, $_SESSION['role']);
+$com_ssd->addRemark($pid,$_SESSION['user_id'],$note);
+echo $pid;
 }
 
 if(isset($_POST['newCompany'])){
@@ -51,18 +55,20 @@ if(isset($_POST['newPeriod'])){
             </div>
             <form action="add_pay.php" method="POST" enctype="multipart/form-data" >
                 <!-- Company name-->
-                <input type="text" name="role" hidden value="<?php echo $_SESSION['rank']; ?>" >
-                <input type="text" name="office" hidden value="<?php echo $_SESSION['office']; ?>" >
 
                 <div class="card text-black  mb-3" id="cards_holder_item">
                     <div class="card-header"><b>Company Name</b></div>
                     <div class="card-body">
-                    <?php
-                    // $result = $com_ssd->getCompany();
-                    ?>
+                   
                       <select name="company" id="companyName" class="form-control">
                         <option value="">Select</option>
-                        
+                         <?php
+                   while($c=mysqli_fetch_array($comp)){
+                     echo '
+                     <option value="'.$c['company_id'].'">'.$c['company_name'].'</option>
+                     ';
+                   }
+                    ?>
                       </select>
                         <div><br>
                         <button type="button" class="btn btn-primary " data-toggle="modal" data-target="#companyModal" data-whatever="@mdo">
@@ -76,11 +82,16 @@ if(isset($_POST['newPeriod'])){
                 <div class="card text-black  mb-3" id="cards_holder_item">
                     <div class="card-header"><b>Service Provided</b></div>
                     <div class="card-body">
-                    <?php
-                    // $result = $com_ssd->getService();
-                    ?>
+                   
                       <select name="service" id="companyName" class="form-control">
                         <option value="">Select</option>
+                        <?php
+                   while($c=mysqli_fetch_array($serve)){
+                     echo '
+                     <option value="'.$c['service_id'].'">'.$c['service_title'].'</option>
+                     ';
+                   }
+                    ?>
                         
                       </select>
                         <div><br>
@@ -152,6 +163,13 @@ if(isset($_POST['newPeriod'])){
                     <div class="col-10">
             <select class="custom-select d-block w-100 form-control" id="country" name="period" required="">
               <option value="">Choose...</option>
+              <?php
+                   while($c=mysqli_fetch_array($period)){
+                     echo '
+                     <option value="'.$c['period_id'].'">'.$c['period_title'].'</option>
+                     ';
+                   }
+                    ?>
                         
             </select>
           </div>
