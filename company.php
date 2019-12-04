@@ -1,6 +1,7 @@
 <?php
 require_once 'requires/head.php';
 include_once 'includes/newCompany.html';
+include 'requires/heading.php';
 ?>
 
 <!-- Modal -->

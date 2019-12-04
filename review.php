@@ -111,7 +111,7 @@ $com_ssd->addRemark($pay_id,$_SESSION['user_id'],$_POST['note']);
     }
 
     // echo $_SESSION['user_id'];
-    echo $_SESSION['role'];
+    // echo $_SESSION['role'];
 
     include 'requires/heading.php';
 ?>

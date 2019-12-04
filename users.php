@@ -50,6 +50,7 @@ else{
 
 //form
 include_once 'includes/adminUsers.php';
+include 'requires/heading.php';
 ?>
 
 <!-- Modal -->
