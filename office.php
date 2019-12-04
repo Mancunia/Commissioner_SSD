@@ -36,6 +36,8 @@ if(isset($_GET['off'])){
 $users=$app->getUserByOffice($_SESSION['office']);
 
 include_once 'includes/newUser.php';
+
+include 'requires/heading.php';
 ?>
 
 <!-- Modal -->

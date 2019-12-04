@@ -1,6 +1,8 @@
 <?php
 require_once 'requires/head.php';
 include_once 'includes/newPeriod.html';
+
+include 'requires/heading.php';
 ?>
 
 <!-- Modal -->

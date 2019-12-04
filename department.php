@@ -8,6 +8,7 @@ if(isset($_POST['newDepart'])){
 }
 
 include_once 'includes/newDepartment.html';
+include 'requires/heading.php';
 ?>
 
 <!-- Modal -->

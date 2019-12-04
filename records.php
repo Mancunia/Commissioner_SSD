@@ -1,5 +1,11 @@
 <?php
 require_once 'requires/head.php';
+include 'requires/com_ssd.php';
+$com_ssd=new com_ssd();
+$payment=$com_ssd->getPayments("0",$_SESSION['department']);
+
+
+include 'requires/heading.php';
 ?>
 
     <div id="content-wrapper">
@@ -22,7 +28,7 @@ require_once 'requires/head.php';
           <div class="card-body">
             <div class="table-responsive">
             <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                <thead>
+            <thead>
                 <tr>
                   <th>#</th>
                     <th>Company</th>
@@ -49,42 +55,28 @@ require_once 'requires/head.php';
                   </tr>
                 </tfoot>
                 <tbody>
+                <?php
+                $i=1;
+                while($pay=mysqli_fetch_array($payment)){
+                  echo"
+                  
                   <tr>
-                    <td>1</td>
-                    <td>System Architect</td>
-                    <td>Edinburgh</td>
-                    <td>61</td>
-                    <td>2011/04/25</td>
-                    <td>$320,800</td>
-                    <td>Edinburgh</td>
-                    <td>61</td>
-                    <td>2011/04/25</td>
+                    <td>".$i."</td>
+                    <td>".$pay['company_name']."</td>
+                    <td>".$pay['service_title']."</td>
+                    <td>".$pay['created_date']."</td>
+                    <td>".$pay['period_title']."</td>
+                    <td>".$pay['amount']."</td>
+                    <td>".$pay['due_date']."</td>
+                    <td>".$com_ssd->status($pay['payment_status'])."</td>
+                    <td><a href='review.php?payid=".$pay['payment_id']."' class='btn btn-dark'> Open</a>
                     
                   </tr>
-                  <tr>
-                    <td>2</td>
-                    <td>Accountant</td>
-                    <td>Tokyo</td>
-                    <td>63</td>
-                    <td>2011/07/25</td>
-                    <td>$170,750</td>
-                    <td>Edinburgh</td>
-                    <td>61</td>
-                    <td>2011/04/25</td>
-                   
-                  </tr>
-                  <tr>
-                    <td>3</td>
-                    <td>Junior Technical Author</td>
-                    <td>San Francisco</td>
-                    <td>66</td>
-                    <td>2009/01/12</td>
-                    <td>$86,000</td>
-                    <td>Edinburgh</td>
-                    <td>61</td>
-                    <td>2011/04/25</td>
-                    
-                  </tr>
+                  ";
+$i++;
+                }
+                ?>
+                  
                   
                   </tbody>
               </table>

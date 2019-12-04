@@ -34,11 +34,3 @@ if($_SESSION['cred_1']==$_SESSION['cred_2']){
 
 <link href="css/this.css" rel="stylesheet">
 </head>
-
-<body id="page-top">
-
-  <!--Nav -->
-<?php include_once 'navbar.php'; ?>
-  <div id="wrapper">
-<!--sidebar -->
-    <?php include_once 'sidebar.php'; ?>

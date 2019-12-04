@@ -17,3 +17,8 @@ input::-webkit-inner-spin-button {
 input[type=number] {
     -moz-appearance:textfield; /* Firefox */
 }
+
+.remarks{
+    height:60px;
+    scrolla
+}

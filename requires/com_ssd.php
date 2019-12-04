@@ -80,6 +80,7 @@ return $pid;
 
 }
 
+
     //Get payments for tables via role
     function getPayments($role,$depart){
         try{
@@ -89,36 +90,72 @@ return $pid;
             // $db=$conn->getdbconnect();
             
 $this_yr=date("Y")."%";
-//if it's AC
-if($role=="6")
-{
-    $status="p.status=Recommended";
-   
-}
 
-//if it's any other
-elseif($role=="5"){
-    $status="p.status= Submitted";
-    
-}
-
-elseif($role=="4"){
-    $status="p.status= Stand By";
-
-
-}
-
-else{
-
-    $status=" p.status IS NOT NULL";
-
-}
-
-$result=mysqli_query($db,"SELECT p.payment_id,p.amount,p.created_date,p.due_date, p.status as payment_status, c.*,s.*, v.period_title, d.* FROM payment p 
+switch ($role) {
+    case 6:
+        $status="Recommended";
+        $result=mysqli_query($db,"SELECT p.payment_id,p.amount,p.created_date,p.due_date, p.status as payment_status, c.*,s.*, v.period_title, d.* FROM payment p 
 join company c  on p.company_id=c.company_id join service s on p.service_id=s.service_id 
 join period v on p.period_id=v.period_id
 join department d on p.department_id=d.department_id
-where p.created_date like '$this_yr' and d.department_id='$depart' and $status and p.alive=1 ORDER BY p.payment_id desc");
+where p.created_date like '$this_yr' and d.department_id='$depart' and p.status='$status' and p.alive=1 ORDER BY p.payment_id desc");
+
+        # code...
+        break;
+
+       case 3:
+        $status="Recommended";
+        $result=mysqli_query($db,"SELECT p.payment_id,p.amount,p.created_date,p.due_date, p.status as payment_status, c.*,s.*, v.period_title, d.* FROM payment p 
+join company c  on p.company_id=c.company_id join service s on p.service_id=s.service_id 
+join period v on p.period_id=v.period_id
+join department d on p.department_id=d.department_id
+where p.created_date like '$this_yr' and d.department_id='$depart' and p.status='$status' and p.alive=1 ORDER BY p.payment_id desc");
+
+        # code...
+        break; 
+
+    case 5:
+         $status="Submitted";
+         $result=mysqli_query($db,"SELECT p.payment_id,p.amount,p.created_date,p.due_date, p.status as payment_status, c.*,s.*, v.period_title, d.* FROM payment p 
+join company c  on p.company_id=c.company_id join service s on p.service_id=s.service_id 
+join period v on p.period_id=v.period_id
+join department d on p.department_id=d.department_id
+where p.created_date like '$this_yr' and d.department_id='$depart' and p.status='$status' and p.alive=1 ORDER BY p.payment_id desc");
+
+    break;
+case 2:
+         $status="Submitted";
+         $result=mysqli_query($db,"SELECT p.payment_id,p.amount,p.created_date,p.due_date, p.status as payment_status, c.*,s.*, v.period_title, d.* FROM payment p 
+join company c  on p.company_id=c.company_id join service s on p.service_id=s.service_id 
+join period v on p.period_id=v.period_id
+join department d on p.department_id=d.department_id
+where p.created_date like '$this_yr' and d.department_id='$depart' and p.status='$status' and p.alive=1 ORDER BY p.payment_id desc");
+
+    break;
+    case 4:
+        $status="Stand By";
+        $result=mysqli_query($db,"SELECT p.payment_id,p.amount,p.created_date,p.due_date, p.status as payment_status, c.*,s.*, v.period_title, d.* FROM payment p 
+join company c  on p.company_id=c.company_id join service s on p.service_id=s.service_id 
+join period v on p.period_id=v.period_id
+join department d on p.department_id=d.department_id
+where p.created_date like '$this_yr' and d.department_id='$depart' and p.status='$status' and p.alive=1 ORDER BY p.payment_id desc");
+
+    break;
+
+    
+    default:
+    $result=mysqli_query($db,"SELECT p.payment_id,p.amount,p.created_date,p.due_date, p.status as payment_status, c.*,s.*, v.period_title, d.* FROM payment p 
+    join company c  on p.company_id=c.company_id join service s on p.service_id=s.service_id 
+    join period v on p.period_id=v.period_id
+    join department d on p.department_id=d.department_id
+    where p.created_date like '$this_yr' and d.department_id='$depart' and p.status IS NOT NULL and p.alive=1 ORDER BY p.payment_id desc");
+    
+    
+        # code...
+        break;
+}
+
+
 
 return $result;
 
@@ -173,48 +210,66 @@ header ($link);
 
 //update status by role and id
 
-        function updateStatus($payID,$role,$userID,$note,$status)
+        function updateStatus($payID,$role,$userID,$status)
         {
             try{
                 $conn = Database::getInstance();
             $db = $conn->getConnection();
-                //for DC
-                if($role=="DC"){
-                    
-                mysqli_query($db,"UPDATE payment SET status='$status', modified_date=NOW() where payment_id='$payID'");
 
-                
-//                 mysqli_query($db,"INSERT INTO `com_ssd`.`remark` (`user_id`, `payment_id`, `note`, `date`) 
-// VALUES ('$userID', '$payID', '$note', NOW()) ");
+            $feed=mysqli_query($db,"UPDATE `com_ssd`.`payment` SET `status`='$status' WHERE `payment_id`='$payID'");
 
-$link="Location:review.php?payid=".$payID;
-header ($link);
-
+            if($feed){
+                return "
+                <div class='alert alert-success alert-dismissible fade show' role='alert'>
+        <strong>Great!</strong> Everything looks good
+        <button type='button' class='close' data-dismiss='alert' aria-label='Close'>
+          <span aria-hidden='true'>&times;</span>
+        </button>
+        </div>
+                ";
             }
-//for commissioner
-            if($role=="Commissioner"){
-                
-            mysqli_query($db,"UPDATE payment SET status='$status', modified_date=NOW() where payment_id='$payID'");
+            else{
+                return"
+                <div class='alert alert-warning alert-dismissible fade show' role='alert'>
+        <strong>WOOW!</strong> Something isn't right
+        <button type='button' class='close' data-dismiss='alert' aria-label='Close'>
+          <span aria-hidden='true'>&times;</span>
+        </button>
+        </div>
+                ";
+            }
+            //switch role of user
+            // switch($role){
+            //     case 4:
+            //         mysqli_query($db,"UPDATE payment SET status='$status', modified_date=NOW() where payment_id='$payID'");
 
-          
-//             mysqli_query($db,"INSERT INTO `com_ssd`.`remark` (`user_id`, `payment_id`, `note`, `date`) 
-// VALUES ('$userID', '$payID', '$note', NOW()) ");
 
-$link="Location:review.php?payid=".$payID;
-header ($link);
-        }
+            //         $link="Location:review.php?payid=".$payID;
+            //         header ($link);
+            //     break;
 
-        //for AC
-        if($role="AC"){
-             mysqli_query($db,"UPDATE payment SET status='$status', modified_date=NOW() where payment_id='$payID'");
+            //     case 6||3:
+                        
+            //         mysqli_query($db,"UPDATE payment SET status='$status', modified_date=NOW() where payment_id='$payID'");
 
-            
-//             mysqli_query($db,"INSERT INTO `com_ssd`.`remark` (`user_id`, `payment_id`, `note`, `date`) 
-// VALUES ('$userID', '$payID', '$note', NOW()) ");
+            //         $link="Location:review.php?payid=".$payID;
+            //         header ($link);
+            //     break;
 
-$link="Location:review.php?payid=".$payID;
-header ($link);
-        }
+            //     case 5||2: 
+            //          //for DC
+            //         mysqli_query($db,"UPDATE payment SET status='$status', modified_date=NOW() where payment_id='$payID'");
+
+            //         $link="Location:review.php?payid=".$payID;
+            //         header ($link);
+            //     break;
+
+            //     default:
+            //     return 0;
+
+            // }
+               
+//                
             
 
             }
@@ -427,19 +482,19 @@ if($table['status']=="Denied"){
 
 
         //edit payment
-        function editPayment($payid,$amnt,$amc_in,$amc_out,$due_date,$period,$year,$role){
+        function editPayment($payid,$amnt,$amc_st,$amc_end,$due_date,$period,$year,$serve,$role){
             try{   
                 $conn = Database::getInstance();
     $db = $conn->getConnection();
                 $status="Submitted";
     
                 // File edit
-                if($role=="staff"){
+                if($role==1){
                     $status="Stand By";
 
                 }
-                mysqli_query($db," UPDATE `com_ssd`.`payment` SET `amount`='$amnt', `period`='$period', `year`='$year', `status`='$status', `AMC_start`='$amc_in', `AMC_end`='$amc_out', `due_date`='$due_date', `modified_date`= NOW() 
-                WHERE `payment_id`='$payid'");
+mysqli_query($db," UPDATE `com_ssd`.`payment` SET `service_id`='$serve', `period_id`='$period', `year`='$year', `amount`='$amnt', `amc_start`='$amc_st', `amc_end`='$amc_end', `due_date`='$due_date', `status`='$status' WHERE `payment_id`='$payid'
+");
 
                 // $feed="
                 // <div class='alert alert-success alert-dismissible fade show' role='alert'>

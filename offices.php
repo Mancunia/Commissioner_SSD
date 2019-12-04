@@ -16,6 +16,7 @@ if(isset($_POST['newOffice'])){
 
 
 include_once 'includes/newOffice.php';
+include 'requires/heading.php';
 ?>
 
 <!-- Modal -->

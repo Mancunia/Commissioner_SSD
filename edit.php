@@ -1,8 +1,19 @@
 <?php
+        if($_SESSION['role']!=4||$_SESSION['role']!=1&&$pay_stat!="Decline"||$pay_stat!="Denied"){
+        
+        header("Location:index.php");
+      }
+        ?>
+
+<?php
+
 require_once 'requires/head.php';
 include 'requires/com_ssd.php';
 $com_ssd=new com_ssd();
-$the_else="";
+$the_else=$feed="";
+$period=$com_ssd->getPeriod();
+$serve=$com_ssd->getService();
+
 
 if (isset($_GET['payid'])){
   $remark=$com_ssd->getRemark($_GET['payid']);
@@ -50,75 +61,42 @@ else{
  ";
  
 }
-// $uid=$_SESSION['user_id'];
-// $role=$_SESSION['role'];
 
-//page activities
-if( isset($_POST['comment']) ){
-  // $pay_id=$_POST['id'];
+if(isset($_POST['edit'])){
+
+  $amnt=$_POST['newAmnt'];
+  $amc_in=$_POST['newAmc_in'];
+  $amc_out=$_POST['newAmc_out'];
+  $due_date=$_POST['newDue_date'];
+  $period=$_POST['newPeriod'];
+  $year=$_POST['newYear'];
+  $service=$_POST['newService'];
   
-//just a message
-$com_ssd->addRemark($pay_id,$_SESSION['user_id'],$_POST['note']);
-
-}
- $status="";
- $feed="";
-
-//declined
-if(isset($_POST['declined'])){
- 
-if($uid==4){
-  $status="Denied";
-}
-elseif ($uid==5||$uid==2) {
-   $status="Revise";
-}
-elseif($uid==6||$uid==3){
-  $status="Declined"; 
-}
-else{
-  $status="Halt";
-}
-
-$feed=$com_ssd->updateStatus($pay_id,$_SESSION['role'],$_SESSION['user_id'],$status);
-  
-$com_ssd->addRemark($pay_id,$_SESSION['user_id'],$_POST['note']);
-  
-  }
-
-  //Accepted
-  if(isset($_POST['approval'])){
-      // $pay_id=$_POST['id'];
-      $uid=$_SESSION['role'];
-   
-
-    if($uid==4){
-      $status="Submitted";
-    }
-    elseif ($uid==5||$uid==2) {
-       $status="Recommended";
-    }
-    elseif($uid==6||$uid==3){
-      $status="Approved"; 
-    }
-    else{
-      $status="Halt";
-    }
-
-    $feed=$com_ssd->updateStatus($pay_id,$_SESSION['role'],$_SESSION['user_id'],$status);
+  $com_ssd->editPayment($pay_id,$amnt,$amc_in,$amc_out,$due_date,$period,$year,$service,$_SESSION['role']);
   
   $com_ssd->addRemark($pay_id,$_SESSION['user_id'],$_POST['note']);
+  $link="Location:review.php?payid=".$pay_id;
+  
+  header("Location:index.php");
+
+  }
+
+  if(isset($_GET['fly'])){
+    $feed= $com_ssd->deletePayment($_GET['fly']);
+    // echo $feed;
+      header("Location:index.php");
     }
 
-    // echo $_SESSION['user_id'];
-    echo $_SESSION['role'];
+
+
+
+
 
     include 'requires/heading.php';
 ?>
 
 
-
-    <div id="content-wrapper">
+<div id="content-wrapper">
 <?php 
 if($the_else){
 echo $the_else; 
@@ -132,7 +110,7 @@ exit();
           <li class="breadcrumb-item">
             <a href="#">Dashboard</a>
           </li>
-          <li class="breadcrumb-item active">Review</li>
+          <li class="breadcrumb-item active">Edit</li>
           <li class="breadcrumb-item active">Payment ID:<?php echo $results['payment_id']; ?></li>
         </ol>
       
@@ -149,15 +127,7 @@ exit();
           </div>
   
         <div class="col-3">
-        <?php
-        if($_SESSION['role']==4&&$pay_stat=="Decline"||$pay_stat=="Denied"||$pay_stat=="Stand By"){
-        
-        echo'
-        <a  href="edit.php?payid='.$pay_id.'" class="btn btn-outline-info" >Edit</a>
-        ';
-      }
-        ?>
-        
+        <a href="edit.php?fly=<?php echo $pay_id; ?>" class="btn btn-outline-danger" >Delete</a>
       </div>
         
 </div>
@@ -255,7 +225,7 @@ echo'
             <div class="input-group-prepend">
               <span class="input-group-text">ghs</span>
             </div>
-            <input type="number" class="form-control" id="username"value="<?php echo $pay_amt;?>" readonly>
+            <input type="number" class="form-control" name="newAmnt" id="username"value="<?php echo $pay_amt;?>">
             
           </div>
         </div>
@@ -266,12 +236,12 @@ echo'
         <div class="row">
           <div class="col-md-5 mb-3">
             <label for="country">From</label>
-            <input type="date" class=" d-block w-100 form-control" name="amc_in" id="country" readonly value="<?php echo $pay_amc_in; ?>">
+            <input type="date" class=" d-block w-100 form-control" name="newAmc_in" value="<?php echo $pay_amc_in; ?>">
           
           </div>
           <div class="col-md-4 mb-3">
             <label for="state">To</label>
-            <input type="date" class="form-control" name="amc_out" readonly value="<?php echo $pay_amc_out;?>">
+            <input type="date" class="form-control" name="newAmc_out" value="<?php echo $pay_amc_out;?>">
             
           </div>
           </div>
@@ -280,7 +250,7 @@ echo'
           <div class="col-md-5 mb-3">
             <label for="country">Due date</label>
             
-            <input type="date" class="form-control" name="due_date" readonly value="<?php echo $pay_due; ?>">
+            <input type="date" class="form-control" name="newDue_date"  value="<?php echo $pay_due; ?>">
           <script>
           var due_date =document.getElemenyById("due_date");
           var today = new Date();
@@ -299,89 +269,51 @@ var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
         <div class="row">
           <div class="col-md-5 mb-3">
             <label for="country">Period</label>
-            <input type="text" class=" d-block w-100 form-control" id="country" readonly value="<?php echo $pay_period; ?>">
-          
+            <select class="custom-select d-block w-100 form-control" id="country" name="newPeriod" required="">
+              <option value="">Choose...</option>
+              <?php
+                   while($c=mysqli_fetch_array($period)){
+                     echo '
+                     <option value="'.$c['period_id'].'">'.$c['period_title'].'</option>
+                     ';
+                   }
+                    ?>
+                        
+            </select>
           </div>
           <div class="col-md-4 mb-3">
             <label for="state">Year</label>
-            <input type="text" class="form-control" name="year" readonly value="<?php echo $pay_year; ?>">
+            <input type="text" class="form-control" name="newYear" value="<?php echo $pay_year; ?>">
             
           </div>
           </div>
-        <hr class="mb-4">
-        
-        <!-- <div class="row col-12" id="buts"> -->
-<!-- <div class="col-6"><button class="btn btn-success btn-lg btn-block"  type="button" onclick="drag_remark(this)"><i class="fas fa-fw fa-check"></i><span>Approve</span></button></div>
-
-<div class="col-6"><button class="btn btn-warning btn-lg btn-block" type="button" onclick="drag_remark(this)"><i class="fas fa-fw fa-times"></i><span>Decline</span></button></div> -->
-<!-- </div> -->
-                                        <?php
-$uid=$_SESSION['role'];
-
-
-if($uid==4 && $pay_stat=="Stand By"){
-  echo'
-   <div class="row col-12" id="buts">
-<div class="col-6"><button class="btn btn-success btn-lg btn-block"  type="button" onclick="drag_remark(this)">Approve</button></div>
-
-<div class="col-6"><button class="btn btn-warning btn-lg btn-block" type="button" onclick="drag_remark(this)">Decline</button></div>
-</div>';
-}
-
-elseif ($uid==5||$uid==2) {
-  if($pay_stat=="Submitted"){
-    echo'
-     <div class="row col-12" id="buts">
-  <div class="col-6"><button class="btn btn-success btn-lg btn-block"  type="button" onclick="drag_remark(this)">Approve</button></div>
-  
-  <div class="col-6"><button class="btn btn-warning btn-lg btn-block" type="button" onclick="drag_remark(this)">Decline</button></div>
-  </div>';
-  }
-  else{
-    echo '
-       <div class="row col-12" id="buts">
-  <div class="col-6"><button class="btn btn-success btn-lg btn-block"  type="button" onclick="drag_remark(this)">Leave a Remark</button></div>
-   </div>
-           ';
-  }
-}
-
-elseif($uid==6||$uid==3 ){
- if($pay_stat=="Recommended"){
-  echo'
-   <div class="row col-12" id="buts">
-<div class="col-6"><button class="btn btn-success btn-lg btn-block"  type="button" onclick="drag_remark(this)">Approve</button></div>
-
-<div class="col-6"><button class="btn btn-warning btn-lg btn-block" type="button" onclick="drag_remark(this)">Decline</button></div>
-</div>';
-}
-else{
-  echo '
-     <div class="row col-12" id="buts">
-<div class="col-6"><button class="btn btn-success btn-lg btn-block"  type="button" onclick="drag_remark(this)">Leave a Remark</button></div>
- </div>
-         ';
-}
-
-}
-
-else{
-  echo '
-     <div class="row col-12" id="buts">
-<div class="col-6"><button class="btn btn-success btn-lg btn-block"  type="button" onclick="drag_remark(this)">Leave a Remark</button></div>
- </div>
-         ';
-}
+          <hr class="mb-4">
+          <h4 class="mb-3">Service Provided</h4>
+          <div >
+          <select name="newService" id="companyName" class="form-control">
+                        <option value="">Select</option>
+                        <?php
+                   while($c=mysqli_fetch_array($serve)){
+                     echo '
+                     <option value="'.$c['service_id'].'">'.$c['service_title'].'</option>
+                     ';
+                   }
+                    ?>
+                        
+                      </select>
+          </div>
+          <hr class="mb-4">
+        <div class="row col-12" id="buts">
+<div class="col-6"><button class="btn btn-success btn-lg btn-block"  type="button" onclick="drag_remark(this)">Done</button></div>
+</div>
 
 
-
- ?>
           <div class="form-group" id="remarks" style="display:none;" >
                                              <label class="control-label ">Remark</label>
 
                                             <div class="">
                                               
-                                                 <textarea id="wysihtml5" class="form-control" rows="9" cols="100" name="note"></textarea>
+                                                 <textarea id="wysihtml5" class="form-control" rows="9" cols="100" name="note" required></textarea>
                                             </div>
                                             <hr class="mb-4">
         

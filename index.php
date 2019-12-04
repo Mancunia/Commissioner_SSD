@@ -7,6 +7,8 @@ $payment=$com_ssd->getPayments($_SESSION['role'],$_SESSION['department']);
 // echo $_SESSION['role']."  ".$_SESSION['department'];
 
 // echo $payment;
+
+include 'requires/heading.php';
 ?>
 
 
@@ -133,6 +135,16 @@ $payment=$com_ssd->getPayments($_SESSION['role'],$_SESSION['department']);
                 </tfoot>
                 <tbody>
                 <?php 
+                if(!$payment){
+                  echo "<div class='alert alert-success alert-dismissible fade show' role='alert'>
+                  <strong>Hmmmm!</strong> No work to do for now
+                  <button type='button' class='close' data-dismiss='alert' aria-label='Close'>
+                    <span aria-hidden='true'>&times;</span>
+                  </button>
+                  </div>
+                      ";
+                }
+                else{
                 $i=1;
                 while($pay=mysqli_fetch_array($payment)){
                   echo"
@@ -152,7 +164,7 @@ $payment=$com_ssd->getPayments($_SESSION['role'],$_SESSION['department']);
                   ";
 $i++;
                 }
-
+}
                 ?>
                   
                   

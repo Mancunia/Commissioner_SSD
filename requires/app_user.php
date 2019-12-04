@@ -298,6 +298,7 @@ catch (PDOException $ex){
         echo $ex->getMessage();
         }
     }
+    
 
     function lastLogin($user){
         $conn = Database::getInstance();

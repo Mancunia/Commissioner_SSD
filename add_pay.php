@@ -35,6 +35,7 @@ if(isset($_POST['newPeriod'])){
  $com_ssd->addPeriod($_POST['period']);
 }
 
+include 'requires/heading.php';
 ?>
 
 <!-- Modal -->
