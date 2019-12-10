@@ -1,6 +1,7 @@
 <?php
 require_once 'requires/head.php';
 include_once 'requires/com_ssd.php';
+$feed="";
 
 $com_ssd=new com_ssd();
 
@@ -8,8 +9,10 @@ $period=$com_ssd->getPeriods($_SESSION['grp'],$_SERVER['REQUEST_URI']);
 
 if(isset($_POST['newPeriod'])){
 
-  $com_ssd->addPeriod($_POST['period']);
-  header ("Location:period.php");
+  
+$feed=$com_ssd->addPeriod($_POST['period'],$_SERVER['REQUEST_URI']);
+
+  // header ("Location:period.php");
  }
 
 include_once 'includes/newPeriod.html';
@@ -32,6 +35,7 @@ include 'requires/heading.php';
           </li>
           <li class="breadcrumb-item active">Periods</li>
         </ol>
+        <?php echo $feed; ?>
         <button class="btn btn-lg btn-info"  data-toggle="modal" data-target="#periodModal" >Add A New Period</button>
 
         <!-- DataTables Example -->

@@ -104,14 +104,14 @@ extract($_POST);
 
 if(isset($_POST['newService'])){
 
-  $com_ssd->addService($_POST['name']);
-  header ("Location:add_pay.php");
+  $feed=$com_ssd->addService($_POST['name'],$_SERVER['REQUEST_URI']);
+  // header ("Location:add_pay.php");
 }
 
 if(isset($_POST['newPeriod'])){
 
- $com_ssd->addPeriod($_POST['period']);
- header ("Location:add_pay.php");
+ $com_ssd->addPeriod($_POST['period'],$_SERVER['REQUEST_URI']);
+//  header ("Location:add_pay.php");
 }
 
 

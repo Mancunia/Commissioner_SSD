@@ -684,15 +684,34 @@ mysqli_query($db," UPDATE `com_ssd`.`payment` SET `service_id`='$serve', `period
 //                 } 
 //         }
 
-        function addService($serviceName){
+        function addService($serviceName, $page){
             try {
                 
                 $conn = Database::getInstance();
                 $db = $conn->getConnection();
-                
-                $sql = "INSERT INTO service (service_title)
+                $count=mysqli_num_rows(mysqli_query($db,"Select * From service where service_title='$serviceName'"));
+                if($count>=1){
+                    return "
+                    <div class='alert alert-danger alert-dismissible fade show' role='alert'>
+                    <strong>Attention!</strong>Service already exits. If you can't see, it is probably <b>DEACTIVATED</b>
+                  <button type='button' class='close' data-dismiss='alert' aria-label='Close'>
+                   <span aria-hidden='true'>&times;</span>
+                 </button>
+                  </div>
+                 
+                    ";
+                }
+                else{
+
+                    $sql = "INSERT INTO service (service_title)
                 VALUES ('$serviceName')";
                 mysqli_query($db,$sql);
+                // $link=
+
+                header("Location:".$page);
+                }
+                
+                
 
 
             } catch (Exception $ex){
@@ -700,14 +719,30 @@ mysqli_query($db," UPDATE `com_ssd`.`payment` SET `service_id`='$serve', `period
                 } 
         }
 
-        function addPeriod($periodName){
+        function addPeriod($periodName,$page){
             try {
                 $conn = Database::getInstance();
     $db = $conn->getConnection();
+            $count=mysqli_num_rows(mysqli_query($db,"Select * From period where period_title='$periodName'"));
+                            if($count>=1){
+                                return "
+                                <div class='alert alert-danger alert-dismissible fade show' role='alert'>
+                                <strong>Attention!</strong>Period already exits. If you can't see, it is probably <b>DEACTIVATED</b>
+                            <button type='button' class='close' data-dismiss='alert' aria-label='Close'>
+                            <span aria-hidden='true'>&times;</span>
+                            </button>
+                            </div>
+                            
+                                ";
+                            }
+                            else{
+                               $sql = "INSERT INTO period (period_title)
+                                VALUES ('$periodName')";
+                                mysqli_query($db,$sql); 
 
-                $sql = "INSERT INTO period (period_title)
-VALUES ('$periodName')";
-mysqli_query($db,$sql);
+                            header("Location:".$page);
+                            }
+                
 
             } catch (Exception $ex){
                 echo $ex->getMessage();
@@ -837,12 +872,14 @@ mysqli_query($db,$sql);
         function getServices($uid,$page){
             $conn = Database::getInstance();
             $db = $conn->getConnection();
+
             if($uid==4||$uid==3){
                 if($page!='/com_ssd/service.php'){
-                   $result=mysqli_query($db,"SELECT * FROM service where status=1");
+
+                   $result=mysqli_query($db,"SELECT * FROM service");
                 }else{
                     
-                    $result=mysqli_query($db,"SELECT * FROM service"); 
+                    $result=mysqli_query($db,"SELECT * FROM service where status=1"); 
                 }
                 
             }

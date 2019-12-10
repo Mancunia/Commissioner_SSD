@@ -4,7 +4,7 @@ require_once 'requires/head.php';
 include 'requires/com_ssd.php';
 $conn = Database::getInstance();
 $db = $conn->getConnection();
-
+$feed="";
 $com_ssd = new com_ssd();
 
 $serve=$com_ssd->getServices($_SESSION['grp'],$_SERVER['REQUEST_URI']);
@@ -38,8 +38,8 @@ header("Location:services.php");
 
 if(isset($_POST['newService'])){
 
-  $com_ssd->addService($_POST['name']);
-  header ("Location:services.php");
+  $feed=$com_ssd->addService($_POST['name'],$_SERVER['REQUEST_URI']);
+  // header ("Location:services.php");
 }
 
 include_once 'includes/newService.html';
@@ -62,6 +62,7 @@ include 'requires/heading.php';
           </li>
           <li class="breadcrumb-item active">Service</li>
         </ol>
+        <?php echo $feed; ?>
         <button class="btn btn-lg btn-info"  data-toggle="modal" data-target="#serviceModal" >Add A New Service</button>
 
         <!-- DataTables Example -->

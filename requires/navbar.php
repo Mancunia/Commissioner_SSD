@@ -16,7 +16,7 @@
     </div>
 
     <?php
-$_SESSION['dashboard']=mysqli_num_rows($com_ssd->getPayments($_SESSION['role'],$_SESSION['department']));
+
 
     
     ?>
