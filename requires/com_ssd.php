@@ -12,6 +12,107 @@ function testDB(){
     // return $d[0];
 }
 
+
+function due($expiration){
+$today=date("Y-m-d");
+
+$ex=explode('-',$expiration);
+$t_day=explode('-',$today);
+
+// print_r($ex);
+// print_r($t_day);
+
+if($ex[0]!=$t_day[0]){
+    //year
+$t_yr=$ex[0]-$t_day[0];
+
+if($t_yr<0)
+{
+    //over due
+    return "<button class='btn btn-danger'>Expired</button>";
+}
+else if($t_yr>0){
+
+return "<button class='btn btn-outline-primary'>Due in <b>".$t_yr."</b> year(s)</button>";
+}
+else{
+   
+    //not year check month
+    
+    if($ex[1]!=$t_day[1]){
+
+        $t_mt=$ex[1]-$t_day[1];
+
+        if($t_mt<0){
+           
+        
+        }
+        else{
+//due in months
+        return "<button class='btn btn-outline-primary'>Due in <b>".$t_mt."</b> Month(s)</button>";
+        }
+
+    }
+
+    else{
+ //get days
+        $t_d=$ex[2]-$t_da[2];
+        
+        if($t_d<0){
+            //over due
+        return "<button class='btn btn-danger'>Expired</button>";
+        }
+        else{
+            //due in days
+            return "<button class='btn btn-outline-danger'>Due in <b>".$t_d."</b> Days</button>";
+        }
+
+    }
+}
+
+}
+
+ // still in year
+else{
+$t_mt=$ex[1]-$t_day[1];
+
+//check month
+if($t_mt<=0){
+$t_d=$ex[2]-$t_day[2];
+
+if($t_d<=0){
+    
+return "<button class='btn btn-danger'>Expired</button>";
+}
+
+elseif($t_d>1) {
+    return "<button class='btn btn-outline-danger'>Due in <b>".$t_d."</b> Days</button>";
+}
+else{
+
+     return "<button class='btn btn-warning'>Due <b>Tomorrow</b> Days</button>";
+}
+
+}
+//not in month
+else{
+    return "<button class='btn btn-outline-primary'>Due in <b>".$t_mt."</b> Month(s)</button>";
+}
+
+}
+
+}
+// else{
+
+// }
+
+// }
+
+
+
+// }
+
+
 function status($status){
     if($status=="Submitted"){
           return "<button class='btn btn-outline-primary'>".$status."...</button>";

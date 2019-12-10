@@ -203,7 +203,7 @@ echo'
       }
       ?>
       </ul>
-      
+
       <h4 class="d-flex justify-content-between align-items-center mb-3">
         <span class="text-muted">Attached Files</span>
         <span class="badge badge-secondary badge-pill"><?php echo mysqli_num_rows($files); ?></span>
@@ -232,7 +232,10 @@ echo'
       <script>
       
       </script>
-       <h4 class="mb-3">Due in 5 days</h4>
+       <h4 class="mb-3">
+       
+       <?php echo $com_ssd->due($pay_due); ?>
+       </h4>
       </div>
      <div class="col-4">
       <?php

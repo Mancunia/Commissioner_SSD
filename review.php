@@ -59,6 +59,8 @@ else{
  ";
  
 }
+
+// $com_ssd->due($pay_due);
 // $uid=$_SESSION['user_id'];
 // echo $_SESSION['role'];
 
@@ -448,7 +450,9 @@ echo'
       <script>
       
       </script>
-       <h4 class="mb-3" id="due">Due in 5 days</h4>
+       <h4 class="mb-3" id="due">
+       <?php echo $com_ssd->due($pay_due); ?>
+       </h4>
       </div>
      <div class="col-4">
       <?php

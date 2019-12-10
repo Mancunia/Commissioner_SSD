@@ -98,3 +98,10 @@ document.getElementById("tin_feed").setAttribute("class","badge badge-danger bad
 }
 
 }
+
+
+function due_date(){
+  var due=document.getElementById("due");
+  var state;
+  state = due.value
+}

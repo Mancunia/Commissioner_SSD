@@ -156,7 +156,7 @@ include 'requires/heading.php';
                     <td>".$pay['created_date']."</td>
                     <td>".$pay['period_title']."</td>
                     <td>".$pay['amount']."</td>
-                    <td>".$pay['due_date']."</td>
+                    <td>".$com_ssd->due($pay['due_date'])."</td>
                     <td>".$com_ssd->status($pay['payment_status'])."</td>
                     <td><a href='review.php?payid=".$pay['payment_id']."' class='btn btn-dark'> Open</a>
                     
