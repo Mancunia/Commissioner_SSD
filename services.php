@@ -1,5 +1,47 @@
 <?php
 require_once 'requires/head.php';
+
+include 'requires/com_ssd.php';
+$conn = Database::getInstance();
+$db = $conn->getConnection();
+
+$com_ssd = new com_ssd();
+
+$serve=$com_ssd->getServices($_SESSION['grp'],$_SERVER['REQUEST_URI']);
+
+if( isset($_GET['on']) )
+{
+//activate
+$com_ssd->serviceOn($_GET['on']);
+
+header("Location:services.php");
+
+}
+
+if( isset($_GET['off']) ){
+//deactivate
+$id=$_GET['off'];
+mysqli_query($db,"UPDATE `service` SET `status`='0' WHERE `service_id`='$id'");
+header("Location:services.php");
+}
+
+
+
+if( isset($_GET['times']) ) 
+{
+//delete
+$x_id=$_GET['times'];
+
+mysqli_query($db,"DELETE FROM `service` WHERE `service_id`='$x_id'");
+header("Location:services.php");
+}
+
+if(isset($_POST['newService'])){
+
+  $com_ssd->addService($_POST['name']);
+  header ("Location:services.php");
+}
+
 include_once 'includes/newService.html';
 
 include 'requires/heading.php';
@@ -45,27 +87,38 @@ include 'requires/heading.php';
                   </tr>
                 </tfoot>
                 <tbody>
-                  <tr>
-                    <td>1</td>
-                    <td>System Architect</td>
-                    <td>Edinburgh</td>
+
+              <?php
+              $i=1;
+              while($service= mysqli_fetch_array($serve)){
+                echo '
+                <tr>
+                    <td>'.$i.'</td>
+                    <td>'.$service['service_title'].'</td>
+                    <td>
+                    ';
+
+                    if($service['status']==1){
+                      echo '<a href="services.php?off='.$service['service_id'].'" class="btn btn-warning btn-group-toggle">Deactivate</a>';
+                    }
+                    else{
+                      echo '<a href="services.php?on='.$service['service_id'].'" class="btn btn-success btn-group-toggle"> Activate </a>';
+                    }
+                    echo "   ";
+                    if($_SESSION['grp']==4){
+                    echo'<a class="btn btn-danger" href="services.php?times='.$service['service_id'].'">&times; Delete</a></td>';
+                  }
                     
                     
+                  echo "
+                  </td>
                   </tr>
-                  <tr>
-                    <td>2</td>
-                    <td>Accountant</td>
-                    <td>Edinburgh</td>
-                    
-                   
-                  </tr>
-                  <tr>
-                    <td>3</td>
-                    <td>Junior Technical Author</td>
-                    <td>Edinburgh</td>
-                    
-                    
-                  </tr>
+                ";
+                  $i++;
+              }
+              
+              ?>
+                  
                   
                   </tbody>
               </table>

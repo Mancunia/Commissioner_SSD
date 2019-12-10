@@ -1,5 +1,27 @@
 <?php
 require_once 'requires/head.php';
+
+$allowed_users=array(4,3);
+if(!in_array($_SESSION['grp'],$allowed_users)){
+header("Location:index.php");
+}
+
+include 'requires/com_ssd.php';
+$com_ssd=new com_ssd();
+
+
+
+$comp=$com_ssd->getCompanies($_SESSION['grp'],$_SERVER['REQUEST_URI']);
+$feed="";
+
+if(isset($_POST['newCompany'])){
+  extract($_POST);
+   $feed= $com_ssd->addCompany($name,$tin,$email,$web,$phone,$phone1,$phone2,$address,$description);
+    header ("Location:company.php");
+  }
+
+  
+
 include_once 'includes/newCompany.html';
 include 'requires/heading.php';
 ?>
@@ -19,6 +41,7 @@ include 'requires/heading.php';
           </li>
           <li class="breadcrumb-item active">companies</li>
         </ol>
+        <?php echo $feed; ?>
         <button class="btn btn-lg btn-info"  data-toggle="modal" data-target="#companyModal" >Add A New Company</button>
         <!-- DataTables Example -->
         <div class="card mb-3">
@@ -32,7 +55,6 @@ include 'requires/heading.php';
                 <tr>
                   <th>#</th>
                     <th>Name</th>
-                    <th>Department</th>
                     <th>Action</th>
                   </tr>
                 </thead>
@@ -40,38 +62,32 @@ include 'requires/heading.php';
                   <tr>
                   <th>#</th>
                     <th>Name</th>
-                    <th>Department</th>
                     <th>Action</th>
                   </tr>
                 </tfoot>
                 <tbody>
-                  <tr>
-                    <td>1</td>
-                    <td>System Architect</td>
-                    <td>Edinburgh</td>
-                    
-                    <td>Edinburgh</td>
-                    
-                    
-                  </tr>
-                  <tr>
-                    <td>2</td>
-                    <td>Accountant</td>
-                    <td>Tokyo</td>
-                    
-                    <td>Edinburgh</td>
-                    
-                   
-                  </tr>
-                  <tr>
-                    <td>3</td>
-                    <td>Junior Technical Author</td>
-                    <td>San Francisco</td>
-                    
-                    <td>Edinburgh</td>
-                    
-                    
-                  </tr>
+
+                <?php
+                $i=1;
+                while($c=mysqli_fetch_array($comp)){
+                  echo'<tr>
+                    <td>'.$i.'</td>
+                    <td>'.$c['company_name'].'</td>
+                    <td>
+                    ';
+                    if($c['alive']==1){
+                      echo'<a class="btn btn-warning" href="company.php?off='.$c['company_id'].'">Deactivate</a>';
+                    }
+                    else{
+                       echo'<a class="btn btn-success" href="company.php?on='.$c['company_id'].'">Activate</a>';
+                    }
+                    echo'</td>';
+                    $i++;
+
+                }
+                
+                ?>
+                  
                   
                   </tbody>
               </table>

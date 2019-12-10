@@ -1,4 +1,4 @@
-<div class="modal fade" id="companyModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalScrollableTitle" aria-hidden="true">
+<div class="modal fade" id="companyModal" name="comp_form" tabindex="-1" role="dialog" aria-labelledby="exampleModalScrollableTitle" aria-hidden="true">
         <div class="modal-dialog bg-success" role="document">
           <div class="modal-content">
             <div class="modal-header bg-dark" style="color:aliceblue;">
@@ -8,7 +8,7 @@
               </button>
             </div>
             <div class="modal-body">
-              <form action="" method="POST" enctype="multipart/form-data">
+              <form action="" name="myform" method="POST" enctype="multipart/form-data" onsubmit="validateForm()">
                 <div class="form-group">
                   <label for="recipient-name" class="col-form-label">Company Name:</label>
                   <input type="text" class="form-control" name="name" id="recipient-name" required>
@@ -18,17 +18,18 @@
                     
                 <div class="form-group">
                   <label for="recipient-name" class="col-form-label">TIN:</label>
-                  <input type="text" class="form-control" name="tin" id="TIN" required>
+                  <input type="text" class="form-control" name="tin" id="TIN" required maxlength="11" minlength="11">
+                  <span  id="tin_feed"></span>
                 </div> 
                 
                 <div class="form-group">
                           <label for="inputEmail4">Email:</label>
-                          <input type="email" class="form-control" id="inputEmail4" name="email" placeholder="user@gra.com">
+                          <input type="email" class="form-control" id="comp" name="email" placeholder="user@gra.com" onclick="validateForm()">
                         </div>
                         
                         <div class="form-group">
                           <label for="inputEmail4">Website:</label>
-                          <input type="text" class="form-control" id="inputEmail4" name="web" placeholder="user@gra.com">
+                          <input type="text" class="form-control" id="comp" name="web" placeholder="user@gra.com">
                         </div>
 
         
@@ -37,17 +38,17 @@
                     <hr>
                         <div class="form-group col-md-4">
                           <label for="inputEmail4">Phone:</label>
-                          <input type="Number" class="form-control" id="inputEmail4" name="phone" placeholder="0240000000">
+                          <input type="Number" class="form-control" id="comp" name="phone" placeholder="0240000000">
                         </div>
                     
                         <div class="form-group col-md-4">
                           <label for="">Phone 2:</label>
-                          <input type="Number" class="form-control" id="inputPassword4" name="phone1" placeholder="0240000000">
+                          <input type="Number" class="form-control" id="comp" name="phone1" placeholder="0240000000">
                         </div> 
                         
                         <div class="form-group col-md-4">
                           <label for="">Phone 3:</label>
-                          <input type="Number" class="form-control" id="inputPassword4" name="phone2" placeholder="0240000000">
+                          <input type="Number" class="form-control" id="comp" name="phone2" placeholder="0240000000">
                         </div>
                       </div>
 
@@ -58,12 +59,12 @@
       
                 <div class="form-group">
                   <label for="message-text" class="col-form-label">Company description:</label>
-                  <textarea class="form-control" id="message-text" name="description" row="20"></textarea>
+                  <textarea class="form-control" id="comp" name="description" row="20"></textarea>
                 </div>
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-              <button type="submit" value="submit" name="newCompany" class="btn btn-primary">Submit</button>
+              <button type="submit" value="submit" name="newCompany" class="btn btn-primary" id="comp">Submit</button>
             </div>
             </form>
           </div>

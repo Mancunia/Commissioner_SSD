@@ -87,7 +87,7 @@ include 'requires/heading.php';
                 <div class="card-body-icon">
                   <i class="fas fa-fw fa-times"></i>
                 </div>
-                <div class="mr-5"><?php echo $com_ssd->getCanceled($_SESSION['department']);  ?> Canceled</div>
+                <div class="mr-5"><?php echo $com_ssd->getDenied($_SESSION['department']);  ?> Denied</div>
               </div>
               <!-- <a class="card-footer text-white clearfix small z-1" href="#">
                 <span class="float-left">View Details</span>

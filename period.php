@@ -1,5 +1,17 @@
 <?php
 require_once 'requires/head.php';
+include_once 'requires/com_ssd.php';
+
+$com_ssd=new com_ssd();
+
+$period=$com_ssd->getPeriods($_SESSION['grp'],$_SERVER['REQUEST_URI']);
+
+if(isset($_POST['newPeriod'])){
+
+  $com_ssd->addPeriod($_POST['period']);
+  header ("Location:period.php");
+ }
+
 include_once 'includes/newPeriod.html';
 
 include 'requires/heading.php';
@@ -45,27 +57,36 @@ include 'requires/heading.php';
                   </tr>
                 </tfoot>
                 <tbody>
-                  <tr>
-                    <td>1</td>
-                    <td>System Architect</td>
-                    <td>Edinburgh</td>
+                <?php
+              $i=1;
+              while($p= mysqli_fetch_array($period)){
+                echo '
+                <tr>
+                    <td>'.$i.'</td>
+                    <td>'.$p['period_title'].'</td>
+                    <td>
+                    ';
+
+                    if($p['status']==1){
+                      echo '<a href="period.php?off='.$p['period_id'].'" class="btn btn-warning btn-group-toggle">Deactivate</a>';
+                    }
+                    else{
+                      echo '<a href="period.php?on='.$p['period_id'].'" class="btn btn-success btn-group-toggle"> Activate </a>';
+                    }
+                    echo "   ";
+                    if($_SESSION['grp']==4){
+                    echo'<a class="btn btn-danger" href="period.php?times='.$p['period_id'].'">&times; Delete</a></td>';
+                  }
                     
                     
+                  echo "
+                  </td>
                   </tr>
-                  <tr>
-                    <td>2</td>
-                    <td>Accountant</td>
-                    <td>Edinburgh</td>
-                    
-                   
-                  </tr>
-                  <tr>
-                    <td>3</td>
-                    <td>Junior Technical Author</td>
-                    <td>Edinburgh</td>
-                    
-                    
-                  </tr>
+                ";
+                  $i++;
+              }
+              
+              ?>
                   
                   </tbody>
               </table>

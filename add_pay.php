@@ -1,39 +1,123 @@
 <?php
 require_once 'requires/head.php';
-include_once 'includes/newCompany.html';
-include_once 'includes/newService.html';
-include_once 'includes/newPeriod.html';
+
+
+
+$allowed_users=array(4,1);
+if(!in_array($_SESSION['role'],$allowed_users)){
+header("Location:index.php");
+}
+
 include_once 'requires/com_ssd.php';
 
 $com_ssd=new com_ssd();
 
-$comp=$com_ssd->getCompany($_SESSION['grp']);
-$serve=$com_ssd->getService();
-$period=$com_ssd->getPeriod();
+$comp=$com_ssd->getCompanies($_SESSION['grp'],$_SERVER['REQUEST_URI']);
+$serve=$com_ssd->getServices($_SESSION['grp'],$_SERVER['REQUEST_URI']);
+$period=$com_ssd->getPeriods($_SESSION['grp'],$_SERVER['REQUEST_URI']);
 
 if(isset($_POST['submitBtn'])){
+
   extract($_POST);
+  if($note!=""){
   // $uid = $_SESSION['user_id'];
   //   $_SESSION['department'];
 $pid=$com_ssd->addPayments($_SESSION['user_id'],$company,$amount,$period,$year,$amc_startDate,$amc_endDate,$dueDate,$_SESSION['department'],$service, $_SESSION['role']);
-$com_ssd->addRemark($pid,$_SESSION['user_id'],$note);
-echo $pid;
+if(isset($_FILES['file'])){
+$file=$_FILES['file'];
+// print_r($file);
+$fileName=$_FILES['file']['name'];
+$fileTmpName=$_FILES['file']['tmp_name'];
+$fileSize=$_FILES['file']['size'];
+$fileError=$_FILES['file']['error'];
+$filetype=$_FILES['file']['type'];
+$fileExt=explode('.',$fileName);
+
+$fileActualExt=strtolower(end($fileExt));
+//check if allowed format
+$allowed=array('jpg','jpeg','pdf','png','docx','csv','rtf','zip','txt');
+if(in_array($fileActualExt,$allowed)){
+  //was there an error?
+if($fileError===0){
+  //check size
+if($fileSize < 1000000){
+$fileNameNew=uniqid('',true).".".$fileActualExt;
+
+$fileDestination='docs/'.$fileNameNew;
+//upload file
+move_uploaded_file($fileTmpName,$fileDestination);
+
+// echo $pid." ".$_SESSION['user_id']." ".$fileNameNew;
+// exit;
+$com_ssd->uploadFile($pid,$_SESSION['user_id'],$fileNameNew,$fileName);
+
+header("Location:add_pay?uploadSuccess");
+
+}
+else{
+  echo "<script>
+  alert('file is too large')
+  </script>";
+
+}
+}else{
+  echo "<script>
+  alert('There was an error uploading file')
+  </script>";
+  
+}
+}
+else{
+   echo "<script>
+  alert('Unsupported file format')
+  </script>";
+  
+}
 }
 
+$com_ssd->addRemark($pid,$_SESSION['user_id'],$note);
+// echo $pid;
+}
+else{
+  $feed="
+  <div class='alert alert-danger alert-dismissible fade show' role='alert'>
+                   <strong>OOPS!</strong> You forgot to add a remark 
+                 <button type='button' class='close' data-dismiss='alert' aria-label='Close'>
+                  <span aria-hidden='true'>&times;</span>
+                </button>
+                 </div>
+  ";
+}
+}
+
+$feed="";
 if(isset($_POST['newCompany'])){
+ 
 extract($_POST);
-  $com_ssd->addCompany($name,$tin,$email,$web,$phone,$phone1,$phone2,$address,$description);
+
+ $page = $_SERVER['PHP_SELF'];
+
+  $feed=$com_ssd->addCompany($name,$tin,$email,$web,$phone,$phone1,$phone2,$address,$description);
+  // echo $page;
+  // header ("Location:add_pay.php");
 }
 
 if(isset($_POST['newService'])){
 
   $com_ssd->addService($_POST['name']);
+  header ("Location:add_pay.php");
 }
 
 if(isset($_POST['newPeriod'])){
 
  $com_ssd->addPeriod($_POST['period']);
+ header ("Location:add_pay.php");
 }
+
+
+include_once 'includes/newCompany.html';
+include_once 'includes/newService.html';
+include_once 'includes/newPeriod.html';
 
 include 'requires/heading.php';
 ?>
@@ -41,6 +125,8 @@ include 'requires/heading.php';
 <!-- Modal -->
 
 <div id="main" style="margin-top:5%;" >
+<?php echo $feed; ?>
+
 <center>
         <div class="col-md-9 card" style="width:80rem;">
             <br>
@@ -61,7 +147,7 @@ include 'requires/heading.php';
                     <div class="card-header"><b>Company Name</b></div>
                     <div class="card-body">
                    
-                      <select name="company" id="companyName" class="form-control">
+                      <select name="company" id="companyName" class="form-control" autofocus required>
                         <option value="">Select</option>
                          <?php
                    while($c=mysqli_fetch_array($comp)){
@@ -84,7 +170,7 @@ include 'requires/heading.php';
                     <div class="card-header"><b>Service Provided</b></div>
                     <div class="card-body">
                    
-                      <select name="service" id="companyName" class="form-control">
+                      <select name="service" id="companyName" class="form-control" required>
                         <option value="">Select</option>
                         <?php
                    while($c=mysqli_fetch_array($serve)){
@@ -111,12 +197,12 @@ include 'requires/heading.php';
 
                     <div class="col-6">
                     <label>From</label>
-                    <input type="date" class="form-control" name="amc_startDate">
+                    <input type="date" class="form-control" name="amc_startDate" required>
                     </div>
 
                     <div class="col-6">
                     <label>To</label>
-                    <input type="date" class="form-control" name="amc_endDate">
+                    <input type="date" class="form-control" name="amc_endDate" required>
                     </div>
                     
                     </div>
@@ -132,7 +218,7 @@ include 'requires/heading.php';
                     <div class="row">
                     <div class="col-12">
                     
-                    <input type="date" class="form-control" name="dueDate">
+                    <input type="date" class="form-control" name="dueDate" required>
                     </div>
                     </div>
                     </div>
@@ -208,7 +294,7 @@ include 'requires/heading.php';
                     <div class="card-header"><strong><b>Attach a File</b></strong>
                     </div>
                     <div class="row">
-                    <input class="form-control-file btn btn-block" type="file" name="my_file" multiple>
+                    <input class="form-control-file btn btn-block" type="file" name="file" multiple>
                     </div>
                     
                 </div>

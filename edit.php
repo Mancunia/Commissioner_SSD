@@ -1,22 +1,25 @@
-<?php
-        if($_SESSION['role']!=4||$_SESSION['role']!=1&&$pay_stat!="Decline"||$pay_stat!="Denied"){
-        
-        header("Location:index.php");
-      }
-        ?>
+
 
 <?php
 
 require_once 'requires/head.php';
+
+if($_SESSION['role']!=4){
+        
+  header("Location:index.php");
+}
+
 include 'requires/com_ssd.php';
 $com_ssd=new com_ssd();
 $the_else=$feed="";
-$period=$com_ssd->getPeriod();
-$serve=$com_ssd->getService();
+$period=$com_ssd->getPeriods($_SESSION['grp'],$_SERVER['REQUEST_URI']);
+$serve=$com_ssd->getServices($_SESSION['grp'],$_SERVER['REQUEST_URI']);
 
+echo $_SERVER['REQUEST_URI'];
 
 if (isset($_GET['payid'])){
   $remark=$com_ssd->getRemark($_GET['payid']);
+  $files=$com_ssd->getFiles($_GET['payid']);
 
   // $note=mysqli_fetch_array($remark);
 
@@ -47,6 +50,8 @@ $pay_id=$results['payment_id'];
 
 //Service provided
 $service_prov=$results['service_title'];
+
+
 }
 else{
 
@@ -71,13 +76,23 @@ if(isset($_POST['edit'])){
   $period=$_POST['newPeriod'];
   $year=$_POST['newYear'];
   $service=$_POST['newService'];
+
+  $status="Stand By";
+
+  if($_SESSION['role']==4)
+  {
+    $status="Submitted";
+  }
+
   
-  $com_ssd->editPayment($pay_id,$amnt,$amc_in,$amc_out,$due_date,$period,$year,$service,$_SESSION['role']);
+  $com_ssd->editPayment($pay_id,$amnt,$amc_in,$amc_out,$due_date,$period,$year,$service,$_SESSION['role'],$status);
   
   $com_ssd->addRemark($pay_id,$_SESSION['user_id'],$_POST['note']);
   $link="Location:review.php?payid=".$pay_id;
+
+  header($link);
   
-  header("Location:index.php");
+  // header("Location:index.php");
 
   }
 
@@ -182,6 +197,26 @@ echo'
             <p>'.$note['note'].'
           
           </p>
+          </div>
+        </li>
+        ';
+      }
+      ?>
+      </ul>
+      
+      <h4 class="d-flex justify-content-between align-items-center mb-3">
+        <span class="text-muted">Attached Files</span>
+        <span class="badge badge-secondary badge-pill"><?php echo mysqli_num_rows($files); ?></span>
+      </h4>
+      <ul class="list-group mb-3">
+  <?php
+    while($note=mysqli_fetch_array($files)){
+        echo'
+        <li class="list-group-item d-flex justify-content-between lh-condensed">
+          <div>
+            <h6 class="my-0"><b>'.$note['file_name'].'</b></h6>
+            <small class="text-muted">'.$note['first_name'].' '.$note['last_name'].'</small><br>
+            <a class="btn btn-group-lg btn-dark" href="docs/'.$note['file_location'].'">Download</a>
           </div>
         </li>
         ';

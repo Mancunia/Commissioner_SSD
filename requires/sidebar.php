@@ -46,7 +46,7 @@ include './includes/grps/ordinary.php';
           <span>Records</span></a>
       </li>
 <li class="nav-item">
-        <a class="nav-link" href="settings/logout.php?logout">
+        <a class="nav-link" href="#" data-toggle="modal" data-target="#logoutModal" >
           <i class="fas fa-fw fa-arrow-left"></i>
           <span>Sign Out</span></a>
       </li>

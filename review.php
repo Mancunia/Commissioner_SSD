@@ -1,11 +1,20 @@
-<?php
+<?php 
+$status="";
+ $feed="";
 require_once 'requires/head.php';
+
+$allowed_users=array(4,1);
+if(!in_array($_SESSION['role'],$allowed_users)){
+header("Location:index.php");
+}
+
 include 'requires/com_ssd.php';
 $com_ssd=new com_ssd();
 $the_else="";
 
 if (isset($_GET['payid'])){
   $remark=$com_ssd->getRemark($_GET['payid']);
+  $files=$com_ssd->getFiles($_GET['payid']);
 
   // $note=mysqli_fetch_array($remark);
 
@@ -51,46 +60,173 @@ else{
  
 }
 // $uid=$_SESSION['user_id'];
-// $role=$_SESSION['role'];
+// echo $_SESSION['role'];
 
 //page activities
 if( isset($_POST['comment']) ){
   // $pay_id=$_POST['id'];
+  if(isset($_FILES['file'])){
+
+    $file=$_FILES['file'];
+    // print_r($file);
+    $fileName=$_FILES['file']['name'];
+    $fileTmpName=$_FILES['file']['tmp_name'];
+    $fileSize=$_FILES['file']['size'];
+    $fileError=$_FILES['file']['error'];
+    $filetype=$_FILES['file']['type'];
+    $fileExt=explode('.',$fileName);
+    
+    $fileActualExt=strtolower(end($fileExt));
+    //check if allowed format
+    $allowed=array('jpg','jpeg','pdf','png','docx','csv','rtf','zip','txt');
+    if(in_array($fileActualExt,$allowed)){
+      //was there an error?
+    if($fileError===0){
+      //check size
+    if($fileSize < 1000000){
+    $fileNameNew=uniqid('',true).".".$fileActualExt;
+    
+    $fileDestination='docs/'.$fileNameNew;
+    //upload file
+    move_uploaded_file($fileTmpName,$fileDestination);
+    
+    // echo $pid." ".$_SESSION['user_id']." ".$fileNameNew;
+    // exit;
+    $com_ssd->uploadFile($pay_id,$_SESSION['user_id'],$fileNameNew,$fileName);
+    
+    // header("Location:add_pay?uploadSuccess");
+    
+    }
+    else{
+      echo "<script>
+      alert('file is too large')
+      </script>";
+    
+    }
+    }else{
+      echo "<script>
+      alert('There was an error uploading file')
+      </script>";
+      
+    }
+    }
+    else{
+       echo "<script>
+      alert('Unsupported file format')
+      </script>";
+      
+    }
+    }
   
 //just a message
-$com_ssd->addRemark($pay_id,$_SESSION['user_id'],$_POST['note']);
+if($_POST['note']!=""){
+  $com_ssd->addRemark($pay_id,$_SESSION['user_id'],$_POST['note']);
+}
+else{
+  $feed="
+  <div class='alert alert-danger alert-dismissible fade show' role='alert'>
+                   <strong>OOPS!</strong> You forgot to add a remark 
+                 <button type='button' class='close' data-dismiss='alert' aria-label='Close'>
+                  <span aria-hidden='true'>&times;</span>
+                </button>
+                 </div>
+  ";
+}
+
 
 }
- $status="";
- $feed="";
+
 
 //declined
 if(isset($_POST['declined'])){
- 
-if($uid==4){
+
+  if($_POST['note']!=""){
+if($_SESSION['role']==4){
   $status="Denied";
 }
-elseif ($uid==5||$uid==2) {
+elseif ($_SESSION['role']==5||$_SESSION['role']==2) {
    $status="Revise";
 }
-elseif($uid==6||$uid==3){
-  $status="Declined"; 
-}
 else{
-  $status="Halt";
+  $status="Declined"; 
 }
 
 $feed=$com_ssd->updateStatus($pay_id,$_SESSION['role'],$_SESSION['user_id'],$status);
+
+if(isset($_FILES['file'])){
+  $file=$_FILES['file'];
+  // print_r($file);
+  $fileName=$_FILES['file']['name'];
+  $fileTmpName=$_FILES['file']['tmp_name'];
+  $fileSize=$_FILES['file']['size'];
+  $fileError=$_FILES['file']['error'];
+  $filetype=$_FILES['file']['type'];
+  $fileExt=explode('.',$fileName);
   
-$com_ssd->addRemark($pay_id,$_SESSION['user_id'],$_POST['note']);
+  $fileActualExt=strtolower(end($fileExt));
+  //check if allowed format
+  $allowed=array('jpg','jpeg','pdf','png','docx','csv','rtf','zip','txt');
+  if(in_array($fileActualExt,$allowed)){
+    //was there an error?
+  if($fileError===0){
+    //check size
+  if($fileSize < 1000000){
+  $fileNameNew=uniqid('',true).".".$fileActualExt;
+  
+  $fileDestination='docs/'.$fileNameNew;
+  //upload file
+  move_uploaded_file($fileTmpName,$fileDestination);
+  
+  // echo $pid." ".$_SESSION['user_id']." ".$fileNameNew;
+  // exit;
+  $com_ssd->uploadFile($pay_id,$_SESSION['user_id'],$fileNameNew,$fileName);
+  
+  header("Location:add_pay?uploadSuccess");
   
   }
+  else{
+    echo "<script>
+    alert('file is too large')
+    </script>";
+  
+  }
+  }else{
+    echo "<script>
+    alert('There was an error uploading file')
+    </script>";
+    
+  }
+  }
+  else{
+     echo "<script>
+    alert('Unsupported file format')
+    </script>";
+    
+  }
+  }
+  
+$com_ssd->addRemark($pay_id,$_SESSION['user_id'],$_POST['note']);
+  }
+else{
+  $feed="
+  <div class='alert alert-danger alert-dismissible fade show' role='alert'>
+                   <strong>OOPS!</strong> You forgot to add a remark 
+                 <button type='button' class='close' data-dismiss='alert' aria-label='Close'>
+                  <span aria-hidden='true'>&times;</span>
+                </button>
+                 </div>
+  ";
+}
+  
+  
+}
 
   //Accepted
   if(isset($_POST['approval'])){
       // $pay_id=$_POST['id'];
       $uid=$_SESSION['role'];
-   
+      
+      if($_POST['note']!=""){
 
     if($uid==4){
       $status="Submitted";
@@ -106,8 +242,71 @@ $com_ssd->addRemark($pay_id,$_SESSION['user_id'],$_POST['note']);
     }
 
     $feed=$com_ssd->updateStatus($pay_id,$_SESSION['role'],$_SESSION['user_id'],$status);
+
+    if(isset($_FILES['file'])){
+      $file=$_FILES['file'];
+      // print_r($file);
+      $fileName=$_FILES['file']['name'];
+      $fileTmpName=$_FILES['file']['tmp_name'];
+      $fileSize=$_FILES['file']['size'];
+      $fileError=$_FILES['file']['error'];
+      $filetype=$_FILES['file']['type'];
+      $fileExt=explode('.',$fileName);
+      
+      $fileActualExt=strtolower(end($fileExt));
+      //check if allowed format
+      $allowed=array('jpg','jpeg','pdf','png','docx','csv','rtf','zip','txt');
+      if(in_array($fileActualExt,$allowed)){
+        //was there an error?
+      if($fileError===0){
+        //check size
+      if($fileSize < 1000000){
+      $fileNameNew=uniqid('',true).".".$fileActualExt;
+      
+      $fileDestination='docs/'.$fileNameNew;
+      //upload file
+      move_uploaded_file($fileTmpName,$fileDestination);
+      
+      // echo $pid." ".$_SESSION['user_id']." ".$fileNameNew;
+      // exit;
+      $com_ssd->uploadFile($pay_id,$_SESSION['user_id'],$fileNameNew,$fileName);
+      
+      header("Location:add_pay?uploadSuccess");
+      
+      }
+      else{
+        echo "<script>
+        alert('file is too large')
+        </script>";
+      
+      }
+      }else{
+        echo "<script>
+        alert('There was an error uploading file')
+        </script>";
+        
+      }
+      }
+      else{
+         echo "<script>
+        alert('Unsupported file format')
+        </script>";
+        
+      }
+      }
   
   $com_ssd->addRemark($pay_id,$_SESSION['user_id'],$_POST['note']);
+    }
+  else{
+    $feed="
+    <div class='alert alert-danger alert-dismissible fade show' role='alert'>
+                     <strong>OOPS!</strong> You forgot to add a remark 
+                   <button type='button' class='close' data-dismiss='alert' aria-label='Close'>
+                    <span aria-hidden='true'>&times;</span>
+                  </button>
+                   </div>
+    ";
+  }
     }
 
     // echo $_SESSION['user_id'];
@@ -150,7 +349,7 @@ exit();
   
         <div class="col-3">
         <?php
-        if($_SESSION['role']==4&&$pay_stat=="Decline"||$pay_stat=="Denied"||$pay_stat=="Stand By"){
+        if($_SESSION['role']==4&&$pay_stat!="Submitted"||$pay_stat!="Recommended"||$pay_stat!="Approved"){
         
         echo'
         <a  href="edit.php?payid='.$pay_id.'" class="btn btn-outline-info" >Edit</a>
@@ -207,7 +406,7 @@ while($note=mysqli_fetch_array($remark)){
 echo'
         <li class="list-group-item d-flex justify-content-between lh-condensed">
           <div>
-            <h6 class="my-0"><b>'.$note['first_name']." ".$note['last_name'].'</b></h6>
+            <h6 class="my-0"><b>'.$note['first_name'].' '.$note['last_name'].'</b></h6>
             <small class="text-muted">'.$note['date_created'].'</small>
             <p>'.$note['note'].'
           
@@ -218,6 +417,28 @@ echo'
       }
       ?>
       </ul>
+      <h4 class="d-flex justify-content-between align-items-center mb-3">
+        <span class="text-muted">Attached Files</span>
+        <span class="badge badge-secondary badge-pill"><?php echo mysqli_num_rows($files); ?></span>
+      </h4>
+      <ul class="list-group mb-3">
+  <?php
+    while($note=mysqli_fetch_array($files)){
+        echo'
+        <li class="list-group-item d-flex justify-content-between lh-condensed">
+          <div>
+            <h6 class="my-0"><b>'.$note['file_name'].'</b></h6>
+            <small class="text-muted">'.$note['first_name'].' '.$note['last_name'].'</small><br>
+            <a class="btn btn-group-lg btn-dark" href="docs/'.$note['file_location'].'">Download</a>
+          </div>
+        </li>
+        ';
+      }
+      ?>
+      </ul>
+
+
+
     </div>
     <!--End of Remarks -->
 
@@ -227,7 +448,7 @@ echo'
       <script>
       
       </script>
-       <h4 class="mb-3">Due in 5 days</h4>
+       <h4 class="mb-3" id="due">Due in 5 days</h4>
       </div>
      <div class="col-4">
       <?php
@@ -381,9 +602,14 @@ else{
 
                                             <div class="">
                                               
-                                                 <textarea id="wysihtml5" class="form-control" rows="9" cols="100" name="note"></textarea>
+                                                 <textarea id="wysihtml5" class="form-control" rows="9" cols="100" name="note" required ></textarea>
                                             </div>
                                             <hr class="mb-4">
+
+                                            <!-- <div class="row">
+                                            <label>Attach a file</label>
+                    <input class="form-control-file btn btn-block" type="file" name="file" multiple>
+                    </div> -->
         
                                             <button class="btn btn-primary btn-lg btn-block" id="decision" type="submit">Submit</button>
                                         </div>

@@ -29,7 +29,7 @@ function status($status){
           return "<button class='btn btn-warning'>".$status."</button>";
         }
         else if($status=="Declined"){
-          return "<button class='btn btn-danger'>".$status."</button>";
+          return "<button class='btn btn-outline-warning'>".$status."</button>";
         }
         else{
           return "<button class='btn btn-outline-danger'>".$status."</button>";
@@ -133,26 +133,25 @@ where p.created_date like '$this_yr' and d.department_id='$depart' and p.status=
 
     break;
     case 4:
-        $status="Stand By";
-        $result=mysqli_query($db,"SELECT p.payment_id,p.amount,p.created_date,p.due_date, p.status as payment_status, c.*,s.*, v.period_title, d.* FROM payment p 
-join company c  on p.company_id=c.company_id join service s on p.service_id=s.service_id 
-join period v on p.period_id=v.period_id
-join department d on p.department_id=d.department_id
-where p.created_date like '$this_yr' and d.department_id='$depart' and p.status='$status' and p.alive=1 ORDER BY p.payment_id desc");
+        
+        $result=mysqli_query($db,"SELECT p.alive,p.payment_id,p.amount,p.created_date,p.due_date, p.status as payment_status, c.company_name,s.service_title, v.period_title, d.* FROM payment p 
+        join company c  on p.company_id=c.company_id join service s on p.service_id=s.service_id 
+        join period v on p.period_id=v.period_id
+        join department d on p.department_id=d.department_id
+    where p.created_date like '$this_yr' and d.department_id='$depart' and p.status='Stand By' and p.alive=1 ORDER BY p.payment_id desc");
 
     break;
 
     
     default:
-    $result=mysqli_query($db,"SELECT p.payment_id,p.amount,p.created_date,p.due_date, p.status as payment_status, c.*,s.*, v.period_title, d.* FROM payment p 
+    $result=mysqli_query($db,"SELECT p.alive,p.payment_id,p.amount,p.created_date,p.due_date, p.status as payment_status, c.company_name,s.service_title, v.period_title, d.* FROM payment p 
     join company c  on p.company_id=c.company_id join service s on p.service_id=s.service_id 
     join period v on p.period_id=v.period_id
     join department d on p.department_id=d.department_id
-    where p.created_date like '$this_yr' and d.department_id='$depart' and p.status IS NOT NULL and p.alive=1 ORDER BY p.payment_id desc");
+    where p.created_date like '$this_yr' and p.department_id='$depart' and p.alive=1 and p.status IS NOT NULL ORDER BY p.payment_id desc");
     
     
         # code...
-        break;
 }
 
 
@@ -195,7 +194,7 @@ header ($link);
                 $conn = Database::getInstance();
             $db = $conn->getConnection();
 
-                $result=mysqli_query($db,"SELECT p.first_name,p.last_name,u.role,r.* FROM remark r join user u on r.added_id=u.user_id join person p on u.person_id=p.person_id where r.payment_id='$payID' ORDER BY r.payment_id desc");
+                $result=mysqli_query($db,"SELECT p.first_name,p.last_name,u.role,r.* FROM remark r join user u on r.added_id=u.user_id join person p on u.person_id=p.person_id where r.payment_id='$payID'  order by r.date_created desc");
 
                 return $result;
 
@@ -279,12 +278,56 @@ header ($link);
         }
 
 
-        function uploadFile($payID,$filename){
+        function uploadFile($pid,$uid,$file_loc,$file_name){
         try{   
             $conn = Database::getInstance();
             $db = $conn->getConnection();
 
+            mysqli_query($db,"INSERT INTO `com_ssd`.`attachment` (`payment_id`, `added_by`,`file_name`, `file_location`) 
+            VALUES ('$pid', '$uid','$file_name','$file_loc')");
+
             // File upload configuration
+            //  $fileName=$filename['file']['name'];
+            // $fileTmpName=$filename['file']['tmp_name'];
+            // $fileSize=$filename['file']['size'];
+            // $fileError=$filename['file']['error'];
+            // $filetype=$filename['file']['type'];
+            // $fileExt=explode('.',$fileName);
+
+            // $fileActualExt=strtolower(end($fileExt));
+            // $allowed=array('jpg','jpeg','pdf','png','docx','csv','rtf','zip','txt');
+            // if(in_array($fileActualExt,$allowed)){
+            // if($fileError===0){
+            // if($fileSize < 1000000){
+            // $fileNameNew=uniqid('',true).".".$fileActualExt;
+            // $fileDestination='docs/'.$fileNameNew;
+            // move_uploaded_file($fileTmpName,$fileDestination);
+
+            // header("Location:add_pay?uploadSuccess");
+
+            // }
+            // else{
+            // echo "<script>
+            // alert('file is too large')
+            // </script>";
+
+            // }
+            // }else{
+            // echo "<script>
+            // alert('There was an error uploading file')
+            // </script>";
+            
+            // }
+            // }
+            // else{
+            // echo "<script>
+            // alert('Unsupported file format')
+            // </script>";
+            
+            // }
+
+
+
    
 
 
@@ -293,6 +336,17 @@ header ($link);
             echo $ex->getMessage();
             }
         }
+//get files attached
+        function getFiles($pid){
+            $conn = Database::getInstance();
+            $db = $conn->getConnection();
+
+            $result=mysqli_query($db," Select a.file_name,a.file_location, p.first_name,p.last_name from attachment a 
+            join user u on a.added_by=u.user_id join person p on u.person_id=p.person_id
+             where a.payment_id='$pid' and a.alive =1;");
+             return $result;
+        }
+
 
         function reArray($filePost){
           $file_ary=array();
@@ -307,37 +361,37 @@ header ($link);
         }
 
         //get Service
-        function getService(){
-            $conn = Database::getInstance();
-            $db = $conn->getConnection();
+        // function getService(){
+        //     $conn = Database::getInstance();
+        //     $db = $conn->getConnection();
 
-            $result = mysqli_query($db,"SELECT * FROM service"); 
-            return $result;
-        }
+        //     $result = mysqli_query($db,"SELECT * FROM service where status=1"); 
+        //     return $result;
+        // }
 
          //Company
-        function getCompany($id){
-            $conn = Database::getInstance();
-            $db = $conn->getConnection();
-if($id==4){
-    $result = mysqli_query($db,"SELECT * FROM company "); 
+//         function getCompany($id){
+//             $conn = Database::getInstance();
+//             $db = $conn->getConnection();
+// if($id==4){
+//     $result = mysqli_query($db,"SELECT * FROM company "); 
         
-}
-          else{
-              $result = mysqli_query($db,"SELECT * FROM company where alive=1 "); 
+// }
+//           else{
+//               $result = mysqli_query($db,"SELECT * FROM company where alive=1 "); 
            
-          }
-             return $result;
-        }
+//           }
+//              return $result;
+//         }
 
          //get Period
-        function getPeriod(){
-            $conn = Database::getInstance();
-            $db = $conn->getConnection();
+        // function getPeriod(){
+        //     $conn = Database::getInstance();
+        //     $db = $conn->getConnection();
 
-            $result = mysqli_query($db,"SELECT * FROM period");
-            return $result;
-        }
+        //     $result = mysqli_query($db,"SELECT * FROM period");
+        //     return $result;
+        // }
 
          //Fly Payment 
         function deletePayment($payid){
@@ -482,17 +536,17 @@ if($table['status']=="Denied"){
 
 
         //edit payment
-        function editPayment($payid,$amnt,$amc_st,$amc_end,$due_date,$period,$year,$serve,$role){
+        function editPayment($payid,$amnt,$amc_st,$amc_end,$due_date,$period,$year,$serve,$role,$status){
             try{   
                 $conn = Database::getInstance();
     $db = $conn->getConnection();
-                $status="Submitted";
+                // $status="Submitted";
     
-                // File edit
-                if($role==1){
-                    $status="Stand By";
+                // // File edit
+                // if($role==1){
+                //     $status="Stand By";
 
-                }
+                // }
 mysqli_query($db," UPDATE `com_ssd`.`payment` SET `service_id`='$serve', `period_id`='$period', `year`='$year', `amount`='$amnt', `amc_start`='$amc_st', `amc_end`='$amc_end', `due_date`='$due_date', `status`='$status' WHERE `payment_id`='$payid'
 ");
 
@@ -562,9 +616,72 @@ mysqli_query($db,$sql);
         function addCompany($companyName,$TIN,$email,$web,$p1,$p2,$p3,$address,$desc){
             $conn = Database::getInstance();
             $db = $conn->getConnection();
-            mysqli_query($db,"INSERT INTO `com_ssd`.`company` (`company_name`, `TIN`, `phone`, `phone_2`, `phone_3`, `address`, `email`, `website`, `description`, `date_add`) 
+
+            $com_p=mysqli_query($db,"SELECT * FROM company WHERE company_name='$companyName' and TIN='$TIN'");
+            
+            $com_p=mysqli_num_rows($com_p);
+            if($com_p>=1){
+                return "
+                <div class='alert alert-danger alert-dismissible fade show' role='alert'>
+                   <strong>Attention!</strong> Company already exits
+                 <button type='button' class='close' data-dismiss='alert' aria-label='Close'>
+                  <span aria-hidden='true'>&times;</span>
+                </button>
+                 </div>
+                ";
+            }
+            else{
+                if(strlen($TIN) == 11){
+
+                if (!preg_match("/^[C].*[A-Z0-9]$/im", $TIN)) {
+                    return "
+                <div class='alert alert-danger alert-dismissible fade show' role='alert'>
+                   <strong>Attention!</strong> TIN isn't correct 
+                 <button type='button' class='close' data-dismiss='alert' aria-label='Close'>
+                  <span aria-hidden='true'>&times;</span>
+                </button>
+                 </div>
+                ";
+                } 
+                else
+                 {
+                     mysqli_query($db,"INSERT INTO `com_ssd`.`company` (`company_name`, `TIN`, `phone`, `phone_2`, `phone_3`, `address`, `email`, `website`, `description`, `date_add`) 
             VALUES ('$companyName', '$TIN', '$p1', '$p2', '$p3', '$address', '$email', '$web', '$desc', NOW()) ");
+            // $link="Location:".;
+
+            header('Location: '.$_SERVER['REQUEST_URI']);
+                }
+            }
+            else{
+                return "
+                <div class='alert alert-danger alert-dismissible fade show' role='alert'>
+                   <strong>Attention!</strong> TIN must be <b>11</b> characters
+                 <button type='button' class='close' data-dismiss='alert' aria-label='Close'>
+                  <span aria-hidden='true'>&times;</span>
+                </button>
+                 </div>
+                ";
+            }
+
+
+           
+        } 
+    
+    }
+
+         function serviceOn($id){
+            $conn = Database::getInstance();
+            $db = $conn->getConnection();
+
+            mysqli_query($db,"UPDATE `service` SET `status`='1' WHERE `service_id`='$id");
          }
+
+
+
+
+
+
+
 
 
          // the UI stuff 
@@ -604,16 +721,87 @@ mysqli_query($db,$sql);
 
          }
 
-         function getCanceled($depart){
+         function getDenied($depart){
 //Canceled
             $this_yr=date("Y")."%";
 
             $conn = Database::getInstance();
             $db = $conn->getConnection();
 
-            $result=mysqli_query($db,"SELECT * From payment where department_id='$depart' and status='Canceled' and alive=1 and created_date like '$this_yr'");
+            $result=mysqli_query($db,"SELECT * From payment where department_id='$depart' and status='Denied' and alive=1 and created_date like '$this_yr'");
             return mysqli_num_rows($result);
 
          }
+//Services
+        function getServices($uid,$page){
+            $conn = Database::getInstance();
+            $db = $conn->getConnection();
+            if($uid==4||$uid==3){
+                if($page!='/com_ssd/service.php'){
+                   $result=mysqli_query($db,"SELECT * FROM service where status=1");
+                }else{
+                    
+                    $result=mysqli_query($db,"SELECT * FROM service"); 
+                }
+                
+            }
+            else{
+             $result=mysqli_query($db,"SELECT * FROM service where status=1");
+            }
+            // $result=mysqli_query($db,"SELECT * FROM service");
+            return $result;
+
+        }
+
+        //Period
+        function getPeriods($uid,$page){
+            $conn = Database::getInstance();
+            $db = $conn->getConnection();
+
+            if($uid==4||$uid==3){
+                if($page!='/com_ssd/period.php'){
+                   $result=mysqli_query($db,"SELECT * FROM period where status=1"); 
+                }else{
+                    $result=mysqli_query($db,"SELECT * FROM period");
+                }
+                
+            }
+            else{
+
+                $result=mysqli_query($db,"SELECT * FROM period where status=1");
+            }
+
+            
+            return $result;
+
+        }
+
+        //company
+        function getCompanies($uid,$page){
+            $conn = Database::getInstance();
+            $db = $conn->getConnection();
+
+            if($uid==4||$uid==3){
+                if($page!='/com_ssd/company.php'){
+                   $result=mysqli_query($db,"SELECT * FROM company where alive=1"); 
+                }else{
+                    $result=mysqli_query($db,"SELECT * FROM company");
+                }
+                
+            }else{
+
+                $result=mysqli_query($db,"SELECT * FROM company where alive=1");
+            }
+
+            
+            return $result;
+
+        }
+
+        
+
+
+
+
 }
 ?>

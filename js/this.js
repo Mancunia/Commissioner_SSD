@@ -59,3 +59,42 @@ function myFunction() {
 //     document.getElementById("decision").setAttribute("name", "declined");
 // }
 
+// disable fields
+function disable_New_com(){
+
+document.getElementBy("comp").disabled = true;
+
+}
+
+
+///check TIN
+function validateForm(){
+  console.log("hello");
+  var Tin= document.forms['myform']['tin'].value;
+var n=Tin.length;
+
+if (n==11){
+// var regex="/^[C].*[A-Z0-9]$/igm ";
+
+var b = /^[C].*[A-Z0-9]$/igm.test(Tin);
+
+if(b==false){
+  document.getElementById("tin_feed").setAttribute("class","badge badge-danger badge-pill");
+  document.getElementById("tin_feed").innerHTML="Not a valid TIN";
+  disable_New_com();
+}
+else{
+  document.getElementById("tin_feed").setAttribute("class","badge badge-success badge-pill");
+  document.getElementById("tin_feed").innerHTML="Good TIN";
+}
+
+console.log(b);
+  
+}
+else{
+document.getElementById("tin_feed").setAttribute("class","badge badge-danger badge-pill");
+  document.getElementById("tin_feed").innerHTML="Too short, must be 11 characters";
+  disable_New_com();
+}
+
+}

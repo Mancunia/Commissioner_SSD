@@ -1,5 +1,11 @@
 <?php
 require_once 'requires/head.php';
+
+$allowed_users=array(4,3);
+if(!in_array($_SESSION['grp'],$allowed_users)){
+header("Location:index.php");
+}
+
 include 'requires/app_user.php';
 
 //instance of the class app_user
