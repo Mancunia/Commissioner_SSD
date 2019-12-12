@@ -46,7 +46,7 @@
     <div class="form-row">
       <div class="form-group col-md-6">
         <label for="inputEmail4">Staff ID:</label>
-        <input type="text" class="form-control" id="inputEmail4" name="staff_id" placeholder="Staff ID">
+        <input type="number" class="form-control" id="inputEmail4" name="staff_id" placeholder="Staff ID">
       </div>
   
       <div class="form-group col-md-6">
@@ -86,7 +86,7 @@
     <!--admin-->
     <div class="form-row">
         <hr>
-            <div class="form-group col-md-4">
+            <div class="form-group col-md-3">
               <label for="inputEmail4">Office</label>
               <select type="Number" class="form-control" id="inputEmail4" required name="office" placeholder="0240000000">
  <option>Select</option>
@@ -100,7 +100,7 @@
             </div>
 
         
-            <div class="form-group col-md-4">
+            <div class="form-group col-md-3">
               <label for="">Rank:</label>
               <select type="text" class="form-control" required name="ranke">
               <option>Select</option>
@@ -112,9 +112,14 @@
   ?>
 
               </select>
+              
             </div> 
+            <div class="form-group col-md-3">
+              <label for="">Add a Rank:</label>
+              <button class="btn btn-group-sm btn-primary" data-toggle="modal" data-target="#rankModal"><b>+</b></button>
+            </div>
             
-            <div class="form-group col-md-4">
+            <div class="form-group col-md-3">
               <label for="">Account Type</label>
               <select name="acnt" type="text" required class="form-control">
               <option>Select</option>

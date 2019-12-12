@@ -45,11 +45,17 @@ else{
 
 }
 
+if(isset($_POST['newRank'])){
+
+  $feed=$app->addRank($_POST['Rname'],$_SERVER['REQUEST_URI']);
+}
+
 
 
 
 //form
 include_once 'includes/adminUsers.php';
+include_once 'includes/newRank.html';
 include 'requires/heading.php';
 ?>
 

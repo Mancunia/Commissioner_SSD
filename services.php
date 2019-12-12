@@ -1,6 +1,11 @@
 <?php
 require_once 'requires/head.php';
 
+$allowed=array(4,3);
+if(!in_array($_SESSION['grp'],$allowed)){
+header("Location:index.php");
+}
+
 include 'requires/com_ssd.php';
 $conn = Database::getInstance();
 $db = $conn->getConnection();
@@ -12,29 +17,29 @@ $serve=$com_ssd->getServices($_SESSION['grp'],$_SERVER['REQUEST_URI']);
 if( isset($_GET['on']) )
 {
 //activate
-$com_ssd->serviceOn($_GET['on']);
-
-header("Location:services.php");
-
+$id=$_GET['on'];
+$feed=$com_ssd->serviceOn($id);
+echo $id;
 }
 
 if( isset($_GET['off']) ){
+  
 //deactivate
 $id=$_GET['off'];
-mysqli_query($db,"UPDATE `service` SET `status`='0' WHERE `service_id`='$id'");
-header("Location:services.php");
+$feed=$com_ssd->serviceOff($id);
+echo $id;
 }
 
 
 
-if( isset($_GET['times']) ) 
-{
-//delete
-$x_id=$_GET['times'];
+// if( isset($_GET['times']) ) 
+// {
+// //delete
+// $x_id=$_GET['times'];
 
-mysqli_query($db,"DELETE FROM `service` WHERE `service_id`='$x_id'");
-header("Location:services.php");
-}
+// mysqli_query($db,"DELETE FROM `service` WHERE `service_id`='$x_id'");
+// header("Location:services.php");
+// }
 
 if(isset($_POST['newService'])){
 

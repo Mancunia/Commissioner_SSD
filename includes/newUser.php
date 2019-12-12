@@ -42,13 +42,13 @@
     </div>
   
     <!--Staff details -->
-    <div class="form-row">
-      <div class="form-group col-md-6">
+    <div class="form-row row">
+      <div class="form-group col-md-4">
         <label for="inputEmail4">Staff ID:</label>
         <input type="text" class="form-control" id="inputEmail4" name="staff_id" placeholder="Staff ID">
       </div>
 
-      <div class="form-group col-md-6">
+      <div class="form-group col-md-4">
               <label for="">Rank:</label>
               <select type="text" class="form-control" required name="rank">
                 <option>Select</option>
@@ -60,7 +60,16 @@
     ?>
   
                 </select>
+                
             </div> 
+<div class="col-2">
+<label for="">Add:</label>
+  <button class="btn btn-primary" data-toggle="modal" data-target="#rankModal"><b>+</b></button>
+</div>
+            <!-- <div class="form-group col-md-4">
+              <label for="">Add a Rank:</label>
+              <button class="btn btn-group-sm btn-primary" data-toggle="modal" data-target="#rankModal"><b>+</b></button>
+            </div> -->
       
     </div>
   

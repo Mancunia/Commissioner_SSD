@@ -15,6 +15,7 @@ if(isset($_POST['newOffice'])){
 }
 
 
+
 include_once 'includes/newOffice.php';
 include 'requires/heading.php';
 ?>
@@ -71,7 +72,7 @@ include 'requires/heading.php';
                     <td>".$d['office_name']."</td>
                     <td>".$d['department_name']."</td>
                     <td><a class='btn btn-info'>Something</a>
-                    <a class='btn btn-primary' href='users.php?office=".$d['office_id']."'>Offices</a>
+                    <a class='btn btn-primary' href='users.php?office=".$d['office_id']."'>Users</a>
                     </td>                    
                   </tr>
                           ";

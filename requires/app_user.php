@@ -15,17 +15,6 @@ class app_user{
        
     }
 
-function newRank($rank)
-    {
-
-        $conn = Database::getInstance();
-        $db = $conn->getConnection();
-
-       mysqli_query($db," INSERT INTO `com_ssd`.`rank` (`rank_title`)
-        VALUES ('$rank')" );
-       
-    }
-
 function newRole($role)
     {
 
@@ -180,6 +169,30 @@ return $pid;
             }
     }
 
+    function addRank($rank,$page){
+
+        $conn = Database::getInstance();
+        $db = $conn->getConnection();
+
+        $result=mysqli_num_rows(mysqli_query($db,"SELECT * FROM rank where rank_title='$rank'"));
+        if($result>0){
+            return"
+            <div class='alert alert-warning alert-dismissible fade show' role='alert'>
+<strong>OOPs!</strong> Rank already exists <b>NOTE!</b> Look through list 
+<button type='button' class='close' data-dismiss='alert' aria-label='Close'>
+<span aria-hidden='true'>&times;</span>
+</button>
+</div>
+            ";
+        }
+        else{
+            mysqli_query($db,"INSERT INTO `com_ssd`.`rank` (`rank_title`) VALUES ('$rank')");
+
+            header("Location:".$page);
+
+        }
+    }
+
 
     function newUser($pers_id,$username,$role,$office,$acnt,$by){
 //New user acount
@@ -223,18 +236,18 @@ function getUserByOffice($office){
     $conn = Database::getInstance();
     $db = $conn->getConnection();
 
-    $result=mysqli_query($db,"SELECT u.*,p.*,r.rank_title FROM user u join person p on u.person_id=p.person_id join rank r on p.rank_id=r.rank_id where u.office_id='$office' and u.grp_id=1");
+    $result=mysqli_query($db,"SELECT u.*,p.*,r.rank_title FROM user u join person p on u.person_id=p.person_id join rank r on p.rank_id=r.rank_id where u.office_id='$office' and u.grp_id<4");
 $count=mysqli_num_rows($result);
-if ($count>=1){
+// if ($count>=1){
 return $result;
-}
-else{
-echo "<script>
-alert('Nothing to show')
-</script>";
-}
+// }
+// else{
+// echo "<script>
+// alert('Nothing to show')
+// </script>";
+// }
 
-header ("Location:./index.php");
+// header ("Location:./index.php");
 
 }
 
@@ -244,16 +257,16 @@ function getUserAdmin(){
 
     $result=mysqli_query($db,"SELECT u.*,p.*,r.rank_title FROM user u join person p on u.person_id=p.person_id join rank r on p.rank_id=r.rank_id where u.grp_id<>4");
 $count=mysqli_num_rows($result);
-if ($count>=1){
+// if ($count>=1){
 return $result;
-}
-else{
-echo "<script>
-alert('Nothing to show')
-</script>";
-}
+// }
+// else{
+// echo "<script>
+// alert('Nothing to show')
+// </script>";
+// }
 
-header ("Location:./index.php");
+// header ("Location:./index.php");
 
 }
 
@@ -263,14 +276,14 @@ function getUserAdmin_id($office){
 
     $result=mysqli_query($db,"SELECT u.*,p.*,r.rank_title FROM user u join person p on u.person_id=p.person_id join rank r on p.rank_id=r.rank_id where u.grp_id<>4 and u.office_id='$office'");
 $count=mysqli_num_rows($result);
-if ($count>=1){
+// if ($count>=1){
 return $result;
-}
-else{
-echo "<script>
-alert('Nothing to show')
-</script>";
-}
+// }
+// else{
+// echo "<script>
+// alert('Nothing to show')
+// </script>";
+// }
 
 // header ("Location:./index.php");
 
@@ -350,6 +363,13 @@ catch (PDOException $ex){
         $result=mysqli_query($db,"SELECT * from `group`");
         return $result;
     }
+
+
+
+
+
+
+
 
 
 

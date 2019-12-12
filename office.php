@@ -1,8 +1,8 @@
 <?php
 require_once 'requires/head.php';
 
-$allowed_users=array(4,3);
-if(!in_array($_SESSION['grp'],$allowed_users)){
+// $allowed_users=array(4,3);
+if( $_SESSION['grp']!=3 ){
 header("Location:index.php");
 }
 
@@ -41,8 +41,14 @@ if(isset($_GET['off'])){
 
 $users=$app->getUserByOffice($_SESSION['office']);
 
-include_once 'includes/newUser.php';
+if(isset($_POST['newRank'])){
 
+  $feed=$app->addRank($_POST['Rname'],$_SERVER['REQUEST_URI']);
+}
+
+
+include_once 'includes/newUser.php';
+include_once 'includes/newRank.html';
 include 'requires/heading.php';
 ?>
 
@@ -137,7 +143,7 @@ include 'requires/heading.php';
               </table>
             </div>
           </div>
-          <div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div>
+          <!-- <div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div> -->
         </div>
 
 

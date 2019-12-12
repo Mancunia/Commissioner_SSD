@@ -166,14 +166,23 @@ function addPayments($uid,$cid,$amnt,$period,$year,$amc_st,$amc_end,$due_D,$depa
 
         // INSERT INTO `com_ssd`.`payment`
 
-        mysqli_query($db,"INSERT INTO payment (`company_id`, `service_id`, `period_id`, `department_id`, `added_id`, `year`,`amount`, `amc_start`, `amc_end`, `due_date`, `status`, `created_date`) 
+        $result=mysqli_query($db,"INSERT INTO payment (`company_id`, `service_id`, `period_id`, `department_id`, `added_id`, `year`,`amount`, `amc_start`, `amc_end`, `due_date`, `status`, `created_date`) 
         VALUES ('$cid', '$service', '$period', '$depart', '$uid', '$year','$amnt', '$amc_st','$amc_end', '$due_D', '$status',NOW() ) ");
-
-$last_id=mysqli_query($db,"SELECT payment_id FROM payment ORDER BY payment_id DESC LIMIT 1");
+if(!$result){
+echo"
+<script>
+alert('Something went wrong, please check all fields ');
+</script>
+";
+}
+else{
+   $last_id=mysqli_query($db,"SELECT payment_id FROM payment ORDER BY payment_id DESC LIMIT 1");
 $last_id=mysqli_fetch_array($last_id);
 $pid=$last_id['payment_id'];
 
-return $pid;
+return $pid; 
+}
+
     } 
     catch (Exception $ex){
         echo $ex->getMessage();
@@ -191,6 +200,19 @@ return $pid;
             // $db=$conn->getdbconnect();
             
 $this_yr=date("Y")."%";
+
+if($depart==1){
+    $result=mysqli_query($db,"SELECT p.alive,p.payment_id,p.amount,p.created_date,p.due_date, p.status as payment_status, c.company_name,s.service_title, v.period_title, d.* FROM payment p 
+    join company c  on p.company_id=c.company_id join service s on p.service_id=s.service_id 
+    join period v on p.period_id=v.period_id
+    join department d on p.department_id=d.department_id
+    where p.created_date like '$this_yr' and p.alive=1 and p.status IS NOT NULL ORDER BY p.payment_id desc");
+
+}
+
+
+else{
+//if not from admin
 
 switch ($role) {
     case 6:
@@ -255,6 +277,8 @@ where p.created_date like '$this_yr' and d.department_id='$depart' and p.status=
         # code...
 }
 
+}
+
 
 
 return $result;
@@ -266,6 +290,21 @@ return $result;
             echo $ex->getMessage();
             }
         }
+
+        function getbin($depart){
+
+            $conn = Database::getInstance();
+            $db = $conn->getConnection();
+
+            $result=mysqli_query($db,"SELECT p.alive,p.payment_id,p.amount,p.created_date,p.due_date, p.status as payment_status, c.company_name,s.service_title, v.period_title, d.* FROM payment p 
+    join company c  on p.company_id=c.company_id join service s on p.service_id=s.service_id 
+    join period v on p.period_id=v.period_id
+    join department d on p.department_id=d.department_id
+    where p.department_id='$depart' and p.alive=0 and p.status IS NOT NULL ORDER BY p.payment_id desc");
+
+    return $result;
+        
+    }
 
       
 
@@ -280,6 +319,7 @@ try{
 
 mysqli_query($db,"INSERT INTO `com_ssd`.`remark` ( `payment_id`,`added_id`, `note`, `date_created`) 
 VALUES ( '$payID','$userID', '$note', NOW()) ");
+
 $link="Location:review.php?payid=".$payID;
 header ($link);
 
@@ -809,7 +849,61 @@ mysqli_query($db," UPDATE `com_ssd`.`payment` SET `service_id`='$serve', `period
             $conn = Database::getInstance();
             $db = $conn->getConnection();
 
-            mysqli_query($db,"UPDATE `service` SET `status`='1' WHERE `service_id`='$id");
+            $result=mysqli_query($db,"UPDATE `service` SET `status`='1' WHERE `service_id`='$id'");
+
+            if($result){
+//  return "
+//                 <div class='alert alert-success alert-dismissible fade show' role='alert'>
+//                    <strong>Attention!</strong> Service successfully Activated
+//                  <button type='button' class='close' data-dismiss='alert' aria-label='Close'>
+//                   <span aria-hidden='true'>&times;</span>
+//                 </button>
+//                  </div>
+//                 ";
+
+                header ("Location:services.php");
+            }
+            else{
+                return "
+                <div class='alert alert-danger alert-dismissible fade show' role='alert'>
+                   <strong>Attention!</strong> Something went wrong service couldn't Activate
+                 <button type='button' class='close' data-dismiss='alert' aria-label='Close'>
+                  <span aria-hidden='true'>&times;</span>
+                </button>
+                 </div>
+                ";
+            }
+         }
+
+         function serviceOff($id){
+            $conn = Database::getInstance();
+            $db = $conn->getConnection();
+
+            $result=mysqli_query($db,"UPDATE `service` SET `status`= 0 WHERE `service_id`='$id'");
+
+            if($result){
+
+//  return "
+//                 <div class='alert alert-success alert-dismissible fade show' role='alert'>
+//                    <strong>Attention!</strong> Service successfully Deactivated
+//                  <button type='button' class='close' data-dismiss='alert' aria-label='Close'>
+//                   <span aria-hidden='true'>&times;</span>
+//                 </button>
+//                  </div>
+//                 ";
+
+                header("Location:services.php");
+            }
+            else{
+                return "
+                <div class='alert alert-danger alert-dismissible fade show' role='alert'>
+                   <strong>Attention!</strong> Something went wrong service couldn't Deactivate
+                 <button type='button' class='close' data-dismiss='alert' aria-label='Close'>
+                  <span aria-hidden='true'>&times;</span>
+                </button>
+                 </div>
+                ";
+            }
          }
 
 
@@ -874,12 +968,12 @@ mysqli_query($db," UPDATE `com_ssd`.`payment` SET `service_id`='$serve', `period
             $db = $conn->getConnection();
 
             if($uid==4||$uid==3){
-                if($page!='/com_ssd/service.php'){
+                if($page!='/com_ssd/services.php'){
 
-                   $result=mysqli_query($db,"SELECT * FROM service");
+                   $result=mysqli_query($db,"SELECT * FROM service where status=1");
                 }else{
                     
-                    $result=mysqli_query($db,"SELECT * FROM service where status=1"); 
+                    $result=mysqli_query($db,"SELECT * FROM service "); 
                 }
                 
             }

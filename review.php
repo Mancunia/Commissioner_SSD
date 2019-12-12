@@ -3,10 +3,10 @@ $status="";
  $feed="";
 require_once 'requires/head.php';
 
-$allowed_users=array(4,1);
-if(!in_array($_SESSION['role'],$allowed_users)){
-header("Location:index.php");
-}
+// $allowed_users=array(4,1);
+// if(!in_array($_SESSION['role'],$allowed_users)){
+// header("Location:index.php");
+// }
 
 include 'requires/com_ssd.php';
 $com_ssd=new com_ssd();

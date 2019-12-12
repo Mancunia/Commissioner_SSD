@@ -29,5 +29,11 @@
       <span>Period</span></a>
   </li>
 
+  <li class="nav-item">
+    <a class="nav-link" href="bin.php">
+      <i class="fa fa-recycle" aria-hidden="true"></i>
+      <span>Recycle</span></a>
+  </li>
+
   
   </div>
