@@ -100,6 +100,34 @@ document.getElementById("tin_feed").setAttribute("class","badge badge-danger bad
 }
 
 
+ 
+    // function PrintDiv() {    
+    //    var divToPrint = document.getElementById('divToPrint');
+    //    var popupWin = window.open('', '_blank', 'width=300,height=300');
+    //    popupWin.document.open();
+    //    popupWin.document.write('<html><body onload="window.print()">' + divToPrint.innerHTML + '</html>');
+    //     popupWin.document.close();
+    //         }
+
+
+    // function myFunction() {
+    //           window.print();
+    //         }
+
+
+    function printDiv(divName) {
+              var printContents = document.getElementById(divName).innerHTML;
+              var originalContents = document.body.innerHTML;
+         
+              document.body.innerHTML = printContents;
+         
+              window.print();
+         
+              document.body.innerHTML = originalContents;
+         }
+
+
+
 function due_date(){
   var due=document.getElementById("due");
   var state;

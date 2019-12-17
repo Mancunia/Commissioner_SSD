@@ -344,9 +344,14 @@ exit();
                 <?php
                 echo $com_ssd->status($pay_stat);
                 ?>
+
           </div>
-          <div class="col-6">
+          <div class="col-5">
           <h4 class="mb-3"><?php echo "<b>".$service_prov." </b>"; ?></h4> 
+
+          </div>
+          <div class="col-1">
+          <button type="button" class="btn btn-dark" onclick="printDiv('printableArea')" value="print a div!">Print</button>
           </div>
   
         <div class="col-3">
@@ -368,7 +373,7 @@ exit();
 
 
 
-<div class=" container card" style="margin-top:5%;">
+<div class=" container card" id="printableArea" style="margin-top:5%;">
   <div class="card-body">
     <body class="bg-light">
     <div class="container">
@@ -444,7 +449,7 @@ echo'
     </div>
     <!--End of Remarks -->
 
-    <div class="col-md-8 order-md-1">
+    <div class="col-md-8 order-md-1" id="printableArea">
       <div class="row">
       <div class="col-8">
       <script>

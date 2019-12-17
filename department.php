@@ -60,7 +60,7 @@ include 'requires/heading.php';
                           <tr>
                     <td>".$i."</td>
                     <td>".$d['department_name']."</td>
-                    <td><a class='btn btn-info'>Something</a>
+                    <td>
                     <a class='btn btn-primary' href='offices.php?depart=".$d['department_id']."'>Offices</a>
                     </td>
                     
@@ -70,7 +70,7 @@ include 'requires/heading.php';
                          $i++;
                         }
                            ?>
-                
+                <!-- <a class='btn btn-info'></a> -->
                   
                   </tbody>
               </table>

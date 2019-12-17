@@ -71,7 +71,7 @@ include 'requires/heading.php';
                     <td>".$i."</td>
                     <td>".$d['office_name']."</td>
                     <td>".$d['department_name']."</td>
-                    <td><a class='btn btn-info'>Something</a>
+                    <td>
                     <a class='btn btn-primary' href='users.php?office=".$d['office_id']."'>Users</a>
                     </td>                    
                   </tr>
@@ -79,7 +79,7 @@ include 'requires/heading.php';
                          $i++;
                         }
                            ?>
-                  
+                  <!-- <a class='btn btn-info'></a> -->
                   </tbody>
               </table>
             </div>

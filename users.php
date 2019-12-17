@@ -66,7 +66,7 @@ include 'requires/heading.php';
     <div id="content-wrapper">
 
       <div class="container-fluid">
-
+      
         <!-- Breadcrumbs-->
         <ol class="breadcrumb">
           <li class="breadcrumb-item">
@@ -132,7 +132,7 @@ include 'requires/heading.php';
                       echo '<a href="users.php?on='.$u['user_id'].'" class="btn btn-success btn-group-toggle">Activate</a>';
                     }
                     
-                    echo"<a href='users.php?times=".$u['user_id']."'>&times;</a></td>
+                    echo"</td>
                     
                     
                   </tr>
@@ -144,6 +144,7 @@ include 'requires/heading.php';
                   
                   
                   ?>
+                  <!-- <a href='users.php?times=".$u['user_id']."'>&times;</a> -->
                   
                   </tbody>
               </table>

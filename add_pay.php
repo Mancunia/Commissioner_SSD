@@ -123,15 +123,16 @@ include 'requires/heading.php';
 ?>
 
 <!-- Modal -->
-<div id="content-wrapper">
+<div id="content-wrapper ">
 
       <div class="container-fluid">
 
-<div id="main" style="margin-top:5%;" >
+<div id="divToPrint" style="margin-top:5%;" >
 <?php echo $feed; ?>
 
 <center>
         <div class="col-md-9 card" style="width:80rem;">
+        <input type="button" value="print" onclick="PrintDiv();" />
             <br>
             <div>
                 <!-- <div id="chng-menu"> <button class="openbtn" onclick="openNav()">☰Menu </button></div> -->
