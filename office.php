@@ -2,8 +2,10 @@
 require_once 'requires/head.php';
 
 // $allowed_users=array(4,3);
-if( $_SESSION['grp']!=3 ){
+if( $_SESSION['grp']!=3 || $_SESSION['grp']!=2){
+
 header("Location:index.php");
+
 }
 
 include 'requires/app_user.php';

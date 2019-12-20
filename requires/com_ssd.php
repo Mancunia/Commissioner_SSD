@@ -12,6 +12,12 @@ function testDB(){
     // return $d[0];
 }
 
+function moneyForm($moni){
+
+return money_format($number);
+
+}
+
 
 function due($expiration){
 $today=date("Y-m-d");
@@ -192,7 +198,7 @@ return $pid;
 
 
     //Get payments for tables via role
-    function getPayments($role,$depart){
+    function getPayments($role,$depart,$grp){
         try{
             $conn = Database::getInstance();
             $db = $conn->getConnection();
@@ -201,7 +207,7 @@ return $pid;
             
 $this_yr=date("Y")."%";
 
-if($depart==1){
+if($depart==1&&$grp==4){
     $result=mysqli_query($db,"SELECT p.alive,p.payment_id,p.amount,p.created_date,p.due_date, p.status as payment_status, c.company_name,s.service_title, v.period_title, d.* FROM payment p 
     join company c  on p.company_id=c.company_id join service s on p.service_id=s.service_id 
     join period v on p.period_id=v.period_id
@@ -214,68 +220,41 @@ if($depart==1){
 else{
 //if not from admin
 
-switch ($role) {
-    case 6:
-        $status="Recommended";
+if($role==3||$role==6){
+    $status="Recommended";
         $result=mysqli_query($db,"SELECT p.payment_id,p.amount,p.created_date,p.due_date, p.status as payment_status, c.*,s.*, v.period_title, d.* FROM payment p 
 join company c  on p.company_id=c.company_id join service s on p.service_id=s.service_id 
 join period v on p.period_id=v.period_id
 join department d on p.department_id=d.department_id
-where p.created_date like '$this_yr' and d.department_id='$depart' and p.status='$status' and p.alive=1 ORDER BY p.payment_id desc");
+where p.created_date like '$this_yr' and p.department_id='$depart' and p.status='$status' and p.alive=1 ORDER BY p.payment_id desc");
 
-        # code...
-        break;
-
-       case 3:
-        $status="Recommended";
-        $result=mysqli_query($db,"SELECT p.payment_id,p.amount,p.created_date,p.due_date, p.status as payment_status, c.*,s.*, v.period_title, d.* FROM payment p 
-join company c  on p.company_id=c.company_id join service s on p.service_id=s.service_id 
-join period v on p.period_id=v.period_id
-join department d on p.department_id=d.department_id
-where p.created_date like '$this_yr' and d.department_id='$depart' and p.status='$status' and p.alive=1 ORDER BY p.payment_id desc");
-
-        # code...
-        break; 
-
-    case 5:
-         $status="Submitted";
+}
+      elseif ($role==5||$role==2) {
          $result=mysqli_query($db,"SELECT p.payment_id,p.amount,p.created_date,p.due_date, p.status as payment_status, c.*,s.*, v.period_title, d.* FROM payment p 
-join company c  on p.company_id=c.company_id join service s on p.service_id=s.service_id 
-join period v on p.period_id=v.period_id
-join department d on p.department_id=d.department_id
-where p.created_date like '$this_yr' and d.department_id='$depart' and p.status='$status' and p.alive=1 ORDER BY p.payment_id desc");
+         join company c  on p.company_id=c.company_id join service s on p.service_id=s.service_id 
+         join period v on p.period_id=v.period_id
+         join department d on p.department_id=d.department_id
+         where p.created_date like '$this_yr' and p.department_id='$depart' and p.status='submitted' and p.alive=1 ORDER BY p.payment_id desc");
 
-    break;
-case 2:
-         $status="Submitted";
-         $result=mysqli_query($db,"SELECT p.payment_id,p.amount,p.created_date,p.due_date, p.status as payment_status, c.*,s.*, v.period_title, d.* FROM payment p 
-join company c  on p.company_id=c.company_id join service s on p.service_id=s.service_id 
-join period v on p.period_id=v.period_id
-join department d on p.department_id=d.department_id
-where p.created_date like '$this_yr' and d.department_id='$depart' and p.status='$status' and p.alive=1 ORDER BY p.payment_id desc");
+      }
+      elseif($role==4){
 
-    break;
-    case 4:
-        
-        $result=mysqli_query($db,"SELECT p.alive,p.payment_id,p.amount,p.created_date,p.due_date, p.status as payment_status, c.company_name,s.service_title, v.period_title, d.* FROM payment p 
+          $result=mysqli_query($db,"SELECT p.alive,p.payment_id,p.amount,p.created_date,p.due_date, p.status as payment_status, c.company_name,s.service_title, v.period_title, d.* FROM payment p 
         join company c  on p.company_id=c.company_id join service s on p.service_id=s.service_id 
         join period v on p.period_id=v.period_id
         join department d on p.department_id=d.department_id
-    where p.created_date like '$this_yr' and d.department_id='$depart' and p.status='Stand By' and p.alive=1 ORDER BY p.payment_id desc");
+    where p.created_date like '$this_yr' and p.department_id='$depart' and p.status='Stand By' or p.status='Declined' or p.status='Revised' and p.alive=1 ORDER BY p.payment_id desc");
 
-    break;
+      }
 
-    
-    default:
-    $result=mysqli_query($db,"SELECT p.alive,p.payment_id,p.amount,p.created_date,p.due_date, p.status as payment_status, c.company_name,s.service_title, v.period_title, d.* FROM payment p 
+      else{
+         $result=mysqli_query($db,"SELECT p.alive,p.payment_id,p.amount,p.created_date,p.due_date, p.status as payment_status, c.company_name,s.service_title, v.period_title, d.* FROM payment p 
     join company c  on p.company_id=c.company_id join service s on p.service_id=s.service_id 
     join period v on p.period_id=v.period_id
     join department d on p.department_id=d.department_id
     where p.created_date like '$this_yr' and p.department_id='$depart' and p.alive=1 and p.status IS NOT NULL ORDER BY p.payment_id desc");
-    
-    
-        # code...
-}
+     
+      }
 
 }
 
@@ -290,6 +269,8 @@ return $result;
             echo $ex->getMessage();
             }
         }
+
+        
 
         function getbin($depart){
 

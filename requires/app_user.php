@@ -331,7 +331,7 @@ catch (PDOException $ex){
         ");
         echo"
         <div class='alert alert-success alert-dismissible fade show' role='alert'>
-    <strong>Great!</strong> Password changed successfully <a href='../index.php'>Login</a>
+    <strong>Great!</strong> Password changed successfully <a href='logout.php?logout'>Login</a>
     <button type='button' class='close' data-dismiss='alert' aria-label='Close'>
       <span aria-hidden='true'>&times;</span>
     </button>

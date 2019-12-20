@@ -483,9 +483,9 @@ echo'
           <label for="username">Amount</label>
           <div class="input-group">
             <div class="input-group-prepend">
-              <span class="input-group-text">ghs</span>
+              <span class="input-group-text">Ghs</span>
             </div>
-            <input type="number" class="form-control" id="username"value="<?php echo $pay_amt;?>" readonly>
+            <input type="number"  class="form-control" id="username"value="<?php echo $pay_amt;?>" readonly>
             
           </div>
         </div>

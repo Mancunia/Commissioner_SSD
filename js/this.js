@@ -133,3 +133,34 @@ function due_date(){
   var state;
   state = due.value
 }
+
+
+var n=document.getElementById("mo_ni").value;
+
+var digs=n.length;
+if (digs>3){
+
+console.log(digs);
+
+}
+else{
+
+}
+
+// Create USD currency formatter.
+// var formatter = new Intl.NumberFormat('en-US', {
+//   style: 'currency',
+//   currency: 'USD',
+// });
+
+// // Use it.
+// var amount = document.getElementById('mo_ni').value;
+
+// document.getElementById('Nmo_ni').value = formatter.format(amount);
+// console.log(formatter.format(amount));
+
+
+
+  // var newMoni = n.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,');
+
+  // n=newMoni;

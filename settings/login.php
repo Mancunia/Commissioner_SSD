@@ -92,7 +92,7 @@ header ("Location:../index.php");
           <div class="form-group">
             <div class="form-label-group">
               <input type="text" id="inputEmail" class="form-control" name="user" placeholder="Email address" required="required" autofocus="autofocus">
-              <label for="inputEmail">Email address</label>
+              <label for="inputEmail">Username</label>
             </div>
           </div>
           <div class="form-group">

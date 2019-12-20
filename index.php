@@ -2,7 +2,7 @@
 require_once 'requires/head.php';
 include 'requires/com_ssd.php';
 $com_ssd=new com_ssd();
-$payment=$com_ssd->getPayments($_SESSION['role'],$_SESSION['department']);
+$payment=$com_ssd->getPayments($_SESSION['role'],$_SESSION['department'],$_SESSION['grp']);
 $_SESSION['dashboard']=mysqli_num_rows($payment);
 
 // echo $_SESSION['role']."  ".$_SESSION['department'];

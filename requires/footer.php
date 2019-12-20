@@ -30,8 +30,8 @@
         </div>
         <div class="modal-body"><?php echo $_SESSION['cred_1']; ?>, Do you wish to <b>Logout</b>? </div>
         <div class="modal-footer">
-          <!-- <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button> -->
-          <a class="btn btn-primary" href="settings/logout.php?logout">Logout</a>
+          <button class="btn btn-danger" type="button" data-dismiss="modal">No</button>
+          <a class="btn btn-success" href="settings/logout.php?logout">Yes</a>
         </div>
       </div>
     </div>

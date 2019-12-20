@@ -17,7 +17,7 @@ if(isset($_POST['newPass'])){
 
   if($pass1==$pass2){
 $app->resetPassword($pass1,$_SESSION['user_id']);
-$_SESSION['cred_2']=$pass1;
+// $_SESSION['cred_2']=$pass1;
   }
   else{
     echo"

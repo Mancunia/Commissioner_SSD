@@ -12,6 +12,7 @@ $office=$app->getOffices();
 }
 if(isset($_POST['newOffice'])){
   $app->newOffice($_POST['office'],$_POST['officeAcro'],$_POST['department']);
+  header("Location:offices.php");
 }
 
 

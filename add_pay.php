@@ -127,12 +127,12 @@ include 'requires/heading.php';
 
       <div class="container-fluid">
 
-<div id="divToPrint" style="margin-top:5%;" >
+<div style="margin-top:5%;" >
 <?php echo $feed; ?>
 
 <center>
         <div class="col-md-9 card" style="width:80rem;">
-        <input type="button" value="print" onclick="PrintDiv();" />
+        
             <br>
             <div>
                 <!-- <div id="chng-menu"> <button class="openbtn" onclick="openNav()">☰Menu </button></div> -->
@@ -233,9 +233,9 @@ include 'requires/heading.php';
           <label for="username">Amount</label>
           <div class="input-group">
             <div class="input-group-prepend">
-              <span class="input-group-text">ghs</span>
+              <span class="input-group-text">Ghs</span>
             </div>
-            <input type="number" class="form-control" id="username" placeholder="0000.00000" name="amount" required="">
+            <input type="number" class="form-control" id="mo_ni" placeholder="0000.00000" name="amount" required="">
             <div class="invalid-feedback" style="width: 100%;">
               The ammount is required.
             </div>
