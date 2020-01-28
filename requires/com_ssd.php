@@ -96,7 +96,7 @@ elseif($t_d>1) {
 }
 else{
 
-     return "<button class='btn btn-warning'>Due <b>Tomorrow</b> Days</button>";
+     return "<button class='btn btn-warning'>Due <b>Tomorrow</b></button>";
 }
 
 }

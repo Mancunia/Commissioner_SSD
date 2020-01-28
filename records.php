@@ -2,7 +2,7 @@
 require_once 'requires/head.php';
 include 'requires/com_ssd.php';
 $com_ssd=new com_ssd();
-$payment=$com_ssd->getPayments("0",$_SESSION['department']);
+$payment=$com_ssd->getPayments("0",$_SESSION['department'],$_SESSION['grp']);
 
 
 include 'requires/heading.php';

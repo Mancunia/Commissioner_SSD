@@ -132,36 +132,81 @@ catch (PDOException $ex){
         
         if($row>0){
            echo"
-<script>
-alert('Username Taken')
-</script>
-"; 
+           <div class='alert alert-danger alert-dismissible fade show' role='alert'>
+           <strong>OOPs!</strong> Username Taken <b>NOTE!</b> Check all details
+           <button type='button' class='close' data-dismiss='alert' aria-label='Close'>
+           <span aria-hidden='true'>&times;</span>
+           </button>
+           </div>
+           ";
         }
 
         else {
-// echo $lname;
-$feed=mysqli_query($db,"INSERT INTO `com_ssd`.`person` (`first_name`, `last_name`, `rank_id`, `dob`, `employee_number`, `phone`, `phone_2`, `address`, `email`, `created_date`) 
-VALUES ('$fname', '$lname', '$rank', '$dob', '$emp_num', '$phone1', '$phone2', '$address', '$email',NOW())
-
-");
-// echo $rank;
-// VALUES ('$fname', '$lname', '$rank','$dob', '$emp_num', '$phone1','$phone2', '$address', '$email',NOW()) ");
-if (!$feed){
-echo"
-<div class='alert alert-danger alert-dismissible fade show' role='alert'>
-<strong>OOPs!</strong> There is something wrong <b>NOTE!</b> Check all details
-<button type='button' class='close' data-dismiss='alert' aria-label='Close'>
-<span aria-hidden='true'>&times;</span>
-</button>
-</div>
-";
-}else{
-$last_id=mysqli_query($db," SELECT `person_id` FROM `com_ssd`.person ORDER BY person_id DESC LIMIT 1");
-$last_id=mysqli_fetch_array($last_id);
-$pid=$last_id['person_id'];
-// echo $pid;
-return $pid;
+            $sid=mysqli_query($db,"SELECT * FROM person where employee_number='$emp_num'");
+            if(mysqli_num_rows($sid)>=1){
+                echo"
+           <div class='alert alert-danger alert-dismissible fade show' role='alert'>
+           <strong>OOPs!</strong> The staff ID is already taken <b>NOTE!</b> Check all details
+           <button type='button' class='close' data-dismiss='alert' aria-label='Close'>
+           <span aria-hidden='true'>&times;</span>
+           </button>
+           </div>
+           "; 
             }
+            else{
+                if(strlen($emp_num)<4||strlen($emp_num)>9){
+                   echo"
+           <div class='alert alert-danger alert-dismissible fade show' role='alert'>
+           <strong>OOPs!</strong> The staff ID isn't within valid range <b>NOTE!</b> Check all details
+           <button type='button' class='close' data-dismiss='alert' aria-label='Close'>
+           <span aria-hidden='true'>&times;</span>
+           </button>
+           </div>
+           ";   
+                }
+                else{
+                    if (!preg_match("/^[G0-9].*[A-Z0-9]$/im", $emp_num)) {
+                        return "
+                    <div class='alert alert-danger alert-dismissible fade show' role='alert'>
+                       <strong>Attention!</strong> Staff ID isn't valid 
+                     <button type='button' class='close' data-dismiss='alert' aria-label='Close'>
+                      <span aria-hidden='true'>&times;</span>
+                    </button>
+                     </div>
+                    ";
+                    }
+                    else{
+                        $feed=mysqli_query($db,"INSERT INTO `com_ssd`.`person` (`first_name`, `last_name`, `rank_id`, `dob`, `employee_number`, `phone`, `phone_2`, `address`, `email`, `created_date`) 
+                VALUES ('$fname', '$lname', '$rank', '$dob', '$emp_num', '$phone1', '$phone2', '$address', '$email',NOW())");
+            // echo $rank;
+            // VALUES ('$fname', '$lname', '$rank','$dob', '$emp_num', '$phone1','$phone2', '$address', '$email',NOW()) ");
+            if (!$feed){
+            echo"
+            <div class='alert alert-danger alert-dismissible fade show' role='alert'>
+            <strong>OOPs!</strong> There is something wrong <b>NOTE!</b> Check all details
+            <button type='button' class='close' data-dismiss='alert' aria-label='Close'>
+            <span aria-hidden='true'>&times;</span>
+            </button>
+            </div>
+            ";
+            }
+            else{
+            $last_id=mysqli_query($db," SELECT `person_id` FROM `com_ssd`.person ORDER BY person_id DESC LIMIT 1");
+            $last_id=mysqli_fetch_array($last_id);
+            $pid=$last_id['person_id'];
+            // echo $pid;
+            return $pid;
+            }
+                    } 
+                    
+                }
+
+
+
+                // echo $lname;
+
+            }
+
 }
         }
         catch (PDOException $ex){
@@ -200,8 +245,19 @@ return $pid;
         $db = $conn->getConnection();
 
         // echo $pers_id;
+        if($pers_id==0){
+          return"
+<div class='alert alert-danger alert-dismissible fade show' role='alert'>
+<strong>OOPs!</strong> There is something wrong <b>NOTE!</b>, Check all details
+<button type='button' class='close' data-dismiss='alert' aria-label='Close'>
+<span aria-hidden='true'>&times;</span>
+</button>
+</div>
+";  
+        }
+        else{
 
-        $feed=mysqli_query($db," INSERT INTO `com_ssd`.`user` (`username`, `password`, `person_id`, `role`, `grp_id`, `office_id`, `date_created`, `created_by`) 
+            $feed=mysqli_query($db," INSERT INTO `com_ssd`.`user` (`username`, `password`, `person_id`, `role`, `grp_id`, `office_id`, `date_created`, `created_by`) 
         VALUES ('$username', '$username', '$pers_id', '$role', '$acnt', '$office', NOW(), '$by')");
         
 
@@ -227,6 +283,9 @@ else{
 ";
 
 }
+        }
+
+        
 
 
 
@@ -236,7 +295,7 @@ function getUserByOffice($office){
     $conn = Database::getInstance();
     $db = $conn->getConnection();
 
-    $result=mysqli_query($db,"SELECT u.*,p.*,r.rank_title FROM user u join person p on u.person_id=p.person_id join rank r on p.rank_id=r.rank_id where u.office_id='$office' and u.grp_id<4");
+    $result=mysqli_query($db,"SELECT u.*,p.*,r.rank_title FROM user u join person p on u.person_id=p.person_id join rank r on p.rank_id=r.rank_id where u.office_id='$office' and u.grp_id<>4");
 $count=mysqli_num_rows($result);
 // if ($count>=1){
 return $result;

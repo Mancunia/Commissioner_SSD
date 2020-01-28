@@ -88,7 +88,7 @@ else{
   document.getElementById("tin_feed").innerHTML="Good TIN";
 }
 
-console.log(b);
+// console.log(b);
   
 }
 else{
@@ -96,6 +96,34 @@ document.getElementById("tin_feed").setAttribute("class","badge badge-danger bad
   document.getElementById("tin_feed").innerHTML="Too short, must be 11 characters";
   disable_New_com();
 }
+
+}
+
+//check Staff ID
+function validateStaffId(){
+  var staff=document.forms['newUser']['staff_id'].value;
+  var n =staff.length;
+
+  if(n>=4 || n<=9){
+
+    var b = /^[0-9G].*[0-9]$/igm.test(staff);
+if(b==false){
+  document.getElementById("sid_feed").setAttribute("class","badge badge-danger badge-pill");
+  document.getElementById("sid_feed").innerHTML="Not a valid Staff ID";
+  disable_New_com();
+}
+else{
+  document.getElementById("sid_feed").setAttribute("class","badge badge-success badge-pill");
+  document.getElementById("sid_feed").innerHTML="Valid Staff ID";
+}
+
+
+  }
+  else{
+    document.getElementById("sid_feed").setAttribute("class","badge badge-danger badge-pill");
+      document.getElementById("sid_feed").innerHTML="Too short, must be between 4 and 9 characters";
+     
+    }
 
 }
 

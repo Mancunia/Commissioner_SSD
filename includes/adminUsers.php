@@ -8,7 +8,7 @@
           </button>
         </div>
         <div class="modal-body">
-        <form action="" method="POST">
+        <form action="" method="POST" name="newUser" >
   
   <!--Names -->
     <div class="form-row">
@@ -46,12 +46,13 @@
     <div class="form-row">
       <div class="form-group col-md-6">
         <label for="inputEmail4">Staff ID:</label>
-        <input type="number" class="form-control" id="inputEmail4" name="staff_id" placeholder="Staff ID">
+        <input type="text" class="form-control" id="inputEmail4" name="staff_id" placeholder="Staff ID" maxlength="9" minlength="4" >
+        <span  id="sid_feed"></span>
       </div>
   
       <div class="form-group col-md-6">
         <label for="inputPassword4">Role:</label>
-        <select class="form-control" id="inputPassword4" required name="role">
+        <select class="form-control" id="inputPassword4" required name="role" onclick="validateStaffId()">
   <option>Select</option>
   <?php
   while($rol=mysqli_fetch_array($role)){
@@ -67,7 +68,7 @@
     <div class="form-row">
       <div class="form-group col-md-6">
         <label for="inputEmail4">Phone:</label>
-        <input type="Number" class="form-control" id="inputEmail4" name="phone" required placeholder="0240000000">
+        <input type="Number" class="form-control" id="inputEmail4" name="phone" required placeholder="0240000000" onclick="validateStaffId()">
       </div>
   
       <div class="form-group col-md-6">

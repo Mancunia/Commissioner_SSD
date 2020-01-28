@@ -8,36 +8,36 @@
           </button>
         </div>
         <div class="modal-body">
-        <form action="" method="POST">
+        <form action="" method="POST" name="newUser" >
   
   <!--Names -->
     <div class="form-row">
       <div class="form-group col-md-6">
         <label for="inputEmail4">Firstname:</label>
-        <input type="text" class="form-control" id="inputEmail4" name="fname" placeholder="Firstname">
+        <input type="text" class="form-control" id="inputEmail4" name="fname" placeholder="Firstname" required>
       </div>
   
       <div class="form-group col-md-6">
         <label for="inputPassword4">Surname:</label>
-        <input type="text" class="form-control" id="inputPassword4" name="lname" placeholder="Surname">
+        <input type="text" class="form-control" id="inputPassword4" name="lname" placeholder="Surname" required>
       </div>
     </div>
   
     <div class="form-row">
       <div class="form-group col-md-6">
         <label for="inputEmail4">Username</label>
-        <input type="text" class="form-control" id="inputEmail4" name="userName" placeholder="Username">
+        <input type="text" class="form-control" id="inputEmail4" name="userName" placeholder="Username" required>
       </div>
       <div class="form-group col-md-6">
         <label for="inputEmail4">Date of Birth</label>
-        <input type="date" class="form-control" id="inputEmail4" name="dob" required placeholder="Date of birth">
+        <input type="date" class="form-control" id="inputEmail4" name="dob" required placeholder="Date of birth" required>
       </div>
     </div>
   
     <div class="form-row">
       <div class="form-group col-md-12">
         <label for="inputEmail4">Email</label>
-        <input type="email" class="form-control" id="inputEmail4" name="email" placeholder="user@email.com">
+        <input type="email" class="form-control" id="inputEmail4" name="email" placeholder="user@email.com" required>
       </div>
     </div>
   
@@ -45,12 +45,13 @@
     <div class="form-row row">
       <div class="form-group col-md-4">
         <label for="inputEmail4">Staff ID:</label>
-        <input type="text" class="form-control" id="inputEmail4" name="staff_id" placeholder="Staff ID">
+        <input type="text" class="form-control" id="inputEmail4" name="staff_id" placeholder="Staff ID" maxlength="9" minlength="4" required>
+        <span  id="sid_feed"></span>
       </div>
 
       <div class="form-group col-md-4">
               <label for="">Rank:</label>
-              <select type="text" class="form-control" required name="rank">
+              <select type="text" class="form-control" required name="rank" required onclick="validateStaffId()">
                 <option>Select</option>
     <?php
     while($rak=mysqli_fetch_array($rank)){
@@ -77,7 +78,7 @@
     <div class="form-row">
       <div class="form-group col-md-6">
         <label for="inputEmail4">Phone:</label>
-        <input type="Number" class="form-control" id="inputEmail4" name="phone" placeholder="0240000000">
+        <input type="Number" class="form-control" id="inputEmail4" name="phone" placeholder="0240000000" required>
       </div>
   
       <div class="form-group col-md-6">

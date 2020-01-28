@@ -1,12 +1,13 @@
 <?php
 require_once 'requires/head.php';
 
-// $allowed_users=array(4,3);
-if( $_SESSION['grp']!=3 || $_SESSION['grp']!=2){
+$allowed_users=array(2,3);
+if( !in_array($_SESSION['grp'],$allowed_users)){
 
 header("Location:index.php");
 
 }
+
 
 include 'requires/app_user.php';
 
@@ -22,8 +23,25 @@ if(isset($_POST['newUser'])){
   $pid=$app->newPerson($userName,$fname,$lname,$dob,$staff_id,$phone,$phone1,$address,$rank,$email);
 
   // echo $userName;
+if($_SESSION['role']==1||$_SESSION['role']==4){
+$grp=1;
+$feed=$app->newUser($pid,$userName,1,$_SESSION['office'],$grp,$_SESSION['user_id']);
+}
 
- $feed=$app->newUser($pid,$userName,1,$_SESSION['office'],1,$_SESSION['user_id']);
+else{
+   $grp=2;
+  if($_SESSION['role']=2||$_SESSION['role']==5)
+  {
+    $role=2;
+  }
+  else{
+    $role=3;
+  }
+ 
+  $feed=$app->newUser($pid,$userName,$role,$_SESSION['office'],$grp,$_SESSION['user_id']);
+}
+
+ 
 //  echo $_SESSION['user_id'];
 //  echo $office;
 }

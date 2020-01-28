@@ -125,7 +125,7 @@ include 'requires/heading.php';
 <!-- Modal -->
 <div id="content-wrapper ">
 
-      <div class="container-fluid">
+      <div class="container">
 
 <div style="margin-top:5%;" >
 <?php echo $feed; ?>
