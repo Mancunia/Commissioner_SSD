@@ -1,6 +1,7 @@
 <!-- Sidebar -->
 <ul class="sidebar navbar-nav">
-    
+    <div class="side">
+      
       <li class="nav-item active">
         <a class="nav-link" href="index.php">
           <i class="fas fa-fw fa-tachometer-alt"></i>
@@ -52,5 +53,7 @@ include './includes/grps/ordinary.php';
       </li>
       
       </div>
+
+    </div>
      
     </ul>

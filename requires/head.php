@@ -19,8 +19,9 @@ if($_SESSION['cred_1']==$_SESSION['cred_2']){
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <meta name="description" content="">
   <meta name="author" content="">
+  <link rel="icon" type="image/ico" href="/image/gra.jpg" />
 
-  <title>Commissioner-SSD</title>
+  <title>Service Providers Payment</title>
 
   <!-- Custom fonts for this template-->
   <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">

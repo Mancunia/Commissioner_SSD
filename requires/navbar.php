@@ -1,5 +1,5 @@
 
-<nav class="navbar navbar-expand navbar-dark bg-dark static-top">
+<nav class="navbar navbar-expand navbar-dark bg-dark fixed-top">
 
     <a class="navbar-brand mr-1" href="index.php" id="top"><img src="./image/gra.png"  alt="GRA ICON" width="95" height="40"></a>
 

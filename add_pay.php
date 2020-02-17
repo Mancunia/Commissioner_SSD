@@ -316,6 +316,7 @@ include 'requires/heading.php';
 </div>
 <br>
 <br>
+
       <!-- /.container-fluid -->
 
       <?php

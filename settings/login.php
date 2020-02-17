@@ -20,7 +20,7 @@ $result= $app->login($_POST['user'],$_POST['pass']);
 if($result['username']==$_POST['user']&&$result['password']==$_POST['pass']){
 
   if($result['status']==0){
-   echo"<div class='alert alert-danger alert-dismissible fade show' role='alert'>
+   echo"<div class='alert alert-danger alert-dismissible fade show bg-light' role='alert'>
    <strong>OOPS!</strong> Your account isn't active
    <button type='button' class='close' data-dismiss='alert' aria-label='Close'>
      <span aria-hidden='true'>&times;</span>
@@ -52,7 +52,7 @@ header ("Location:../index.php");
 }
    
    else{
-       echo "<div class='alert alert-danger alert-dismissible fade show' role='alert'>
+       echo "<div class='alert alert-danger alert-dismissible fade show bg-light' role='alert'>
        <strong>OOPS!</strong> Your credentials are not correct or you are not supposed to be trying this.
        <button type='button' class='close' data-dismiss='alert' aria-label='Close'>
          <span aria-hidden='true'>&times;</span>
@@ -70,7 +70,8 @@ header ("Location:../index.php");
   <meta name="description" content="">
   <meta name="author" content="">
 
-  <title>SB Admin - Login</title>
+  <title>Login</title>
+  <link rel="icon" type="image/ico" href="../image/gra.jpg" />
 
   <!-- Custom fonts for this template-->
   <link href="../vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
@@ -78,11 +79,44 @@ header ("Location:../index.php");
   <!-- Custom styles for this template-->
   <link href="../css/sb-admin.css" rel="stylesheet">
 
+   <style>
+  .bg-blue{
+
+    background-color: #30336B;
+
+   /* background-color: #30336B;*/ 
+    /*background-image: url("../image/gra.png");*/
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-position: center;
+}
+
+.sys-name{
+font-size: 41pt;
+color: white;
+font-style: bold;
+
+
+}
+
+  </style>
+
+
 </head>
+<?php
 
-<body class="bg-dark">
+echo $error_msg; 
 
-  <?php echo $error_msg; ?>
+?>
+<body class="bg-blue">
+  <!-- <nav class="navbar navbar-expand navbar-dark bg-dark static-top">
+
+   </nav> -->
+   <div class="container-fluid row bg-dark ">
+     <img src="../image/gra.png"><b><span class="sys-name">_SPP</span></b>
+   </div>
+
+  
 
   <div class="container">
     <div class="card card-login mx-auto mt-5">
