@@ -740,6 +740,8 @@ mysqli_query($db," UPDATE `com_ssd`.`payment` SET `service_id`='$serve', `period
                 } 
         }
 
+        //........................Period............................
+
         function addPeriod($periodName,$page){
             try {
                 $conn = Database::getInstance();
@@ -769,6 +771,105 @@ mysqli_query($db," UPDATE `com_ssd`.`payment` SET `service_id`='$serve', `period
                 echo $ex->getMessage();
                 } 
         }
+
+        //company activation
+    function periodOn($id){
+            $conn = Database::getInstance();
+            $db = $conn->getConnection();
+
+            $result=mysqli_query($db,"UPDATE `period` SET `status`='1' WHERE `period_id`='$id'");
+
+            if($result){
+//  return "
+//                 <div class='alert alert-success alert-dismissible fade show' role='alert'>
+//                    <strong>Attention!</strong> Service successfully Activated
+//                  <button type='button' class='close' data-dismiss='alert' aria-label='Close'>
+//                   <span aria-hidden='true'>&times;</span>
+//                 </button>
+//                  </div>
+//                 ";
+
+                header ("Location:period.php");
+            }
+            else{
+                return "
+                <div class='alert alert-danger alert-dismissible fade show' role='alert'>
+                   <strong>Attention!</strong> Something went wrong Period couldn't Activate
+                 <button type='button' class='close' data-dismiss='alert' aria-label='Close'>
+                  <span aria-hidden='true'>&times;</span>
+                </button>
+                 </div>
+                ";
+            }
+         }
+
+         //company deactivation
+         function periodOff($id){
+            $conn = Database::getInstance();
+            $db = $conn->getConnection();
+
+            $result=mysqli_query($db,"UPDATE `period` SET `status`='0' WHERE `period_id`='$id'");
+
+            if($result){
+//  return "
+//                 <div class='alert alert-success alert-dismissible fade show' role='alert'>
+//                    <strong>Attention!</strong> Service successfully Activated
+//                  <button type='button' class='close' data-dismiss='alert' aria-label='Close'>
+//                   <span aria-hidden='true'>&times;</span>
+//                 </button>
+//                  </div>
+//                 ";
+
+                header ("Location:period.php");
+            }
+            else{
+                return "
+                <div class='alert alert-danger alert-dismissible fade show' role='alert'>
+                   <strong>Attention!</strong> Something went wrong Period couldn't Deacivate
+                 <button type='button' class='close' data-dismiss='alert' aria-label='Close'>
+                  <span aria-hidden='true'>&times;</span>
+                </button>
+                 </div>
+                ";
+            }
+         }
+
+
+         function periodDel($id){
+            $conn = Database::getInstance();
+            $db = $conn->getConnection();
+
+            $result=mysqli_query($db,"DELETE FROM `period` WHERE `period_id`='$id'");
+
+            if($result){
+//  return "
+//                 <div class='alert alert-success alert-dismissible fade show' role='alert'>
+//                    <strong>Attention!</strong> Service successfully Activated
+//                  <button type='button' class='close' data-dismiss='alert' aria-label='Close'>
+//                   <span aria-hidden='true'>&times;</span>
+//                 </button>
+//                  </div>
+//                 ";
+
+                header ("Location:period.php");
+            }
+            else{
+                return "
+                <div class='alert alert-danger alert-dismissible fade show' role='alert'>
+                   <strong>Attention!</strong> Something went wrong Period couldn't be Deleted
+                 <button type='button' class='close' data-dismiss='alert' aria-label='Close'>
+                  <span aria-hidden='true'>&times;</span>
+                </button>
+                 </div>
+                ";
+            }
+         }
+
+
+
+
+
+        // ...........................COMPANY..............................................
 
         function addCompany($companyName,$TIN,$email,$web,$p1,$p2,$p3,$address,$desc){
             $conn = Database::getInstance();
@@ -826,6 +927,10 @@ mysqli_query($db," UPDATE `com_ssd`.`payment` SET `service_id`='$serve', `period
     
     }
 
+
+
+
+
          function serviceOn($id){
             $conn = Database::getInstance();
             $db = $conn->getConnection();
@@ -879,6 +984,36 @@ mysqli_query($db," UPDATE `com_ssd`.`payment` SET `service_id`='$serve', `period
                 return "
                 <div class='alert alert-danger alert-dismissible fade show' role='alert'>
                    <strong>Attention!</strong> Something went wrong service couldn't Deactivate
+                 <button type='button' class='close' data-dismiss='alert' aria-label='Close'>
+                  <span aria-hidden='true'>&times;</span>
+                </button>
+                 </div>
+                ";
+            }
+         }
+
+          function serviceDel($id){
+            $conn = Database::getInstance();
+            $db = $conn->getConnection();
+
+            $result=mysqli_query($db,"DELETE FROM `service` WHERE `service_id`='$id'");
+
+            if($result){
+//  return "
+//                 <div class='alert alert-success alert-dismissible fade show' role='alert'>
+//                    <strong>Attention!</strong> Service successfully Activated
+//                  <button type='button' class='close' data-dismiss='alert' aria-label='Close'>
+//                   <span aria-hidden='true'>&times;</span>
+//                 </button>
+//                  </div>
+//                 ";
+
+                header ("Location:period.php");
+            }
+            else{
+                return "
+                <div class='alert alert-danger alert-dismissible fade show' role='alert'>
+                   <strong>Attention!</strong> Something went wrong Service couldn't be Deleted
                  <button type='button' class='close' data-dismiss='alert' aria-label='Close'>
                   <span aria-hidden='true'>&times;</span>
                 </button>
@@ -996,7 +1131,7 @@ mysqli_query($db," UPDATE `com_ssd`.`payment` SET `service_id`='$serve', `period
 
             if($uid==4||$uid==3){
                 if($page!='/com_ssd/company.php'){
-                   $result=mysqli_query($db,"SELECT * FROM company where alive=1"); 
+                   $result=mysqli_query($db,"SELECT * FROM company"); 
                 }else{
                     $result=mysqli_query($db,"SELECT * FROM company");
                 }
@@ -1010,6 +1145,68 @@ mysqli_query($db," UPDATE `com_ssd`.`payment` SET `service_id`='$serve', `period
             return $result;
 
         }
+
+        //company activation
+    function companyOn($id){
+            $conn = Database::getInstance();
+            $db = $conn->getConnection();
+
+            $result=mysqli_query($db,"UPDATE `company` SET `alive`='1' WHERE `company_id`='$id'");
+
+            if($result){
+//  return "
+//                 <div class='alert alert-success alert-dismissible fade show' role='alert'>
+//                    <strong>Attention!</strong> Service successfully Activated
+//                  <button type='button' class='close' data-dismiss='alert' aria-label='Close'>
+//                   <span aria-hidden='true'>&times;</span>
+//                 </button>
+//                  </div>
+//                 ";
+
+                header ("Location:company.php");
+            }
+            else{
+                return "
+                <div class='alert alert-danger alert-dismissible fade show' role='alert'>
+                   <strong>Attention!</strong> Something went wrong company couldn't Activate
+                 <button type='button' class='close' data-dismiss='alert' aria-label='Close'>
+                  <span aria-hidden='true'>&times;</span>
+                </button>
+                 </div>
+                ";
+            }
+         }
+
+         //company deactivation
+         function companyOff($id){
+            $conn = Database::getInstance();
+            $db = $conn->getConnection();
+
+            $result=mysqli_query($db,"UPDATE `company` SET `alive`='0' WHERE `company_id`='$id'");
+
+            if($result){
+//  return "
+//                 <div class='alert alert-success alert-dismissible fade show' role='alert'>
+//                    <strong>Attention!</strong> Service successfully Activated
+//                  <button type='button' class='close' data-dismiss='alert' aria-label='Close'>
+//                   <span aria-hidden='true'>&times;</span>
+//                 </button>
+//                  </div>
+//                 ";
+
+                header ("Location:company.php");
+            }
+            else{
+                return "
+                <div class='alert alert-danger alert-dismissible fade show' role='alert'>
+                   <strong>Attention!</strong> Something went wrong company couldn't Deacivate
+                 <button type='button' class='close' data-dismiss='alert' aria-label='Close'>
+                  <span aria-hidden='true'>&times;</span>
+                </button>
+                 </div>
+                ";
+            }
+         }
 
         
 

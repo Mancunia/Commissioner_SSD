@@ -15,6 +15,22 @@ $feed=$com_ssd->addPeriod($_POST['period'],$_SERVER['REQUEST_URI']);
   // header ("Location:period.php");
  }
 
+ if(isset($_GET['on'])){
+
+    $feed=$com_ssd->periodOn($_GET['on']);
+  }
+
+if(isset($_GET['off'])){
+
+    $feed=$com_ssd->periodOff($_GET['off']);
+  }
+
+if(isset($_GET['times'])){
+
+    $feed=$com_ssd->periodDel($_GET['times']);
+  }
+
+
 include_once 'includes/newPeriod.html';
 
 include 'requires/heading.php';

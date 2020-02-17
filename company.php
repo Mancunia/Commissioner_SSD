@@ -20,6 +20,15 @@ if(isset($_POST['newCompany'])){
     header ("Location:company.php");
   }
 
+  if(isset($_GET['on'])){
+
+    $feed=$com_ssd->companyOn($_GET['on']);
+  }
+
+if(isset($_GET['off'])){
+
+    $feed=$com_ssd->companyOff($_GET['off']);
+  }
   
 
 include_once 'includes/newCompany.html';

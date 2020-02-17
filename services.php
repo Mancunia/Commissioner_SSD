@@ -30,6 +30,11 @@ $feed=$com_ssd->serviceOff($id);
 echo $id;
 }
 
+if(isset($_GET['times'])){
+
+    $feed=$com_ssd->serviceDel($_GET['times']);
+  }
+
 
 
 // if( isset($_GET['times']) ) 
